@@ -21,14 +21,15 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 getString(R.string.Menu),
                 getString(R.string.Discover)
         };
-        tabLayout.addTab(tabLayout.newTab().setText("Home"));
-        tabLayout.addTab(tabLayout.newTab().setText("Menu"));
-        tabLayout.addTab(tabLayout.newTab().setText("Discover"));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.Home)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.Menu)));
+        tabLayout.addTab(tabLayout.newTab().setText(getString(R.string.Discover)));
+
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setupWithViewPager(viewPager);//to enable the scrolling of pager
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount(),tabBarTitles);
         viewPager.setAdapter(pagerAdapter);
-        
 
     }
 
