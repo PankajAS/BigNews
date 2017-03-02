@@ -42,18 +42,6 @@ public class DiscoverFragment extends Fragment {
     String defaultCat;
     JSONObject JsonCategories;
 
-    String[] mTextofButton = { "Tamil Head News", "Tamil Cinema News", "Tamil Vikatan Business News", "Malayalam Head Lines News", "Malayalam Business News", "Telugu Business News",
-            "Malayalam Movie News", "Malayalam Sports News", "Malayalam World News" ,"Malayalam National News"};
-
-    String[] catKeys = { "tamilHeadNews", "tamilCinemaNews", "tamilVikatanBusinessNews", "MalayalamHeadLinesNews", "MalayalamBusinessNews", "teluguBusinessNews",
-            "MalayalamMovieNews", "MalayalamSportsNews", "MalayalamWorldNews" ,"MalayalamNationalNews"};
-
-    String[] colorCodes = { "#aab7b8", "#aab7b8", "#aab7b8", "#aab7b8", "#aab7b8", "#aab7b8",
-            "#aab7b8", "#aab7b8", "#aab7b8" ,"#aab7b8"};
-
-    final String SelectedColor = "#04A94A";
-    final String UnSelectedColor = "#aab7b8";
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View discoverView = inflater.inflate(R.layout.activity_discover_fragment, container, false);
@@ -63,7 +51,7 @@ public class DiscoverFragment extends Fragment {
         getUpdatedCategories();
 
         try {
-            createButtonsDynamically(discoverView, mTextofButton, colorCodes);
+            createButtonsDynamically(discoverView, utils.mTextofButton, utils.colorCodes);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -84,13 +72,12 @@ public class DiscoverFragment extends Fragment {
     private void createButtonsDynamically(View menuView, final String[] numberOfItems, final String[] BgColor) throws JSONException {
         TableLayout mTlayout;
         TableRow tr = null;
-        int minusMargin = 0;
         int i = 0;
 
         mTlayout = (TableLayout) menuView.findViewById(R.id.tableLayout);
 
         TableRow.LayoutParams tableRowLayoutParams =
-                new TableRow.LayoutParams((utils.getScreenWidth()- minusMargin)/2, (utils.getScreenWidth()-minusMargin)/2);
+                new TableRow.LayoutParams((utils.getScreenWidth())/2, (utils.getScreenWidth())/2);
         tableRowLayoutParams.setMargins(0,0,10,10);
 
         while (i < numberOfItems.length) {
@@ -100,11 +87,6 @@ public class DiscoverFragment extends Fragment {
                 tr = new TableRow(menuView.getContext());
                 mTlayout.addView(tr);
             }
-
-//            TableLayout.LayoutParams rowParam =
-//                    new TableLayout.LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT);
-//            tr.setLayoutParams(rowParam);
-
             button.setText(numberOfItems[i]);
             button.setLayoutParams(tableRowLayoutParams);
            // button.setPadding(0,0,5,5);
@@ -112,9 +94,9 @@ public class DiscoverFragment extends Fragment {
             button.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
             button.setTextColor(Color.BLACK);
             button.setId(i);
-            if(selectedCategory(catKeys[i]))
+            if(selectedCategory(utils.catKeys[i]))
             {
-                button.setBackgroundColor(Color.parseColor(SelectedColor));
+                button.setBackgroundColor(Color.parseColor(utils.SelectedColor));
                 button.setTextColor(Color.WHITE);
             }
             else
@@ -129,20 +111,20 @@ public class DiscoverFragment extends Fragment {
                     int color = ((ColorDrawable)v.getBackground()).getColor();
                     String strColor = String.format("#%06X", 0xFFFFFF & color);
 
-                    if(SelectedColor.equals(strColor)){
-                        v.setBackgroundColor(Color.parseColor(UnSelectedColor)); // custom color
+                    if(utils.SelectedColor.equals(strColor)){
+                        v.setBackgroundColor(Color.parseColor(utils.UnSelectedColor)); // custom color
                         button.setTextColor(Color.BLACK);
                         getUpdatedCategories();
-                        JsonCategories.remove(catKeys[finalI]);
+                        JsonCategories.remove(utils.catKeys[finalI]);
                         utils.setUserPrefs(utils.NewsCategories, JsonCategories.toString(),getContext());
                     }
                     else
                     {
-                        v.setBackgroundColor(Color.parseColor(SelectedColor)); // custom color
+                        v.setBackgroundColor(Color.parseColor(utils.SelectedColor)); // custom color
                         button.setTextColor(Color.WHITE);
                         try {
                             getUpdatedCategories();
-                            JsonCategories.put(catKeys[finalI], numberOfItems[finalI]);
+                            JsonCategories.put(utils.catKeys[finalI], numberOfItems[finalI]);
                             utils.setUserPrefs(utils.NewsCategories, JsonCategories.toString(),getContext());
                         } catch (JSONException e) {
                             e.printStackTrace();

@@ -24,21 +24,9 @@ import java.util.Iterator;
 
 
 public class MenuFragment extends Fragment {
-   /*1. tamilHeadNews
-   2. tamilCinemaNews
-   3. tamilVikatanBusinessNews
-   4. MalayalamHeadLinesNews
-   5. MalayalamBusinessNews
-   6. teluguBusinessNews
-   7. MalayalamMovieNews
-   8. MalayalamSportsNews
-   9. MalayalamWorldNews
-   10. MalayalamNationalNews*/
 
     Utils utils;
     String defaultCat;
-
-    String[] mTextofButton = { "Tamil Head News", "Tamil Cinema News", "Tamil Vikatan Business News", "Malayalam Head Lines News", "Malayalam Business News", "Telugu Business News"};
 
     String[] colorCodes = { "#cd6155", "#DAF7A6", "#FFC300", "#FF5733", "#C70039", "#ba4a00", "#5d6d7e"};
 
@@ -51,7 +39,7 @@ public class MenuFragment extends Fragment {
 
         defaultCat = utils.getUserPrefs(utils.NewsCategories,getContext());
         try {
-            createButtonsDynamically(menuView, mTextofButton, colorCodes);
+            createButtonsDynamically(menuView, utils.mTextofButton, colorCodes);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -60,15 +48,15 @@ public class MenuFragment extends Fragment {
     }
 
     public void createButtonsDynamically(View menuView, String[] numberOfItems, final String[] BgColor) throws JSONException {
+
         TableLayout mTlayout;
         TableRow tr = null;
 
-        int minusMargin = 0;
         mTlayout = (TableLayout) menuView.findViewById(R.id.tableLayout);
 
         TableRow.LayoutParams tableRowLayoutParams =
-                new TableRow.LayoutParams((utils.getScreenWidth() - minusMargin) / 2, (utils.getScreenWidth() - minusMargin) / 2);
-        tableRowLayoutParams.setMargins(0, 0, 10, 10);
+                new TableRow.LayoutParams((utils.getScreenWidth()) / 2, (utils.getScreenWidth()) / 2);
+        //tableRowLayoutParams.setMargins(0,0,10,10);
 
         JSONObject JsonCategories = new JSONObject(defaultCat);
 
