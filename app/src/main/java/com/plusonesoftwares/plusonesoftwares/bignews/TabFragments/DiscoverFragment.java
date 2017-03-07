@@ -1,12 +1,10 @@
 package com.plusonesoftwares.plusonesoftwares.bignews.TabFragments;
 
-import android.app.ActionBar;
-import android.app.ActionBar.LayoutParams;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +15,24 @@ import android.widget.TableRow;
 import com.plusonesoftwares.plusonesoftwares.bignews.R;
 import com.plusonesoftwares.plusonesoftwares.bignews.Utils;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
 
-import static android.R.attr.layout_width;
-
 public class DiscoverFragment extends Fragment {
+
+
+    public DiscoverFragment(String title) {
+
+    }
+    public DiscoverFragment() {
+
+    }
+
+    public static DiscoverFragment newInstance(String title) {
+        return new DiscoverFragment(title);
+    }
 
    /*1. tamilHeadNews
    2. tamilCinemaNews

@@ -1,11 +1,10 @@
 package com.plusonesoftwares.plusonesoftwares.bignews.TabFragments;
 
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,13 +35,14 @@ public class MenuFragment extends Fragment {
         View menuView = inflater.inflate(R.layout.activity_menu_fragment, container, false);
 
         utils = new Utils();
-
+        defaultNewsCategories();
         defaultCat = utils.getUserPrefs(utils.NewsCategories,getContext());
         try {
             createButtonsDynamically(menuView, utils.mTextofButton, colorCodes);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
 
         return menuView;
     }
@@ -84,7 +84,7 @@ public class MenuFragment extends Fragment {
             //button.setPadding(7,10,7,10);
             button.setTextSize(16);
             button.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
-            button.setBackgroundColor(Color.parseColor(BgColor[i])); // custom color
+            //button.setBackgroundColor(Color.parseColor(BgColor[i])); // custom color
             button.setTextColor(Color.BLACK);
             button.setId(i);
             button.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +98,21 @@ public class MenuFragment extends Fragment {
             tr.addView(button);
             i++;
         }
+    }
+    private void defaultNewsCategories()
+    {
+        JSONObject FollowedCategories = new JSONObject();
+        try {
+            FollowedCategories.put("tamilHeadNews", "Tamil Head News");
+            FollowedCategories.put("tamilCinemaNews", "Tamil Cinema News");
+            FollowedCategories.put("tamilVikatanBusinessNews", "Tamil Vikatan Business News");
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if(!utils.keyExist(getContext()))
+            utils.setUserPrefs(utils.NewsCategories, FollowedCategories.toString() ,getContext());
     }
 }
 
