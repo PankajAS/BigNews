@@ -11,10 +11,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * Created by Plus 3 on 08-03-2017.
- */
-
 public class ImageDownloader extends AsyncTask<String, Void , Bitmap> {
 
     private ImageView imv;

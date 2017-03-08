@@ -36,16 +36,19 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
         this.context = context;
         travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
     }
+
     public CustomViewAdapter(Context context, JSONArray jsonArray) {
         super(context, R.layout.new_item);
         this.context = context;
         travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
         this.jsonArray = jsonArray;
+
     }
 
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+
 
         if(convertView == null) {
             holder = new CustomViewAdapter.ViewHolder();
@@ -80,7 +83,7 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
 
     @Override
     public int getCount() {
-        return 4;
+        return jsonArray.length();
     }
 
     private class ViewHolder{
