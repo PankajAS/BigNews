@@ -100,4 +100,8 @@ public class TravelAdapter extends BaseAdapter {
 
         return layout;
     }
+
+    public List<Travels.Data> getTravelData() {
+        return travelData;
+    }
 }

@@ -80,7 +80,7 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     private class ViewHolder{
