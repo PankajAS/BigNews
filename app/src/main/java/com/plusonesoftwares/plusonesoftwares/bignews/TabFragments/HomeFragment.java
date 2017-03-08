@@ -14,18 +14,17 @@ import com.plusonesoftwares.plusonesoftwares.bignews.TravelAdapter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     DiscoverFragment home;
     FragmentManager manger;
     private FlipViewController flipView;
-    String Url = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=tamilHeadNews";
+    String Url = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=";
     HttpConnection httpConnection;
     JSONArray jsonArray = new JSONArray();
     JSONObject jsonObject;
+    ArrayList<String> urllist;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,21 +32,20 @@ public class HomeFragment extends Fragment {
         httpConnection = new HttpConnection();
         //View homeView = inflater.inflate(R.layout.activity_home_fragment, container, false);
         flipView = new FlipViewController(getContext(), FlipViewController.VERTICAL);
+        urllist = new ArrayList<>();
+        urllist.add(Url+"tamilHeadNews");
+        urllist.add(Url+"tamilCinemaNews");
+        urllist.add(Url+"tamilVikatanBusinessNews");
+        urllist.add(Url+"MalayalamHeadLinesNews");
+        urllist.add(Url+"MalayalamBusinessNews");
+        urllist.add(Url+"teluguBusinessNews");
+        urllist.add(Url+"MalayalamMovieNews");
+        urllist.add(Url+"MalayalamSportsNews");
+        urllist.add(Url+"MalayalamWorldNews");
+        urllist.add(Url+"MalayalamNationalNews");
 
-
-        try {
-
-            jsonArray = httpConnection.new FetchData(getContext()).execute(new URL(Url)).get();
-            flipView.setAdapter(new TravelAdapter(getContext(), jsonArray));
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
+        // jsonArray = httpConnection.new FetchData(getContext()).execute(new URL(Url+"tamilVikatanBusinessNews")).get();
+        flipView.setAdapter(new TravelAdapter(getContext(), urllist));
 
         return flipView;
     }
