@@ -17,11 +17,11 @@ import android.view.ViewDebug;
 import android.widget.AbsListView;
 import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.flip.FlipCards;
 import com.plusonesoftwares.plusonesoftwares.bignews.flip.FlipRenderer;
 import com.plusonesoftwares.plusonesoftwares.bignews.unit.AphidLog;
-
 
 import junit.framework.Assert;
 
@@ -265,6 +265,7 @@ public class FlipViewController extends AdapterView<Adapter> {
                 @Override
                 public void run() {
                     hideFlipAnimation();
+
                 }
             });
         }

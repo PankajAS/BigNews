@@ -84,7 +84,7 @@ public class MenuFragment extends Fragment {
             //button.setPadding(7,10,7,10);
             button.setTextSize(16);
             button.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
-            //button.setBackgroundColor(Color.parseColor(BgColor[i])); // custom color
+            //button.setBackgroundColor(Color.parseColor(BgColor[i])); //custom color
             button.setTextColor(Color.BLACK);
             button.setId(i);
             button.setOnClickListener(new View.OnClickListener() {
