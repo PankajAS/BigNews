@@ -33,7 +33,6 @@ public class NewsDetails extends AppCompatActivity {
         newsTitle = intent.getStringExtra("NewsCategory");
         setTitle(newsTitle);
 
-
         try {
             jobject = new JSONObject(jsonarray);
             headline.setText(jobject.getString("title"));

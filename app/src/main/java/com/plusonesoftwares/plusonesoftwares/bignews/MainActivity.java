@@ -38,6 +38,29 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         //PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount(),tabBarTitles);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 1){
+                    setTitle("Followed Catogries");
+                }else if(position == 2){
+                    setTitle("All Catogries");
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+
+            }
+        });
+
         viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
 
             @Override
@@ -49,9 +72,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         return flip;
                     case 1:
                         MenuFragment menu = new MenuFragment();
+
                         return menu;
                     case 2:
                         DiscoverFragment discover = new DiscoverFragment();
+
                         return discover;
                     default:
                         return null;
@@ -128,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+
 
     }
 
