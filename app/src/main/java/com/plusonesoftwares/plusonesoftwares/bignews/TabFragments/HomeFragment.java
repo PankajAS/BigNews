@@ -22,6 +22,7 @@ public class HomeFragment extends Fragment {
     FragmentManager manger;
     private FlipViewController flipView;
     String Url = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=";
+    String nextUrl = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getNextNewsList?newsCategory=";
     HttpConnection httpConnection;
     JSONArray jsonArray = new JSONArray();
     JSONObject jsonObject;
@@ -39,25 +40,33 @@ public class HomeFragment extends Fragment {
         urllist.add(Url+"tamilHeadNews");
         urllist.add(Url+"tamilCinemaNews");
         urllist.add(Url+"tamilVikatanBusinessNews");
-       /* urllist.add(Url+"MalayalamHeadLinesNews");
-        urllist.add(Url+"MalayalamBusinessNews");
+       urllist.add(Url+"MalayalamHeadLinesNews");
+       /* urllist.add(Url+"MalayalamBusinessNews");
         urllist.add(Url+"teluguBusinessNews");
         urllist.add(Url+"MalayalamMovieNews");
         urllist.add(Url+"MalayalamSportsNews");
         urllist.add(Url+"MalayalamWorldNews");
         urllist.add(Url+"MalayalamNationalNews");*/
+        urllist.add(Url+"tamilHeadNews");
+        urllist.add(Url+"tamilCinemaNews");
+        urllist.add(Url+"tamilVikatanBusinessNews");
+        urllist.add(Url+"MalayalamHeadLinesNews");
 
         //Heading news category name
         newsCategory.add("Tamil Head News");
         newsCategory.add("Tamil Cinema News");
         newsCategory.add("Tamil Vikatan Business News");
-        /*newsCategory.add("Malayalam HeadLines News");
-        newsCategory.add("Malayalam Business News");
+        newsCategory.add("Malayalam HeadLines News");
+        /*newsCategory.add("Malayalam Business News");
         newsCategory.add("Telugu Business News");
         newsCategory.add("Malayalam Movie News");
         newsCategory.add("Malayalam Sports News");
         newsCategory.add("Malayalam World News");
         newsCategory.add("Malayalam National News");*/
+        newsCategory.add("Tamil Head News");
+        newsCategory.add("Tamil Cinema News");
+        newsCategory.add("Tamil Vikatan Business News");
+        newsCategory.add("Malayalam HeadLines News");
 
         // jsonArray = httpConnection.new FetchData(getContext()).execute(new URL(Url+"tamilVikatanBusinessNews")).get();
         flipView.setAdapter(new TravelAdapter(getContext(),getActivity(), urllist, newsCategory));
