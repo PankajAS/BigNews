@@ -47,10 +47,10 @@ public class HomeFragment extends Fragment {
         urllist.add(Url+"MalayalamSportsNews");
         urllist.add(Url+"MalayalamWorldNews");
         urllist.add(Url+"MalayalamNationalNews");*/
-        urllist.add(Url+"tamilHeadNews");
-        urllist.add(Url+"tamilCinemaNews");
-        urllist.add(Url+"tamilVikatanBusinessNews");
-        urllist.add(Url+"MalayalamHeadLinesNews");
+        urllist.add(nextUrl+"tamilHeadNews");
+        urllist.add(nextUrl+"tamilCinemaNews");
+        urllist.add(nextUrl+"tamilVikatanBusinessNews");
+        urllist.add(nextUrl+"MalayalamHeadLinesNews");
 
         //Heading news category name
         newsCategory.add("Tamil Head News");
