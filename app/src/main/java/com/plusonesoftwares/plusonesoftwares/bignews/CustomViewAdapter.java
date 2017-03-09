@@ -1,6 +1,8 @@
 package com.plusonesoftwares.plusonesoftwares.bignews;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,7 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
     JSONArray jsonArray;
     CustomViewAdapter.ViewHolder holder= null;
     JSONObject jObject;
+    Activity parentContext;
 
     public CustomViewAdapter(Context context) {
         super(context, R.layout.new_item);
@@ -37,18 +40,17 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
         travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
     }
 
-    public CustomViewAdapter(Context context, JSONArray jsonArray) {
+    public CustomViewAdapter(Context context,Activity parentContext, JSONArray jsonArray) {
         super(context, R.layout.new_item);
         this.context = context;
         travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
         this.jsonArray = jsonArray;
-
+        this.parentContext = parentContext;
     }
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         if(convertView == null) {
             holder = new CustomViewAdapter.ViewHolder();
@@ -62,12 +64,26 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
 
 
 
-            try {
-                jObject = jsonArray.getJSONObject(position);
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    JSONObject jobject = null;
+                    try {
+                        jobject = jsonArray.getJSONObject(position);
+                        Intent intent = new Intent(context, NewsDetails.class);
+                        intent.putExtra("Data",jobject.toString());
+                        intent.putExtra("NewsCategory",parentContext.getTitle());
+                        context.startActivity(intent);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
+            try {
+               jObject = jsonArray.getJSONObject(position);
                holder.title.setText(AphidLog.format(jObject.getString("title")));
                new ImageDownloader(holder.title_image).execute(jObject.getString("imgURL"));
-               // jObject.getString("imgURL");
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -75,11 +91,9 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
         }else{
             holder = (CustomViewAdapter.ViewHolder) convertView.getTag();
         }
-        //jObject.getString("imgURL")
 
         return convertView;
     }
-
 
     @Override
     public int getCount() {

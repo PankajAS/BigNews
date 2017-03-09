@@ -3,6 +3,7 @@ package com.plusonesoftwares.plusonesoftwares.bignews;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,17 +17,22 @@ public class NewsDetails extends AppCompatActivity {
     TextView headline, description;
     ImageView newsImage;
     String jsonarray;
+    String newsTitle;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         headline = (TextView)findViewById(R.id.headline);
         description = (TextView)findViewById(R.id.description);
         newsImage = (ImageView)findViewById(R.id.newsImage);
         Intent intent = getIntent();
         jsonarray=intent.getStringExtra("Data");
+        newsTitle = intent.getStringExtra("NewsCategory");
+        setTitle(newsTitle);
+
 
         try {
             jobject = new JSONObject(jsonarray);
@@ -40,5 +46,15 @@ public class NewsDetails extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            //overridePendingTransition(R.transition.stay, R.transition.slide_down);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

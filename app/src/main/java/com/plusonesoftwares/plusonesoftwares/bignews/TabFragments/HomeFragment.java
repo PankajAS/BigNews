@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
     DiscoverFragment home;
@@ -25,6 +26,7 @@ public class HomeFragment extends Fragment {
     JSONArray jsonArray = new JSONArray();
     JSONObject jsonObject;
     ArrayList<String> urllist;
+    List<String> newsCategory;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,19 +35,32 @@ public class HomeFragment extends Fragment {
         //View homeView = inflater.inflate(R.layout.activity_home_fragment, container, false);
         flipView = new FlipViewController(getContext(), FlipViewController.VERTICAL);
         urllist = new ArrayList<>();
+        newsCategory= new ArrayList<>();
         urllist.add(Url+"tamilHeadNews");
         urllist.add(Url+"tamilCinemaNews");
         urllist.add(Url+"tamilVikatanBusinessNews");
-        urllist.add(Url+"MalayalamHeadLinesNews");
+       /* urllist.add(Url+"MalayalamHeadLinesNews");
         urllist.add(Url+"MalayalamBusinessNews");
         urllist.add(Url+"teluguBusinessNews");
         urllist.add(Url+"MalayalamMovieNews");
         urllist.add(Url+"MalayalamSportsNews");
         urllist.add(Url+"MalayalamWorldNews");
-        urllist.add(Url+"MalayalamNationalNews");
+        urllist.add(Url+"MalayalamNationalNews");*/
+
+        //Heading news category name
+        newsCategory.add("Tamil Head News");
+        newsCategory.add("Tamil Cinema News");
+        newsCategory.add("Tamil Vikatan Business News");
+        /*newsCategory.add("Malayalam HeadLines News");
+        newsCategory.add("Malayalam Business News");
+        newsCategory.add("Telugu Business News");
+        newsCategory.add("Malayalam Movie News");
+        newsCategory.add("Malayalam Sports News");
+        newsCategory.add("Malayalam World News");
+        newsCategory.add("Malayalam National News");*/
 
         // jsonArray = httpConnection.new FetchData(getContext()).execute(new URL(Url+"tamilVikatanBusinessNews")).get();
-        flipView.setAdapter(new TravelAdapter(getContext(), urllist));
+        flipView.setAdapter(new TravelAdapter(getContext(),getActivity(), urllist, newsCategory));
 
         return flipView;
     }
