@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.FlipViewController;
+import com.plusonesoftwares.plusonesoftwares.bignews.unit.AphidLog;
 import com.plusonesoftwares.plusonesoftwares.bignews.unit.TextureUtils;
 import com.plusonesoftwares.plusonesoftwares.bignews.unit.UI;
 
@@ -323,9 +324,9 @@ public class FlipCards {
                                 backCards.resetWithIndex(frontCards.getIndex() + 1);
                                 controller.flippedToView(anglePageIndex, false);
                             } else {
-                               // throw new RuntimeException(AphidLog.format(
-                                 //       "Inconsistent states: anglePageIndex: %d, accumulatedAngle %.1f, frontCards %d, backCards %d",
-                                   //     anglePageIndex, accumulatedAngle, frontCards.getIndex(), backCards.getIndex()));
+                               throw new RuntimeException(AphidLog.format(
+                                       "Inconsistent states: anglePageIndex: %d, accumulatedAngle %.1f, frontCards %d, backCards %d",
+                                       anglePageIndex, accumulatedAngle, frontCards.getIndex(), backCards.getIndex()));
                             }
                         }
                     }

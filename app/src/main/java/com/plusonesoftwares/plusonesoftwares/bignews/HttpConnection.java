@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.plusonesoftwares.plusonesoftwares.bignews.data.DataCollection;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,6 +68,24 @@ public class HttpConnection {
 
         @Override
         protected void onPostExecute(JSONArray strings) {
+            JSONObject obj = null;
+
+            for (int i = 0; i < strings.length(); i++) {
+                try {
+                    obj = strings.getJSONObject(i);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            try {
+                DataCollection.IMG_DESCRIPTIONS.add(new DataCollection.Data(obj.getString("title"),obj.getString("desc"),obj.getString("imgURL")));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
             //dialog.dismiss();
             super.onPostExecute(strings);
         }

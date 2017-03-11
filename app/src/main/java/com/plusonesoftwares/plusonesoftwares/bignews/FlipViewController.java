@@ -42,7 +42,6 @@ public class FlipViewController extends AdapterView<Adapter> {
     }
     private static final int MAX_RELEASED_VIEW_SIZE = 1;
 
-
     public static final int MSG_SURFACE_CREATED = 1;
 
     private Handler handler = new Handler(new Handler.Callback() {
@@ -289,7 +288,7 @@ public class FlipViewController extends AdapterView<Adapter> {
 
             handler.post(new Runnable() {
                 public void run() {
-                    if (!inFlipAnimation) {
+                    if (!inFlipAnimation){
                         cards.setVisible(false);
                         surfaceView.requestRender(); //ask OpenGL to clear its display
                     }
@@ -353,7 +352,7 @@ public class FlipViewController extends AdapterView<Adapter> {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                flippedToView(indexInAdapter, true);
+               flippedToView(indexInAdapter, true);
             }
         });
     }
@@ -467,7 +466,6 @@ public class FlipViewController extends AdapterView<Adapter> {
 
         this.adapter = adapter;
         adapterDataCount = adapter.getCount();
-
         adapterDataObserver = new MyDataSetObserver();
         this.adapter.registerDataSetObserver(adapterDataObserver);
         if (adapterDataCount > 0) {

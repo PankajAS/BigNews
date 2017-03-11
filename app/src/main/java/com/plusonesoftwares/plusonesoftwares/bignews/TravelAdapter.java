@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.plusonesoftwares.plusonesoftwares.bignews.data.DataCollection;
 import com.plusonesoftwares.plusonesoftwares.bignews.data.Travels;
 import com.plusonesoftwares.plusonesoftwares.bignews.unit.AphidLog;
 import com.plusonesoftwares.plusonesoftwares.bignews.unit.UI;
@@ -39,6 +41,7 @@ public class TravelAdapter extends BaseAdapter {
 
     private int repeatCount = 1;
     private List<Travels.Data> travelData;
+    private List<DataCollection.Data> dataCollectionData;
     JSONArray jarray;
     List<String> urls;
     List<String> newsCategory;
@@ -47,29 +50,34 @@ public class TravelAdapter extends BaseAdapter {
         this.context = context1;
         inflater = LayoutInflater.from(context1);
         travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
+        //dataCollectionData = new ArrayList<DataCollection.Data>(DataCollection.IMG_DESCRIPTIONS);
         this.parentContext = parentcontext;
         this.urls = urllist;
         this.newsCategory = newsCategory;
     }
 
-    public TravelAdapter(Context context, JSONArray jarray) {
+    public TravelAdapter(Context context, List<String> urls) {
+        this.context = context;
+        this.urls = urls;
+    }
+
+    public TravelAdapter(Activity context, JSONArray jarray) {
         this.context = context;
         inflater = LayoutInflater.from(context);
-        travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
         this.jarray = jarray;
     }
 
-    public TravelAdapter(Context context, ArrayList<String> urls) {
-        this.context = context;
-        inflater = LayoutInflater.from(context);
-        travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
-
-    }
 
     @Override
     public int getCount() {
         //return travelData.size() * repeatCount;
+        if(urls !=null){
         return urls.size();
+        }
+        else if(jarray !=null){
+            return jarray.length();
+        }
+        return 0;
     }
 
     public int getRepeatCount() {
@@ -93,27 +101,43 @@ public class TravelAdapter extends BaseAdapter {
 
 
     @Override
-    public View getView(int position, View convertView, ViewGroup viewGroup) {
+    public View getView(final int position, final View convertView, ViewGroup viewGroup) {
         View layout = convertView;
-        if (convertView == null) {
-            layout = inflater.inflate(R.layout.activity_home_fragment, null);
-            AphidLog.d("created new view from adapter: %d", position);
-        }
 
-        final Travels.Data data = travelData.get(position % travelData.size());
-        try {
-            new DownloadData(context,UI.<ListView>findViewById(layout, R.id.list)).execute(new URL(urls.get(position)));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        System.out.println(position);
+        if(parentContext!=null) {
+            if (convertView == null) {
+                layout = inflater.inflate(R.layout.activity_home_fragment,null);
+                AphidLog.d("created new view from adapter: %d", position);
+            }
+            //final Travels.Data data = travelData.get(position % travelData.size());
+           //DataCollection.Data data = dataCollectionData.get(position);
 
-        parentContext.setTitle(newsCategory.get(position));
+
+            try {
+                new DownloadData(context, parentContext, newsCategory.get(position), UI.<ListView>findViewById(layout, R.id.list)).execute(new URL(urls.get(position)));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+        }else{
+
+            if(convertView==null){
+                layout = inflater.inflate(R.layout.activity_news_category_details,null);
+            }
+            try {
+                JSONObject jobject = jarray.getJSONObject(position);
+                UI.<TextView>findViewById(layout, R.id.headline).setText(jobject.getString("title"));
+               // new ImageDownloader(UI.<ImageView>findViewById(layout, R.id.newsImage)).execute(jobject.getString("imgURL"));
+                UI.<TextView>findViewById(layout, R.id.description).setText(jobject.getString("desc"));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
 
         return layout;
-    }
-
-    public List<Travels.Data> getTravelData() {
-        return travelData;
     }
 
     public class DownloadData extends AsyncTask<URL,Context,JSONArray>{
@@ -121,17 +145,27 @@ public class TravelAdapter extends BaseAdapter {
         private HttpURLConnection urlConnection;
         Context context;
         ListView list;
+        Activity parentContext;
+        String title;
 
-        public DownloadData(Context context, ListView list){
+
+        public DownloadData(Context context, Activity parentContext, String title, ListView list){
             this.context = context;
             this.list = list;
+            this.parentContext = parentContext;
+            this.title = title;
         }
+
+
 
         @Override
         protected JSONArray doInBackground(URL... urls) {
             URL url = urls[0];
             String line;
             String c;
+
+            System.out.println(url.toString().substring(url.toString().lastIndexOf("=") + 1));
+            System.out.println(url);
             sb = new StringBuilder();
             try {
                 urlConnection = (HttpURLConnection)url.openConnection();
@@ -148,12 +182,20 @@ public class TravelAdapter extends BaseAdapter {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            System.out.println(jarray);
             return jarray;
         }
 
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
+
+
+
+
             list.setAdapter(new CustomViewAdapter(context,parentContext, jsonArray));
+
+            parentContext.setTitle(title);
+
             super.onPostExecute(jsonArray);
         }
     }

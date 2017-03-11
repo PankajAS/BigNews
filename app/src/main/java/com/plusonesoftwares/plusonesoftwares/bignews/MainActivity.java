@@ -95,6 +95,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         });
         tabLayout.setupWithViewPager(viewPager);
         //changePager();
+
+        HttpConnection data = new HttpConnection();
+
+           // data.new FetchData(getApplicationContext()).execute(new URL("https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=tamilHeadNews"));
+
     }
 
     public void changePager(){

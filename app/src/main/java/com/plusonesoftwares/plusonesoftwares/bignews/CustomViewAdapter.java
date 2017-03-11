@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.data.Travels;
-import com.plusonesoftwares.plusonesoftwares.bignews.unit.AphidLog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,8 +81,10 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
 
             try {
                jObject = jsonArray.getJSONObject(position);
-               holder.title.setText(AphidLog.format(jObject.getString("title")));
-               new ImageDownloader(holder.title_image).execute(jObject.getString("imgURL"));
+                holder.title.setText(jObject.getString("title"));
+               // Picasso.with(parentContext).load(jObject.getString("imgURL")).into(holder.title_image);
+
+              // new ImageDownloader(holder.title_image).execute(jObject.getString("imgURL"));
 
             } catch (JSONException e) {
                 e.printStackTrace();

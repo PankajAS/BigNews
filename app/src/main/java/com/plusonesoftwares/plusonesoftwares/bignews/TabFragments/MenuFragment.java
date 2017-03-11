@@ -27,6 +27,7 @@ public class MenuFragment extends Fragment {
     Utils utils;
     String defaultCat;
 
+
     String[] colorCodes = { "#cd6155", "#DAF7A6", "#FFC300", "#FF5733", "#C70039", "#ba4a00", "#5d6d7e"};
 
     @Override
@@ -58,7 +59,7 @@ public class MenuFragment extends Fragment {
                 new TableRow.LayoutParams((utils.getScreenWidth()) / 2, (utils.getScreenWidth()) / 2);
         //tableRowLayoutParams.setMargins(0,0,10,10);
 
-        JSONObject JsonCategories = new JSONObject(defaultCat);
+        final JSONObject JsonCategories = new JSONObject(defaultCat);
 
         Iterator<String> iter = JsonCategories.keys();
 
@@ -91,6 +92,7 @@ public class MenuFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), NewsCategoryDetails.class);
+                    intent.putExtra("categoryName",((Button) v).getText());
                     startActivity(intent);
                 }
             });
