@@ -10,11 +10,15 @@ import android.view.ViewGroup;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.FlipViewController;
 import com.plusonesoftwares.plusonesoftwares.bignews.TravelAdapter;
+import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -60,9 +64,9 @@ public class HomeFragment extends Fragment {
 
 
         //Heading news category name
-        newsCategory.add("india HeadLines News");
-        newsCategory.add("india Movie News");
-        newsCategory.add("india Business News");
+        newsCategory.add("indiaHeadLinesNews");
+        newsCategory.add("indiaMovieNews");
+        newsCategory.add("indiaBusinessNews");
       /*  newsCategory.add("Malayalam HeadLines News");
         newsCategory.add("Malayalam Business News");
         newsCategory.add("Telugu Business News");
@@ -74,15 +78,31 @@ public class HomeFragment extends Fragment {
         newsCategory.add("Tamil Cinema News");
         newsCategory.add("Tamil Vikatan Business News");
         newsCategory.add("Malayalam HeadLines News");*/
-        newsCategory.add("india HeadLines News");
-        newsCategory.add("india Movie News");
-        newsCategory.add("india Business News");
+        newsCategory.add("indiaHeadLinesNews");
+        newsCategory.add("indiaMovieNews");
+        newsCategory.add("indiaBusinessNews");
 
         // jsonArray = httpConnection.new FetchData(getContext()).execute(new URL(Url+"tamilVikatanBusinessNews")).get();
         flipView = new FlipViewController(getContext(), FlipViewController.VERTICAL);
-        flipView.setAdapter(new TravelAdapter(getContext(),getActivity(), urllist, newsCategory));
+        //flipView.setAdapter(new TravelAdapter(getContext(),getActivity(), urllist, newsCategory));
+
+
+        ContentRepo data = new ContentRepo(getContext());
+        ArrayList<HashMap<String, String>> newsList = new ArrayList<HashMap<String, String>>();
+        newsList = data.getNewsData("","");
+
+        JSONArray mJSONArray = new JSONArray(Arrays.asList(newsList));
+        JSONArray jsonArray1 = new JSONArray();
+        try {
+            System.out.println(mJSONArray.toString(2));
+            jsonArray1 = mJSONArray.getJSONArray(0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        flipView.setAdapter(new TravelAdapter(getContext(),getActivity(), urllist, newsCategory, jsonArray1));
 
         return flipView;
     }
+
 
 }

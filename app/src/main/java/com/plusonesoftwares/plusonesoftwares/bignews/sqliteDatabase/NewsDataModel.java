@@ -1,5 +1,8 @@
 package com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Plus 3 on 11-03-2017.
  */
@@ -7,7 +10,6 @@ package com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase;
 public class NewsDataModel {
     // Labels table name
     public static final String TABLE = "tblNewsData";
-
     // Labels Table Columns names
     public  static final String KEY_ID = "ID";
     public  static final String KEY_Title = "Title";
@@ -21,6 +23,35 @@ public class NewsDataModel {
     public String Title;
     public String ImageUrl;
     public String Description;
-    public String Category;
-    public String IsNext;
+    public static String Category;
+    public static String IsNext;
+
+    public static List<Data> IMG_DESCRIPTIONS = new ArrayList<Data>();
+
+static {
+    //IMG_DESCRIPTIONS.add(new NewsDataModel.Data());
+}
+
+
+
+
+    public static final class Data {
+
+        public String ID;
+        public String Title;
+        public String ImageUrl;
+        public String Description;
+        public String Category;
+        public Boolean IsNext;
+
+        private Data(String ID, String Title, String ImageUrl, String Description,
+                     String Category, Boolean IsNext) {
+            this.ID = ID;
+            this.Title = Title;
+            this.ImageUrl = ImageUrl;
+            this.Description = Description;
+            this.Category = Category;
+            this.IsNext = IsNext;
+        }
+    }
 }

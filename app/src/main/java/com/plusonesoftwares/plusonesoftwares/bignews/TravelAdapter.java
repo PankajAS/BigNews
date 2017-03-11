@@ -8,11 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.data.DataCollection;
 import com.plusonesoftwares.plusonesoftwares.bignews.data.Travels;
-import com.plusonesoftwares.plusonesoftwares.bignews.unit.AphidLog;
+import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
+import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.NewsDataModel;
 import com.plusonesoftwares.plusonesoftwares.bignews.unit.UI;
 
 import org.json.JSONArray;
@@ -23,9 +23,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -45,20 +46,24 @@ public class TravelAdapter extends BaseAdapter {
     JSONArray jarray;
     List<String> urls;
     List<String> newsCategory;
+    List<NewsDataModel.Data> newsDataList;
+    JSONArray allNewsData;
+    ContentRepo newsRecords;
 
-    public TravelAdapter(Context context1, Activity parentcontext, ArrayList<String> urllist, List<String> newsCategory) {
+    public TravelAdapter(Context context1, Activity parentcontext, ArrayList<String> urllist, List<String> newsCategory, JSONArray allNewsData) {
         this.context = context1;
         inflater = LayoutInflater.from(context1);
         travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
         //dataCollectionData = new ArrayList<DataCollection.Data>(DataCollection.IMG_DESCRIPTIONS);
         this.parentContext = parentcontext;
+        this.allNewsData = allNewsData;
         this.urls = urllist;
         this.newsCategory = newsCategory;
     }
 
-    public TravelAdapter(Context context, List<String> urls) {
+    public TravelAdapter(Context context) {
         this.context = context;
-        this.urls = urls;
+
     }
 
     public TravelAdapter(Activity context, JSONArray jarray) {
@@ -99,13 +104,45 @@ public class TravelAdapter extends BaseAdapter {
     }
 
 
+    private Boolean getIsNext(List<String> newsCategory, int parentIndex){
 
+        int halfsize =  newsCategory.size()/2;
+
+        if(parentIndex>halfsize-1){
+            return  true;
+        }
+        else{
+            return  false;
+        }
+    }
     @Override
     public View getView(final int position, final View convertView, ViewGroup viewGroup) {
         View layout = convertView;
+        if (convertView == null) {
+            layout = inflater.inflate(R.layout.activity_home_fragment, null);
 
-        System.out.println(position);
-        if(parentContext!=null) {
+        }
+        newsRecords = new ContentRepo(context);
+        ArrayList<HashMap<String, String>> newsList = new ArrayList<HashMap<String, String>>();
+        Boolean isNext = getIsNext(newsCategory,position);
+        newsList =newsRecords.getNewsData(newsCategory.get(position),isNext? "true":"false");
+
+        JSONArray mJSONArray = new JSONArray(Arrays.asList(newsList));
+        JSONArray jsonArray1 = new JSONArray();
+        try {
+            System.out.println(mJSONArray.toString(2));
+            jsonArray1 = mJSONArray.getJSONArray(0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        System.out.println();
+
+
+
+        UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, parentContext, jsonArray1));
+
+        //System.out.println(position);
+        /*if(parentContext!=null) {
             if (convertView == null) {
                 layout = inflater.inflate(R.layout.activity_home_fragment,null);
                 AphidLog.d("created new view from adapter: %d", position);
@@ -135,7 +172,7 @@ public class TravelAdapter extends BaseAdapter {
                 e.printStackTrace();
             }
 
-        }
+        }*/
 
         return layout;
     }
@@ -164,8 +201,8 @@ public class TravelAdapter extends BaseAdapter {
             String line;
             String c;
 
-            System.out.println(url.toString().substring(url.toString().lastIndexOf("=") + 1));
-            System.out.println(url);
+           // System.out.println(url.toString().substring(url.toString().lastIndexOf("=") + 1));
+           // System.out.println(url);
             sb = new StringBuilder();
             try {
                 urlConnection = (HttpURLConnection)url.openConnection();
@@ -182,7 +219,7 @@ public class TravelAdapter extends BaseAdapter {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            System.out.println(jarray);
+           // System.out.println(jarray);
             return jarray;
         }
 

@@ -23,15 +23,18 @@ public class DBHelper  extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+
+
         //All necessary tables you like to create will create here
-        String CREATE_TABLE_CATEGORY = "CREATE TABLE " + NewsDataModel.TABLE  + "("
-                + NewsDataModel.KEY_ID  + " INTEGER ,"
-                + NewsDataModel.KEY_Title + " TEXT, "
-                + NewsDataModel.KEY_Content + " TEXT, "
-                + NewsDataModel.KEY_Description + " TEXT , "
-                + NewsDataModel.KEY_Category + " INTEGER,"
-                + NewsDataModel.KEY_IsNext + "INTEGER)";
-        db.execSQL(CREATE_TABLE_CATEGORY);
+        String CREATE_TABLE_NEWS = "CREATE TABLE " + NewsDataModel.TABLE  + "("
+                + NewsDataModel.KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                + NewsDataModel.KEY_Title + " TEXT ,"
+                + NewsDataModel.KEY_ImageUrl + " TEXT ,"
+                + NewsDataModel.KEY_Description + " TEXT ,"
+                + NewsDataModel.KEY_Category + " INTEGER ,"
+                + NewsDataModel.KEY_IsNext + " TEXT ) ";
+        db.execSQL(CREATE_TABLE_NEWS);
     }
 
     @Override

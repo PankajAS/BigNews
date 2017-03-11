@@ -44,6 +44,7 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
         this.context = context;
         travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
         this.jsonArray = jsonArray;
+
         this.parentContext = parentContext;
     }
 
@@ -62,6 +63,7 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
 
 
 
+            //System.out.println(position);
 
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -81,10 +83,10 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
 
             try {
                jObject = jsonArray.getJSONObject(position);
-                holder.title.setText(jObject.getString("title"));
+               holder.title.setText(jObject.getString("Title"));
                // Picasso.with(parentContext).load(jObject.getString("imgURL")).into(holder.title_image);
 
-              // new ImageDownloader(holder.title_image).execute(jObject.getString("imgURL"));
+              new ImageDownloader(holder.title_image).execute(jObject.getString("ImageUrl"));
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -98,6 +100,8 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
 
     @Override
     public int getCount() {
+
+        System.out.println("length: "+jsonArray.length());
         return jsonArray.length();
     }
 
