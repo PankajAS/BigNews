@@ -31,6 +31,7 @@ public class DiscoverFragment extends Fragment {
     }
 
     public static DiscoverFragment newInstance(String title) {
+
         return new DiscoverFragment(title);
     }
 
@@ -46,7 +47,6 @@ public class DiscoverFragment extends Fragment {
    10. MalayalamNationalNews*/
 
     Utils utils;
-    String defaultCat;
     JSONObject JsonCategories;
 
     @Override
@@ -55,7 +55,7 @@ public class DiscoverFragment extends Fragment {
 
         utils = new Utils();
 
-        getUpdatedCategories();
+        JsonCategories = utils.getUpdatedCategories(getContext());
 
         try {
             createButtonsDynamically(discoverView, utils.mTextofButton, utils.colorCodes);
@@ -64,16 +64,6 @@ public class DiscoverFragment extends Fragment {
         }
 
         return discoverView;
-    }
-
-    private void getUpdatedCategories()
-    {
-        defaultCat = utils.getUserPrefs(utils.NewsCategories,getContext());
-        try {
-            JsonCategories = new JSONObject(defaultCat);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     private void createButtonsDynamically(View menuView, final String[] numberOfItems, final String[] BgColor) throws JSONException {
@@ -121,7 +111,7 @@ public class DiscoverFragment extends Fragment {
                     if(utils.SelectedColor.equals(strColor)){
                         v.setBackgroundColor(Color.parseColor(utils.UnSelectedColor)); // custom color
                         button.setTextColor(Color.BLACK);
-                        getUpdatedCategories();
+                        JsonCategories = utils.getUpdatedCategories(getContext());
                         JsonCategories.remove(utils.catKeys[finalI]);
                         utils.setUserPrefs(utils.NewsCategories, JsonCategories.toString(),getContext());
                     }
@@ -130,7 +120,7 @@ public class DiscoverFragment extends Fragment {
                         v.setBackgroundColor(Color.parseColor(utils.SelectedColor)); // custom color
                         button.setTextColor(Color.WHITE);
                         try {
-                            getUpdatedCategories();
+                            JsonCategories = utils.getUpdatedCategories(getContext());
                             JsonCategories.put(utils.catKeys[finalI], numberOfItems[finalI]);
                             utils.setUserPrefs(utils.NewsCategories, JsonCategories.toString(),getContext());
                         } catch (JSONException e) {
@@ -147,7 +137,7 @@ public class DiscoverFragment extends Fragment {
 
     private boolean selectedCategory(String CatValue) throws JSONException {
 
-        JSONObject JsonCategories = new JSONObject(defaultCat);
+        JsonCategories = utils.getUpdatedCategories(getContext());
 
         Iterator<String> iter = JsonCategories.keys();
         while (iter.hasNext()) {

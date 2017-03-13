@@ -9,65 +9,58 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
+
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class SplashScreenActivity extends AppCompatActivity {
-
-    private ProgressBar progressBar;
-    private int progressStatus = 0;
-    private TextView textView;
-    private Handler handler = new Handler();
     List<String> string;
-    ListView data;
     String Url = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=";
     String nextUrl = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getNextNewsList?newsCategory=";
-    ArrayList<String> newsCategory= new ArrayList<>();
+    ArrayList<String> newsCategory = new ArrayList<>();
 
 
 
     Utils utils;
-    //JSONArray jsonArray;
-    JSONArray array;
-    JSONObject jsonObj;
+    ContentRepo contentOperation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        newsCategory.add(Url+"indiaHeadLinesNews");
-        newsCategory.add(Url+"indiaMovieNews");
-        newsCategory.add(Url+"indiaBusinessNews");
-        newsCategory.add(nextUrl+"indiaHeadLinesNews");
-        newsCategory.add(nextUrl+"indiaMovieNews");
-        newsCategory.add(nextUrl+"indiaBusinessNews");
-
-
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        textView = (TextView) findViewById(R.id.textView);
         utils = new Utils();
+        contentOperation = new ContentRepo(getApplicationContext());
 
+        newsCategory = getFollowedCategoriesUrls();
 
+        if(!contentOperation.isAlreadyExist()) {
+            boolean isLastRequest = false;
+            int parentIndex = 0;
 
-                /*int parentIndex = 0;
-                for(String url:newsCategory) {
-                    try {
-                        new GetNewsData(getApplicationContext(),getIsNext(newsCategory,parentIndex),getCategoryName(url)).execute(new URL(url));//start async task to get all categories
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    }
-                    parentIndex++;
-                }*/
-        Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-        startActivity(intent);
-
-
-
-
+            for (String url : newsCategory) {
+                isLastRequest = (parentIndex == newsCategory.size() - 1);
+                try {
+                    new GetNewsData(getApplicationContext(), getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest, SplashScreenActivity.this).execute(new URL(url));//start async task to get all categories
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                parentIndex++;
+            }
+        }
+        else
+        {
+            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     private String getIsNext(ArrayList<String> newsCategory, int parentIndex){
@@ -81,10 +74,25 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-    private String getCategoryName(String url){
+    public ArrayList<String> getFollowedCategoriesUrls()
+    {
+        JSONObject JsonCategories = utils.getUpdatedCategories(getApplicationContext());
 
-        return url.substring(url.lastIndexOf("=") + 1);
+        ArrayList<String> catUrlList = new ArrayList<>();
+        Iterator<String> iter = JsonCategories.keys();
+        String key;
+        //Adding url for first news items
+        while (iter.hasNext()) {
+            key = iter.next();
+            catUrlList.add(Url+key);
+        }
+        //Adding url for next news items
+        Iterator<String> iter1 = JsonCategories.keys();
+        while (iter1.hasNext()) {
+            key = iter1.next();
+            catUrlList.add(nextUrl+key);
+        }
+        return catUrlList;
     }
-
 }
 

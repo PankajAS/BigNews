@@ -2,6 +2,7 @@ package com.plusonesoftwares.plusonesoftwares.bignews;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.ListView;
 
@@ -25,7 +26,6 @@ import java.util.List;
  */
 
 public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
-
         StringBuilder sb = null;
         private HttpURLConnection urlConnection;
         Context context;
@@ -33,18 +33,17 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
         Activity parentContext;
         String title;
         JSONArray jarray;
-    String isNext;
-    String Category;
+        String isNext;
+        String Category;
+        boolean isLastRequest;
 
-
-
-        public GetNewsData(Context context, String isNext ,String Category){
+        public GetNewsData(Context context, String isNext ,String Category, boolean isLastRequest, Activity parentContext){
             this.context = context;
             this.isNext = isNext;
             this.Category = Category;
+            this.isLastRequest = isLastRequest;
+            this.parentContext = parentContext;
         }
-
-
 
         @Override
         protected JSONArray doInBackground(URL... urls) {
@@ -78,7 +77,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
         protected void onPostExecute(JSONArray jsonArray) {
            // list.setAdapter(new CustomViewAdapter(context,parentContext, jsonArray));
             super.onPostExecute(jsonArray);
-            ContentRepo contentOperation = new ContentRepo(context);
+            ContentRepo contentOperation = new ContentRepo(parentContext);
 
             List<NewsDataModel> newsList = new ArrayList<>();
 
@@ -87,7 +86,6 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     try {
                         singleCatObj = new NewsDataModel();
-                        //singleCatObj.ID = jsonArray.getJSONObject(i).getString("ID");
                         singleCatObj.Title = jsonArray.getJSONObject(i).getString("title");
                         singleCatObj.ImageUrl = jsonArray.getJSONObject(i).getString("imgURL");
                         singleCatObj.Description = jsonArray.getJSONObject(i).getString("desc");
@@ -100,12 +98,11 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
                 }
                 contentOperation.insert_NewsData(newsList);
 
-                //Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-                //startActivity(intent);
-            }
-            else
-            {
-               //utils.showNetworkConnectionMsg(SplashScreenActivity.this);
+                if(isLastRequest)
+                {
+                    Intent intent = new Intent(parentContext, MainActivity.class);
+                    parentContext.startActivity(intent);
+                }
             }
         }
     }

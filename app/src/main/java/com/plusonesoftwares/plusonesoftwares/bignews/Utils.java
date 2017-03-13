@@ -8,6 +8,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by ashoksharma on 02/03/17.
  */
@@ -42,7 +45,7 @@ public class Utils {
     public static final String UnSelectedColor = "#aab7b8";
 
     SharedPreferences sharedpreferences;
-
+    
     public void setUserPrefs(String key, String value, Context context) {
         if (sharedpreferences == null) {
             sharedpreferences = context.getSharedPreferences(MyPREFERENCES, context.MODE_PRIVATE);
@@ -107,6 +110,21 @@ public class Utils {
                     haveConnectedMobile = true;
         }
         return haveConnectedWifi || haveConnectedMobile;
+    }
+
+    public JSONObject getUpdatedCategories(Context context)
+    {
+        JSONObject JsonCategories = null;
+        try {
+            JsonCategories = new JSONObject(getUserPrefs(NewsCategories,context));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return JsonCategories;
+    }
+
+    public String getCategoryName(String url){
+        return url.substring(url.lastIndexOf("=") + 1);
     }
 
 }

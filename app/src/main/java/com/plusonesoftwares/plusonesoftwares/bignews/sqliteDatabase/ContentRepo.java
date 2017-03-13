@@ -40,6 +40,20 @@ public class ContentRepo {
             db.endTransaction();
         }
     }
+    public boolean isAlreadyExist() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor cursor = null;
+        String sql = " SELECT ID FROM "+ NewsDataModel.TABLE;
+        cursor = db.rawQuery(sql,null);
+
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
+    }
 
     public ArrayList<HashMap<String, String>> getNewsData(String categoryName, String isNext) {
         //Open connection to read only
