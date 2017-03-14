@@ -2,27 +2,22 @@ package com.plusonesoftwares.plusonesoftwares.bignews;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 public class SplashScreenActivity extends AppCompatActivity {
+
     List<String> string;
     String Url = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=";
     String nextUrl = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getNextNewsList?newsCategory=";
@@ -38,11 +33,12 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         utils = new Utils();
+        defaultNewsCategories();
         contentOperation = new ContentRepo(getApplicationContext());
 
         newsCategory = getFollowedCategoriesUrls();
 
-        if(!contentOperation.isAlreadyExist()) {
+        if(!contentOperation.dataAlreadyExist()) {
             boolean isLastRequest = false;
             int parentIndex = 0;
 
@@ -74,25 +70,40 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
-    public ArrayList<String> getFollowedCategoriesUrls()
-    {
+    public ArrayList<String> getFollowedCategoriesUrls() {
         JSONObject JsonCategories = utils.getUpdatedCategories(getApplicationContext());
 
         ArrayList<String> catUrlList = new ArrayList<>();
         Iterator<String> iter = JsonCategories.keys();
         String key;
+
         //Adding url for first news items
         while (iter.hasNext()) {
             key = iter.next();
-            catUrlList.add(Url+key);
+            catUrlList.add(Url + key);
         }
         //Adding url for next news items
         Iterator<String> iter1 = JsonCategories.keys();
         while (iter1.hasNext()) {
             key = iter1.next();
-            catUrlList.add(nextUrl+key);
+            catUrlList.add(nextUrl + key);
         }
         return catUrlList;
+    }
+
+    private void defaultNewsCategories()
+    {
+        JSONObject FollowedCategories = new JSONObject();
+        try {
+            FollowedCategories.put("indiaHeadLinesNews", "Tamil Head News");
+            FollowedCategories.put("indiaMovieNews", "Tamil Cinema News");
+            FollowedCategories.put("indiaBusinessNews", "Tamil Vikatan Business News");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if(!utils.keyExist(getApplicationContext()))
+            utils.setUserPrefs(utils.NewsCategories, FollowedCategories.toString() ,getApplicationContext());
     }
 }
 

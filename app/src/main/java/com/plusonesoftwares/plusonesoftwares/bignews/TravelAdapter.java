@@ -54,7 +54,6 @@ public class TravelAdapter extends BaseAdapter {
         this.context = context1;
         inflater = LayoutInflater.from(context1);
         travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
-        //dataCollectionData = new ArrayList<DataCollection.Data>(DataCollection.IMG_DESCRIPTIONS);
         this.parentContext = parentcontext;
         this.allNewsData = allNewsData;
         this.urls = urllist;
@@ -75,7 +74,6 @@ public class TravelAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        //return travelData.size() * repeatCount;
         if(urls !=null){
         return urls.size();
         }
@@ -125,19 +123,15 @@ public class TravelAdapter extends BaseAdapter {
         newsRecords = new ContentRepo(context);
         ArrayList<HashMap<String, String>> newsList = new ArrayList<HashMap<String, String>>();
         Boolean isNext = getIsNext(newsCategory,position);
-        newsList =newsRecords.getNewsData(newsCategory.get(position),isNext? "true":"false");
+        newsList = newsRecords.getNewsData(newsCategory.get(position),isNext? "true":"false");
 
         JSONArray mJSONArray = new JSONArray(Arrays.asList(newsList));
         JSONArray jsonArray1 = new JSONArray();
         try {
-            System.out.println(mJSONArray.toString(2));
             jsonArray1 = mJSONArray.getJSONArray(0);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println();
-
-
 
         UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, parentContext, jsonArray1));
 
@@ -185,7 +179,6 @@ public class TravelAdapter extends BaseAdapter {
         Activity parentContext;
         String title;
 
-
         public DownloadData(Context context, Activity parentContext, String title, ListView list){
             this.context = context;
             this.list = list;
@@ -193,16 +186,12 @@ public class TravelAdapter extends BaseAdapter {
             this.title = title;
         }
 
-
-
         @Override
         protected JSONArray doInBackground(URL... urls) {
             URL url = urls[0];
             String line;
             String c;
 
-           // System.out.println(url.toString().substring(url.toString().lastIndexOf("=") + 1));
-           // System.out.println(url);
             sb = new StringBuilder();
             try {
                 urlConnection = (HttpURLConnection)url.openConnection();
@@ -219,7 +208,6 @@ public class TravelAdapter extends BaseAdapter {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-           // System.out.println(jarray);
             return jarray;
         }
 

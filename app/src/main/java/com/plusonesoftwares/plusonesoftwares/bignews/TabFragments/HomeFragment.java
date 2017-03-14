@@ -82,10 +82,7 @@ public class HomeFragment extends Fragment {
         newsCategory.add("indiaMovieNews");
         newsCategory.add("indiaBusinessNews");
 
-        // jsonArray = httpConnection.new FetchData(getContext()).execute(new URL(Url+"tamilVikatanBusinessNews")).get();
         flipView = new FlipViewController(getContext(), FlipViewController.VERTICAL);
-        //flipView.setAdapter(new TravelAdapter(getContext(),getActivity(), urllist, newsCategory));
-
 
         ContentRepo data = new ContentRepo(getContext());
         ArrayList<HashMap<String, String>> newsList = new ArrayList<HashMap<String, String>>();

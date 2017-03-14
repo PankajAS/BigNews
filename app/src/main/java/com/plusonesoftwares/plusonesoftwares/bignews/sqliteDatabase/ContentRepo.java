@@ -8,7 +8,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +26,6 @@ public class ContentRepo {
         try {
             ContentValues values = new ContentValues();
             for (NewsDataModel newsData : list) {
-                //values.put(NewsDataModel.KEY_ID, newsData.ID);
                 values.put(NewsDataModel.KEY_Title, newsData.Title);
                 values.put(NewsDataModel.KEY_ImageUrl, newsData.ImageUrl);
                 values.put(NewsDataModel.KEY_Description, newsData.Description);
@@ -40,12 +38,11 @@ public class ContentRepo {
             db.endTransaction();
         }
     }
-    public boolean isAlreadyExist() {
+    public boolean dataAlreadyExist() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        Cursor cursor = null;
         String sql = " SELECT ID FROM "+ NewsDataModel.TABLE;
-        cursor = db.rawQuery(sql,null);
+        Cursor cursor = db.rawQuery(sql,null);
 
         if(cursor.getCount() <= 0){
             cursor.close();
@@ -59,9 +56,8 @@ public class ContentRepo {
         //Open connection to read only
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String categoryWhereClause = "";
-        if(!categoryName.equals(""))
-        categoryWhereClause = " WHERE " + NewsDataModel.KEY_Category + " = ? AND "+NewsDataModel.KEY_IsNext + " = ?";
-        //categoryWhereClause = " WHERE " + NewsDataModel.KEY_Category + " = ?";
+        if(categoryName != null && !categoryName.isEmpty())
+            categoryWhereClause = " WHERE " + NewsDataModel.KEY_Category + " = ? AND "+ NewsDataModel.KEY_IsNext + " = ?";
 
         String selectQuery =  " SELECT  " +
                 NewsDataModel.KEY_ID + "," +
@@ -73,21 +69,15 @@ public class ContentRepo {
                 " FROM " + NewsDataModel.TABLE + categoryWhereClause ;
 
         Cursor cursor;
-        if(!categoryName.equals("")) {
+        if(categoryName != null && !categoryName.isEmpty()) {
             String[] params = new String[]{categoryName, isNext};
-            //String[] params = new String[]{categoryName};
             cursor = db.rawQuery(selectQuery, params);
         }else {
             cursor = db.rawQuery(selectQuery, null);
         }
-
-
-        //Student student = new Student();
         ArrayList<HashMap<String, String>> categoryList = new ArrayList<HashMap<String, String>>();
 
-
-        // looping through all rows and adding to list
-
+        //looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
                 HashMap<String, String> category = new HashMap<String, String>();

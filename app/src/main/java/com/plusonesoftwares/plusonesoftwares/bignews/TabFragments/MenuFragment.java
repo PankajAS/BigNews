@@ -36,14 +36,13 @@ public class MenuFragment extends Fragment {
         View menuView = inflater.inflate(R.layout.activity_menu_fragment, container, false);
 
         utils = new Utils();
-        defaultNewsCategories();
+        //defaultNewsCategories();
         defaultCat = utils.getUserPrefs(utils.NewsCategories,getContext());
         try {
             createButtonsDynamically(menuView, utils.mTextofButton, colorCodes);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
         return menuView;
     }
@@ -100,21 +99,6 @@ public class MenuFragment extends Fragment {
             tr.addView(button);
             i++;
         }
-    }
-    private void defaultNewsCategories()
-    {
-        JSONObject FollowedCategories = new JSONObject();
-        try {
-            FollowedCategories.put("tamilHeadNews", "Tamil Head News");
-            FollowedCategories.put("tamilCinemaNews", "Tamil Cinema News");
-            FollowedCategories.put("tamilVikatanBusinessNews", "Tamil Vikatan Business News");
-
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        if(!utils.keyExist(getContext()))
-            utils.setUserPrefs(utils.NewsCategories, FollowedCategories.toString() ,getContext());
     }
 }
 
