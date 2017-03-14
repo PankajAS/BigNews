@@ -3,7 +3,9 @@ package com.plusonesoftwares.plusonesoftwares.bignews.TabFragments;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.NewsCategoryDetails;
 import com.plusonesoftwares.plusonesoftwares.bignews.R;
@@ -35,6 +38,7 @@ public class MenuFragment extends Fragment {
 
         View menuView = inflater.inflate(R.layout.activity_menu_fragment, container, false);
 
+        //Toast.makeText(getContext(), " Called menu Tab", Toast.LENGTH_SHORT).show();
         utils = new Utils();
         //defaultNewsCategories();
         defaultCat = utils.getUserPrefs(utils.NewsCategories,getContext());

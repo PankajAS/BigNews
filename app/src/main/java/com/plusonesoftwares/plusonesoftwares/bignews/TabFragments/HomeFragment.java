@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.FlipViewController;
 import com.plusonesoftwares.plusonesoftwares.bignews.TravelAdapter;
@@ -43,7 +44,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
+        //Toast.makeText(getContext(), " Called Home Tab", Toast.LENGTH_SHORT).show();
        // View homeView = inflater.inflate(R.layout.activity_home_fragment, container, false);
         urllist = new ArrayList<>();
         newsCategory= new ArrayList<>();

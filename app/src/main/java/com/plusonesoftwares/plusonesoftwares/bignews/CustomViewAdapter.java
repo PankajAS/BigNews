@@ -3,6 +3,7 @@ package com.plusonesoftwares.plusonesoftwares.bignews;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.data.Travels;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,12 +41,11 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
         travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
     }
 
-    public CustomViewAdapter(Context context,Activity parentContext, JSONArray jsonArray) {
+    public CustomViewAdapter(Context context, Activity parentContext, JSONArray jsonArray) {
         super(context, R.layout.new_item);
         this.context = context;
         travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
         this.jsonArray = jsonArray;
-
         this.parentContext = parentContext;
     }
 
@@ -56,14 +57,10 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
             holder = new CustomViewAdapter.ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.new_item, null, true);
-            final Travels.Data data = travelData.get(position % travelData.size());
+            //final Travels.Data data = travelData.get(position % travelData.size());
 
             holder.title = (TextView) convertView.findViewById(R.id.title);
             holder.title_image = (ImageView) convertView.findViewById(R.id.titleimage);
-
-
-
-            //System.out.println(position);
 
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -82,11 +79,12 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
             });
 
             try {
-               jObject = jsonArray.getJSONObject(position);
-               holder.title.setText(jObject.getString("Title"));
-               // Picasso.with(parentContext).load(jObject.getString("imgURL")).into(holder.title_image);
 
-              new ImageDownloader(holder.title_image).execute(jObject.getString("ImageUrl"));
+                jObject = jsonArray.getJSONObject(position);
+                holder.title.setText(jObject.getString("Title"));
+                Picasso.with(parentContext)
+                        .load("http:" + jObject.getString("ImageUrl"))
+                        .into(holder.title_image);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -100,8 +98,6 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
 
     @Override
     public int getCount() {
-
-        System.out.println("length: "+jsonArray.length());
         return jsonArray.length();
     }
 

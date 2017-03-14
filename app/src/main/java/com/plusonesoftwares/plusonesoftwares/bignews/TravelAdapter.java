@@ -7,13 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.data.DataCollection;
 import com.plusonesoftwares.plusonesoftwares.bignews.data.Travels;
 import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.NewsDataModel;
 import com.plusonesoftwares.plusonesoftwares.bignews.unit.UI;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,22 +41,18 @@ public class TravelAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     Context context;
     Activity parentContext;
-    HttpConnection httpConnection = new HttpConnection();
 
     private int repeatCount = 1;
-    private List<Travels.Data> travelData;
-    private List<DataCollection.Data> dataCollectionData;
     JSONArray jarray;
     List<String> urls;
     List<String> newsCategory;
-    List<NewsDataModel.Data> newsDataList;
     JSONArray allNewsData;
-    ContentRepo newsRecords;
+    ContentRepo newsRecordsClsObj;
+    Utils utils;
 
     public TravelAdapter(Context context1, Activity parentcontext, ArrayList<String> urllist, List<String> newsCategory, JSONArray allNewsData) {
         this.context = context1;
         inflater = LayoutInflater.from(context1);
-        travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
         this.parentContext = parentcontext;
         this.allNewsData = allNewsData;
         this.urls = urllist;
@@ -70,7 +69,6 @@ public class TravelAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(context);
         this.jarray = jarray;
     }
-
 
     @Override
     public int getCount() {
@@ -116,112 +114,47 @@ public class TravelAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, final View convertView, ViewGroup viewGroup) {
         View layout = convertView;
-        if (convertView == null) {
-            layout = inflater.inflate(R.layout.activity_home_fragment, null);
 
-        }
-        newsRecords = new ContentRepo(context);
-        ArrayList<HashMap<String, String>> newsList = new ArrayList<HashMap<String, String>>();
-        Boolean isNext = getIsNext(newsCategory,position);
-        newsList = newsRecords.getNewsData(newsCategory.get(position),isNext? "true":"false");
+        if(parentContext!=null) {
 
-        JSONArray mJSONArray = new JSONArray(Arrays.asList(newsList));
-        JSONArray jsonArray1 = new JSONArray();
-        try {
-            jsonArray1 = mJSONArray.getJSONArray(0);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, parentContext, jsonArray1));
-
-        //System.out.println(position);
-        /*if(parentContext!=null) {
             if (convertView == null) {
-                layout = inflater.inflate(R.layout.activity_home_fragment,null);
-                AphidLog.d("created new view from adapter: %d", position);
+                layout = inflater.inflate(R.layout.activity_home_fragment, null);
+
             }
-            //final Travels.Data data = travelData.get(position % travelData.size());
-           //DataCollection.Data data = dataCollectionData.get(position);
+            newsRecordsClsObj = new ContentRepo(context);
+            utils = new Utils();
+            Boolean isNext = getIsNext(newsCategory,position);
+            ArrayList<HashMap<String, String>> newsList = newsRecordsClsObj.getNewsData(newsCategory.get(position), isNext? "true":"false");
 
-
+            JSONArray mJSONArray = new JSONArray(Arrays.asList(newsList));
+            JSONArray jsonArray1 = new JSONArray();
             try {
-                new DownloadData(context, parentContext, newsCategory.get(position), UI.<ListView>findViewById(layout, R.id.list)).execute(new URL(urls.get(position)));
-            } catch (MalformedURLException e) {
+                jsonArray1 = mJSONArray.getJSONArray(0);
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
+            UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, parentContext, jsonArray1));
+            parentContext.setTitle(utils.getCatNameByCatId(newsCategory.get(position)));
+
         }else{
 
-            if(convertView==null){
+            if(convertView == null){
                 layout = inflater.inflate(R.layout.activity_news_category_details,null);
             }
             try {
                 JSONObject jobject = jarray.getJSONObject(position);
-                UI.<TextView>findViewById(layout, R.id.headline).setText(jobject.getString("title"));
-               // new ImageDownloader(UI.<ImageView>findViewById(layout, R.id.newsImage)).execute(jobject.getString("imgURL"));
-                UI.<TextView>findViewById(layout, R.id.description).setText(jobject.getString("desc"));
+                UI.<TextView>findViewById(layout, R.id.headline).setText(jobject.getString("Title"));
+                Picasso.with(parentContext)
+                        .load("http:" + jobject.getString("ImageUrl"))
+                        .into(UI.<ImageView>findViewById(layout, R.id.newsImage));
+                JSONObject descObject = new JSONObject(jobject.getString("Description"));
+                UI.<TextView>findViewById(layout, R.id.description).setText(descObject.getString("value"));
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-        }*/
-
+        }
         return layout;
-    }
-
-    public class DownloadData extends AsyncTask<URL,Context,JSONArray>{
-        StringBuilder sb = null;
-        private HttpURLConnection urlConnection;
-        Context context;
-        ListView list;
-        Activity parentContext;
-        String title;
-
-        public DownloadData(Context context, Activity parentContext, String title, ListView list){
-            this.context = context;
-            this.list = list;
-            this.parentContext = parentContext;
-            this.title = title;
-        }
-
-        @Override
-        protected JSONArray doInBackground(URL... urls) {
-            URL url = urls[0];
-            String line;
-            String c;
-
-            sb = new StringBuilder();
-            try {
-                urlConnection = (HttpURLConnection)url.openConnection();
-                BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-
-                while ((line = in.readLine()) != null) {
-                    sb.append(line);
-                }
-                JSONObject jsnobject = new JSONObject(sb.toString());
-                jarray = jsnobject.getJSONArray("items");
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return jarray;
-        }
-
-        @Override
-        protected void onPostExecute(JSONArray jsonArray) {
-
-
-
-
-            list.setAdapter(new CustomViewAdapter(context,parentContext, jsonArray));
-
-            parentContext.setTitle(title);
-
-            super.onPostExecute(jsonArray);
-        }
     }
 }

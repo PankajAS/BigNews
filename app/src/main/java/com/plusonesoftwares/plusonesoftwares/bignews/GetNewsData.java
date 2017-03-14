@@ -36,12 +36,15 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
         String isNext;
         String Category;
         boolean isLastRequest;
+        boolean isInsert;
 
-        public GetNewsData(Context context, String isNext ,String Category, boolean isLastRequest, Activity parentContext){
+
+        public GetNewsData(Context context, String isNext ,String Category, boolean isLastRequest, Activity parentContext, boolean isInsert){
             this.context = context;
             this.isNext = isNext;
             this.Category = Category;
             this.isLastRequest = isLastRequest;
+            this.isInsert = isInsert;
             this.parentContext = parentContext;
         }
 
@@ -96,7 +99,11 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
                         e.printStackTrace();
                     }
                 }
-                contentOperation.insert_NewsData(newsList);
+
+                if(isInsert)
+                    contentOperation.insert_NewsData(newsList);
+                else
+                    contentOperation.update_NewsData(newsList, Category);
 
                 if(isLastRequest)
                 {

@@ -45,7 +45,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             for (String url : newsCategory) {
                 isLastRequest = (parentIndex == newsCategory.size() - 1);
                 try {
-                    new GetNewsData(getApplicationContext(), getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest, SplashScreenActivity.this).execute(new URL(url));//start async task to get all categories
+                    new GetNewsData(getApplicationContext(), getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest, SplashScreenActivity.this, true).execute(new URL(url));//start async task to get all categories
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -95,9 +95,9 @@ public class SplashScreenActivity extends AppCompatActivity {
     {
         JSONObject FollowedCategories = new JSONObject();
         try {
-            FollowedCategories.put("indiaHeadLinesNews", "Tamil Head News");
-            FollowedCategories.put("indiaMovieNews", "Tamil Cinema News");
-            FollowedCategories.put("indiaBusinessNews", "Tamil Vikatan Business News");
+            FollowedCategories.put("indiaHeadLinesNews", "India Head Lines News");
+            FollowedCategories.put("indiaMovieNews", "India Movie News");
+            FollowedCategories.put("indiaBusinessNews", "India Business News");
 
         } catch (JSONException e) {
             e.printStackTrace();

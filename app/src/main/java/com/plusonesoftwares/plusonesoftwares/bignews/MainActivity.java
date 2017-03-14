@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.TabFragments.DiscoverFragment;
 import com.plusonesoftwares.plusonesoftwares.bignews.TabFragments.HomeFragment;
@@ -16,10 +17,7 @@ import com.plusonesoftwares.plusonesoftwares.bignews.TabFragments.MenuFragment;
 
 public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
     private TabLayout tabLayout;
-    //private ViewPager viewPager;
     ViewPager viewPager;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,11 +93,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         });
         tabLayout.setupWithViewPager(viewPager);
         //changePager();
-
-        HttpConnection data = new HttpConnection();
-
-           // data.new FetchData(getApplicationContext()).execute(new URL("https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=tamilHeadNews"));
-
     }
 
     public void changePager(){
@@ -155,11 +148,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         });
     }
-
+//    getString(R.string.Home),
+//    getString(R.string.Menu),
+//    getString(R.string.Discover)
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-
-
+        Toast.makeText(getApplicationContext(), " Called onTabSelected :" + tab.getText(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

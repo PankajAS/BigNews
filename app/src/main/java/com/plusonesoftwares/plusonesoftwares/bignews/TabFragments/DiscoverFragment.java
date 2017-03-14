@@ -11,9 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.R;
 import com.plusonesoftwares.plusonesoftwares.bignews.Utils;
+import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,17 +37,6 @@ public class DiscoverFragment extends Fragment {
         return new DiscoverFragment(title);
     }
 
-   /*1. tamilHeadNews
-   2. tamilCinemaNews
-   3. tamilVikatanBusinessNews
-   4. MalayalamHeadLinesNews
-   5. MalayalamBusinessNews
-   6. teluguBusinessNews
-   7. MalayalamMovieNews
-   8. MalayalamSportsNews
-   9. MalayalamWorldNews
-   10. MalayalamNationalNews*/
-
     Utils utils;
     JSONObject JsonCategories;
 
@@ -54,8 +45,8 @@ public class DiscoverFragment extends Fragment {
         View discoverView = inflater.inflate(R.layout.activity_discover_fragment, container, false);
 
         utils = new Utils();
-
         JsonCategories = utils.getUpdatedCategories(getContext());
+        //Toast.makeText(getContext(), " Called discover Tab", Toast.LENGTH_SHORT).show();
 
         try {
             createButtonsDynamically(discoverView, utils.mTextofButton, utils.colorCodes);
@@ -69,6 +60,7 @@ public class DiscoverFragment extends Fragment {
     private void createButtonsDynamically(View menuView, final String[] numberOfItems, final String[] BgColor) throws JSONException {
         TableLayout mTlayout;
         TableRow tr = null;
+        final ContentRepo contentOperation = new ContentRepo(getContext());
         int i = 0;
 
         mTlayout = (TableLayout) menuView.findViewById(R.id.tableLayout);
@@ -108,14 +100,16 @@ public class DiscoverFragment extends Fragment {
                     int color = ((ColorDrawable)v.getBackground()).getColor();
                     String strColor = String.format("#%06X", 0xFFFFFF & color);
 
-                    if(utils.SelectedColor.equals(strColor)){
+                    if(utils.SelectedColor.equals(strColor)){// un-select the category
                         v.setBackgroundColor(Color.parseColor(utils.UnSelectedColor)); // custom color
                         button.setTextColor(Color.BLACK);
                         JsonCategories = utils.getUpdatedCategories(getContext());
                         JsonCategories.remove(utils.catKeys[finalI]);
                         utils.setUserPrefs(utils.NewsCategories, JsonCategories.toString(),getContext());
+                        //Deleting data from sqlite database on un-select
+                        contentOperation.delete_NewsData(utils.getCatIdByCatName(numberOfItems[finalI]));
                     }
-                    else
+                    else //selecting new category
                     {
                         v.setBackgroundColor(Color.parseColor(utils.SelectedColor)); // custom color
                         button.setTextColor(Color.WHITE);
@@ -129,7 +123,6 @@ public class DiscoverFragment extends Fragment {
                     }
                 }
             });
-
             tr.addView(button);
             i++;
         }

@@ -7,6 +7,8 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,19 +31,18 @@ public class NewsDetails extends AppCompatActivity {
         description = (TextView)findViewById(R.id.description);
         newsImage = (ImageView)findViewById(R.id.newsImage);
         Intent intent = getIntent();
-        jsonarray=intent.getStringExtra("Data");
+        jsonarray = intent.getStringExtra("Data");
         newsTitle = intent.getStringExtra("NewsCategory");
         setTitle(newsTitle);
 
         try {
             jobject = new JSONObject(jsonarray);
-            headline.setText(jobject.getString("title"));
-            descObject = new JSONObject(jobject.getString("desc"));
-            new ImageDownloader(newsImage).execute(jobject.getString("imgURL"));
+            headline.setText(jobject.getString("Title"));
+            descObject = new JSONObject(jobject.getString("Description"));
+            Picasso.with(this)
+                    .load("http:" + jobject.getString("ImageUrl"))
+                    .into(newsImage);
             description.setText(descObject.getString("value"));
-            System.out.println(jobject.toString(2));
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -52,7 +53,6 @@ public class NewsDetails extends AppCompatActivity {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             finish();
-            //overridePendingTransition(R.transition.stay, R.transition.slide_down);
         }
         return super.onOptionsItemSelected(item);
     }

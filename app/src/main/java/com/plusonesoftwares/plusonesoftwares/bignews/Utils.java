@@ -15,9 +15,9 @@ import org.json.JSONObject;
  * Created by ashoksharma on 02/03/17.
  */
 
- /*1. tamilHeadNews
-   2. tamilCinemaNews
-   3. tamilVikatanBusinessNews
+ /*1. indiaHeadLinesNews
+   2. indiaMovieNews
+   3. indiaBusinessNews
    4. MalayalamHeadLinesNews
    5. MalayalamBusinessNews
    6. teluguBusinessNews
@@ -28,14 +28,13 @@ import org.json.JSONObject;
  */
 
 public class Utils {
-
     public static final String MyPREFERENCES = "MyPrefs";
     public static final String NewsCategories = "NewsCategories";
 
-    public static final  String[] mTextofButton = { "Tamil Head News", "Tamil Cinema News", "Tamil Vikatan Business News", "Malayalam Head Lines News", "Malayalam Business News", "Telugu Business News",
+    public static final  String[] mTextofButton = { "India Head Lines News", "India Movie News", "India Business News", "Malayalam Head Lines News", "Malayalam Business News", "Telugu Business News",
             "Malayalam Movie News", "Malayalam Sports News", "Malayalam World News" ,"Malayalam National News"};
 
-    public static final String[] catKeys = { "tamilHeadNews", "tamilCinemaNews", "tamilVikatanBusinessNews", "MalayalamHeadLinesNews", "MalayalamBusinessNews", "teluguBusinessNews",
+    public static final String[] catKeys = { "indiaHeadLinesNews", "indiaMovieNews", "indiaBusinessNews", "MalayalamHeadLinesNews", "MalayalamBusinessNews", "teluguBusinessNews",
             "MalayalamMovieNews", "MalayalamSportsNews", "MalayalamWorldNews" ,"MalayalamNationalNews"};
 
     public static final   String[] colorCodes = { "#aab7b8", "#aab7b8", "#aab7b8", "#aab7b8", "#aab7b8", "#aab7b8",
@@ -127,4 +126,51 @@ public class Utils {
         return url.substring(url.lastIndexOf("=") + 1);
     }
 
+    public String getCatNameByCatId(String CategoryId)
+    {
+        String CatName = "";
+        switch (CategoryId) {
+            case "indiaHeadLinesNews":
+                CatName =  "India Head Lines News";
+                break;
+            case "indiaMovieNews":
+                CatName = "India Movie News";
+                break;
+            case "indiaBusinessNews":
+                CatName = "India Business News";
+                break;
+            case "MalayalamHeadLinesNews":
+                CatName = "Malayalam Head Lines News";
+                break;
+            case "MalayalamBusinessNews":
+                CatName = "Malayalam Business News";
+                break;
+            case "teluguBusinessNews":
+                CatName = "Telugu Business News";
+                break;
+            case "MalayalamMovieNews":
+                CatName = "Malayalam Movie News";
+                break;
+            case "MalayalamSportsNews":
+                CatName = "Malayalam Sports News";
+                break;
+            case "MalayalamWorldNews":
+                CatName = "Malayalam World News";
+                break;
+            case "MalayalamNationalNews":
+                CatName = "Malayalam National News";
+                break;
+        }
+        return CatName;
+    }
+
+    public String getCatIdByCatName(String CatName)
+    {
+        String category = CatName.replaceAll("\\s+","");
+
+        if(!category.substring(0, 1).equals("M")){
+            category =  category.substring(0, 1).toLowerCase() + category.substring(1);
+        }
+        return category;
+    }
 }
