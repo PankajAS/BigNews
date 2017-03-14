@@ -17,11 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class SplashScreenActivity extends AppCompatActivity {
-
     List<String> string;
     ArrayList<String> newsCategory = new ArrayList<>();
-
-
 
     Utils utils;
     ContentRepo contentOperation;
@@ -32,6 +29,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         utils = new Utils();
         defaultNewsCategories();
+
         contentOperation = new ContentRepo(getApplicationContext());
 
         newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true);
@@ -60,7 +58,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     private String getIsNext(ArrayList<String> newsCategory, int parentIndex){
        int halfsize =  newsCategory.size()/2;
 
-        if(parentIndex>halfsize-1){
+        if(parentIndex > halfsize-1){
             return  "true";
         }
         else{

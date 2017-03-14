@@ -25,7 +25,6 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
     private FlipViewController flipView;
-    List<String> newsCategory;
     Utils utils;
 
     @Override
@@ -37,9 +36,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         flipView = new FlipViewController(getContext(), FlipViewController.VERTICAL);
         utils = new Utils();
-
-        newsCategory = utils.getFollowedCategoriesLink(getContext(), false);
-        flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory));
+        flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), utils.getFollowedCategoriesLink(getContext(), false)));
 
         return flipView;
     }

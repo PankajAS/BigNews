@@ -107,7 +107,7 @@ public class DiscoverFragment extends Fragment {
                         JsonCategories.remove(utils.catKeys[finalI]);
                         utils.setUserPrefs(utils.NewsCategories, JsonCategories.toString(),getContext());
                         //Deleting data from sqlite database on un-select
-                        contentOperation.delete_NewsData(utils.getCatIdByCatName(numberOfItems[finalI]));
+                        //contentOperation.delete_NewsData(utils.getCatIdByCatName(numberOfItems[finalI]));
                     }
                     else //selecting new category
                     {
