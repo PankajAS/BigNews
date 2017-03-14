@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        />
+        android:alpha="0.6" />
 
     <TextView
         android:id="@+id/textView1"
@@ -51,7 +51,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Loading your data please wait.."
+        android:text="Initialization..."
         android:typeface="serif"
         android:layout_below="@+id/progressBar"
         android:textColor="@android:color/white"
@@ -64,5 +64,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp"
         android:id="@+id/imageView"
-        android:layout_height="150dp" />
+        android:layout_height="150dp"
+        android:background="@mipmap/ic_launcher" />
 </RelativeLayout>
