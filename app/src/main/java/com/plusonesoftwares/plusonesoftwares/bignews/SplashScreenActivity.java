@@ -19,8 +19,6 @@ import java.util.List;
 public class SplashScreenActivity extends AppCompatActivity {
 
     List<String> string;
-    String Url = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=";
-    String nextUrl = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getNextNewsList?newsCategory=";
     ArrayList<String> newsCategory = new ArrayList<>();
 
 
@@ -36,7 +34,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         defaultNewsCategories();
         contentOperation = new ContentRepo(getApplicationContext());
 
-        newsCategory = getFollowedCategoriesUrls();
+        newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true);
 
         if(!contentOperation.dataAlreadyExist()) {
             boolean isLastRequest = false;
@@ -68,27 +66,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         else{
             return  "false";
         }
-    }
-
-    public ArrayList<String> getFollowedCategoriesUrls() {
-        JSONObject JsonCategories = utils.getUpdatedCategories(getApplicationContext());
-
-        ArrayList<String> catUrlList = new ArrayList<>();
-        Iterator<String> iter = JsonCategories.keys();
-        String key;
-
-        //Adding url for first news items
-        while (iter.hasNext()) {
-            key = iter.next();
-            catUrlList.add(Url + key);
-        }
-        //Adding url for next news items
-        Iterator<String> iter1 = JsonCategories.keys();
-        while (iter1.hasNext()) {
-            key = iter1.next();
-            catUrlList.add(nextUrl + key);
-        }
-        return catUrlList;
     }
 
     private void defaultNewsCategories()

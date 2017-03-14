@@ -44,18 +44,14 @@ public class TravelAdapter extends BaseAdapter {
 
     private int repeatCount = 1;
     JSONArray jarray;
-    List<String> urls;
     List<String> newsCategory;
-    JSONArray allNewsData;
     ContentRepo newsRecordsClsObj;
     Utils utils;
 
-    public TravelAdapter(Context context1, Activity parentcontext, ArrayList<String> urllist, List<String> newsCategory, JSONArray allNewsData) {
+    public TravelAdapter(Context context1, Activity parentcontext, List<String> newsCategory) {
         this.context = context1;
         inflater = LayoutInflater.from(context1);
         this.parentContext = parentcontext;
-        this.allNewsData = allNewsData;
-        this.urls = urllist;
         this.newsCategory = newsCategory;
     }
 
@@ -72,8 +68,8 @@ public class TravelAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if(urls !=null){
-        return urls.size();
+        if(newsCategory !=null){
+        return newsCategory.size();
         }
         else if(jarray !=null){
             return jarray.length();

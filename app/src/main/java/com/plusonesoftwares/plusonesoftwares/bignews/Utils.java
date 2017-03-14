@@ -11,6 +11,9 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  * Created by ashoksharma on 02/03/17.
  */
@@ -42,6 +45,8 @@ public class Utils {
 
     public static final String SelectedColor = "#04A94A";
     public static final String UnSelectedColor = "#aab7b8";
+    String Url = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=";
+    String nextUrl = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getNextNewsList?newsCategory=";
 
     SharedPreferences sharedpreferences;
     
@@ -172,5 +177,26 @@ public class Utils {
             category =  category.substring(0, 1).toLowerCase() + category.substring(1);
         }
         return category;
+    }
+
+    public ArrayList<String> getFollowedCategoriesLink(Context context,boolean isUrl) {
+        JSONObject JsonCategories = getUpdatedCategories(context);
+
+        ArrayList<String> categoriesLink = new ArrayList<>();
+        Iterator<String> iter = JsonCategories.keys();
+        String key;
+
+        //Adding url for first news items
+        while (iter.hasNext()) {
+            key = iter.next();
+            categoriesLink.add(isUrl? (Url + key) : key);
+        }
+        //Adding url for next news items
+        Iterator<String> iter1 = JsonCategories.keys();
+        while (iter1.hasNext()) {
+            key = iter1.next();
+            categoriesLink.add(isUrl? (nextUrl + key) : key);
+        }
+        return categoriesLink;
     }
 }

@@ -78,7 +78,6 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
 
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
-           // list.setAdapter(new CustomViewAdapter(context,parentContext, jsonArray));
             super.onPostExecute(jsonArray);
             ContentRepo contentOperation = new ContentRepo(parentContext);
 
