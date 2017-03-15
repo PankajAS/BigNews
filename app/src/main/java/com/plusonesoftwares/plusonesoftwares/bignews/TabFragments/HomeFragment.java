@@ -1,6 +1,7 @@
 package com.plusonesoftwares.plusonesoftwares.bignews.TabFragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,11 @@ public class HomeFragment extends Fragment {
     Utils utils;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         flipView = new FlipViewController(getContext(), FlipViewController.VERTICAL);
         utils = new Utils();
@@ -25,7 +31,6 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onResume() {
-        flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), utils.getFollowedCategoriesLink(getContext(), false, false)));
         getActivity().setTitle(utils.getUserPrefs(utils.CategroyTitle, getContext()));
         super.onResume();
     }
