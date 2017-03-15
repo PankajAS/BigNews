@@ -31,7 +31,6 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onResume() {
-        getActivity().setTitle(utils.getUserPrefs(utils.CategroyTitle, getContext()));
         super.onResume();
     }
 }

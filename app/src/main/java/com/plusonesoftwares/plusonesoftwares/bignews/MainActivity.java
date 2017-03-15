@@ -45,12 +45,16 @@ public class MainActivity extends AppCompatActivity  {
             }
             @Override
             public void onPageSelected(int position) {
-                android.support.v4.app.Fragment fragment= ((PagerAdapter)viewPager.getAdapter()).getFragment(position);
-                if(position == 0 && fragment!=null){
+                android.support.v4.app.Fragment fragment = ((PagerAdapter) viewPager.getAdapter()).getFragment(position);
+
+                if (position == 0 && fragment != null) {
                     fragment.onResume();
-                }
-                else if(position == 1 && fragment!=null){
+                    setTitle(utils.getUserPrefs(utils.CategroyTitle, getApplicationContext()));
+                } else if (position == 1 && fragment != null) {
                     fragment.onResume();
+                    setTitle("Followed Catogries");
+                } else if (position == 2 && fragment != null) {
+                    setTitle("All Catogries");
                 }
             }
 
