@@ -24,7 +24,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         flipView = new FlipViewController(getContext(), FlipViewController.VERTICAL);
         utils = new Utils();
-        flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), utils.getFollowedCategoriesLink(getContext(), false)));
+        flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), utils.getFollowedCategoriesLink(getContext(), false, false)));
 
         return flipView;
     }

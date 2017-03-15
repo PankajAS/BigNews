@@ -181,23 +181,34 @@ public class Utils {
         return category;
     }
 
-    public ArrayList<String> getFollowedCategoriesLink(Context context,boolean isUrl) {
+    public ArrayList<String> getFollowedCategoriesLink(Context context, boolean isUrl, boolean isAll) {
         JSONObject JsonCategories = getUpdatedCategories(context);
 
         ArrayList<String> categoriesLink = new ArrayList<>();
         Iterator<String> iter = JsonCategories.keys();
         String key;
 
-        //Adding url for first news items
-        while (iter.hasNext()) {
-            key = iter.next();
-            categoriesLink.add(isUrl? (Url + key) : key);
+        if(!isAll) {
+            //Adding url for first news items
+            while (iter.hasNext()) {
+                key = iter.next();
+                categoriesLink.add(isUrl ? (Url + key) : key);
+            }
+            //Adding url for next news items
+            Iterator<String> iter1 = JsonCategories.keys();
+            while (iter1.hasNext()) {
+                key = iter1.next();
+                categoriesLink.add(isUrl ? (nextUrl + key) : key);
+            }
         }
-        //Adding url for next news items
-        Iterator<String> iter1 = JsonCategories.keys();
-        while (iter1.hasNext()) {
-            key = iter1.next();
-            categoriesLink.add(isUrl? (nextUrl + key) : key);
+        else
+        {
+            for (String catName: catKeys) {
+                categoriesLink.add(isUrl ? (Url + catName) : catName);
+            }
+            for (String catName: catKeys) {
+                categoriesLink.add(isUrl ? (nextUrl + catName) : catName);
+            }
         }
         return categoriesLink;
     }

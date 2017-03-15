@@ -32,14 +32,14 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         contentOperation = new ContentRepo(getApplicationContext());
 
-        newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true);
+        newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true, true);
 
         if(!contentOperation.dataAlreadyExist()) {
             boolean isLastRequest = false;
             int parentIndex = 0;
 
             for (String url : newsCategory) {
-                isLastRequest = (parentIndex == newsCategory.size() - 1);
+                isLastRequest = (parentIndex == 2);
                 try {
                     new GetNewsData(getApplicationContext(), getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest, SplashScreenActivity.this, true).execute(new URL(url));//start async task to get all categories
                 } catch (MalformedURLException e) {
