@@ -1,12 +1,9 @@
 package com.plusonesoftwares.plusonesoftwares.bignews;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 public class MainActivity extends AppCompatActivity  {
     private TabLayout tabLayout;
@@ -28,13 +25,11 @@ public class MainActivity extends AppCompatActivity  {
         tabLayout.addTab(tabLayout.newTab().setText(tabBarTitles[2]));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        //PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount(),tabBarTitles);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
-
             @Override
             public void onPageSelected(int position) {
                 if(position == 1){
@@ -42,12 +37,10 @@ public class MainActivity extends AppCompatActivity  {
                 }else if(position == 2){
                     setTitle("All Catogries");
                 }
-
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
 
             }
         });
@@ -80,61 +73,12 @@ public class MainActivity extends AppCompatActivity  {
 
             }
         });
-
     }
 
-    public void changePager(){
-        viewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void transformPage(View view, float position) {
-
-                if (position <= -1.0F || position >= 1.0F) {
-                    view.setAlpha(0.0F);
-                } else if (position == 0.0F) {
-                    view.setAlpha(1.0F);
-                } else {
-                    // position is between -1.0F & 0.0F OR 0.0F & 1.0F
-                    view.setAlpha(1.0F - Math.abs(position));
-                }
-
-                int pageWidth = view.getWidth();
-                float pageWidthTimesPosition = pageWidth * position;
-                float absPosition = Math.abs(position);
-
-                if (position < -1) { // [-Infinity,-1)
-                    // This page is way off-screen to the left.
-                    view.setAlpha(0);
-
-                } else if (position <= 1) { // [-1,1]
-                    view.setAlpha(1);
-                    // int pagePosition = (int) page.getTag();
-                    // Counteract the default slide transition
-                    view.setTranslationX(view.getWidth() * -position);
-                    //set Y position to swipe in from top
-                    float yPosition = position * view.getHeight();
-                    view.setTranslationY(yPosition);
-                    view.setTranslationZ(yPosition);
-
-
-                    View title = view.findViewById(R.id.title);
-                    if (title != null) {
-                        //title.setAlpha(1.0f - absPosition);
-                        //title.setTranslationY(-100f);
-                        //title.setPivotX(view.getWidth() * 0.5f);
-                        title.setTranslationY(-pageWidthTimesPosition / 1f);
-                        title.setAlpha(1.0f - absPosition);
-                    }
-
-                   /* final float rotation = -180f * position;
-                    view.setAlpha(rotation > 90f || rotation < -90f ? 0f : 1f);
-                    view.setPivotX(view.getWidth() * 0.5f);
-                    view.setPivotY(view.getHeight() * 0.5f);
-                    view.setRotationX(rotation);*/
-                }
-            }
-
-        });
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+        System.exit(0);
+        finish();
     }
-
 }
