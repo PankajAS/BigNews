@@ -3,9 +3,7 @@ package com.plusonesoftwares.plusonesoftwares.bignews.TabFragments;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.Toast;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.NewsCategoryDetails;
 import com.plusonesoftwares.plusonesoftwares.bignews.R;
@@ -29,6 +26,8 @@ public class MenuFragment extends Fragment {
 
     Utils utils;
     String defaultCat;
+    View menuView;
+
 
 
     String[] colorCodes = { "#cd6155", "#DAF7A6", "#FFC300", "#FF5733", "#C70039", "#ba4a00", "#5d6d7e"};
@@ -36,7 +35,7 @@ public class MenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View menuView = inflater.inflate(R.layout.activity_menu_fragment, container, false);
+        menuView = inflater.inflate(R.layout.activity_menu_fragment, container, false);
 
         //Toast.makeText(getContext(), " Called menu Tab", Toast.LENGTH_SHORT).show();
         utils = new Utils();
@@ -47,6 +46,8 @@ public class MenuFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+      // FragmentTransaction ft = getFragmentManager().beginTransaction();
+    //   ft.detach(this).attach(this).commit();
 
         return menuView;
     }
@@ -56,8 +57,11 @@ public class MenuFragment extends Fragment {
         TableLayout mTlayout;
         TableRow tr = null;
 
+
+
         mTlayout = (TableLayout) menuView.findViewById(R.id.tableLayout);
 
+        mTlayout.removeAllViews();
         TableRow.LayoutParams tableRowLayoutParams =
                 new TableRow.LayoutParams((utils.getScreenWidth()) / 2, (utils.getScreenWidth()) / 2);
         //tableRowLayoutParams.setMargins(0,0,10,10);
@@ -102,7 +106,19 @@ public class MenuFragment extends Fragment {
 
             tr.addView(button);
             i++;
+       }
+    }
+
+    @Override
+    public void onResume() {
+        //defaultNewsCategories();
+        defaultCat = utils.getUserPrefs(utils.NewsCategories,getContext());
+        try {
+            createButtonsDynamically(menuView, utils.mTextofButton, colorCodes);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        super.onResume();
     }
 }
 

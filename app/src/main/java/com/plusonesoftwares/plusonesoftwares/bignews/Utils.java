@@ -33,6 +33,8 @@ import java.util.Iterator;
 public class Utils {
     public static final String MyPREFERENCES = "MyPrefs";
     public static final String NewsCategories = "NewsCategories";
+    public static final String CategroyTitle = "CategroyTitle";
+
 
     public static final  String[] mTextofButton = { "India Head Lines News", "India Movie News", "India Business News", "Malayalam Head Lines News", "Malayalam Business News", "Telugu Business News",
             "Malayalam Movie News", "Malayalam Sports News", "Malayalam World News" ,"Malayalam National News"};

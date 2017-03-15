@@ -4,18 +4,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
-import com.plusonesoftwares.plusonesoftwares.bignews.TabFragments.DiscoverFragment;
-import com.plusonesoftwares.plusonesoftwares.bignews.TabFragments.HomeFragment;
-import com.plusonesoftwares.plusonesoftwares.bignews.TabFragments.MenuFragment;
-
-public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
+public class MainActivity extends AppCompatActivity  {
     private TabLayout tabLayout;
     ViewPager viewPager;
 
@@ -59,40 +52,35 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             }
         });
 
-        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
+            final PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(),tabBarTitles);
+            viewPager.setAdapter(pagerAdapter);
+            tabLayout.setupWithViewPager(viewPager);
+
+
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
 
             @Override
-            public Fragment getItem(int position) {
+            public void onPageSelected(int position) {
 
-                switch (position) {
-                    case 0:
-                        HomeFragment flip = new HomeFragment();
-                        return flip;
-                    case 1:
-                        MenuFragment menu = new MenuFragment();
+                android.support.v4.app.Fragment fragment= ((PagerAdapter)viewPager.getAdapter()).getFragment(position);
 
-                        return menu;
-                    case 2:
-                        DiscoverFragment discover = new DiscoverFragment();
-
-                        return discover;
-                    default:
-                        return null;
+                if(position==1 && fragment!=null){
+                    fragment.onResume();
+                }
+                else if(position==0 && fragment!=null){
+                    fragment.onResume();
                 }
             }
 
             @Override
-            public CharSequence getPageTitle(int position) {
-                return tabBarTitles[position];
-            }
+            public void onPageScrollStateChanged(int state) {
 
-            @Override
-            public int getCount() {
-                return tabBarTitles.length;
             }
         });
-        tabLayout.setupWithViewPager(viewPager);
-        //changePager();
+
     }
 
     public void changePager(){
@@ -148,21 +136,5 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         });
     }
-//    getString(R.string.Home),
-//    getString(R.string.Menu),
-//    getString(R.string.Discover)
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        Toast.makeText(getApplicationContext(), " Called onTabSelected :" + tab.getText(), Toast.LENGTH_SHORT).show();
-    }
 
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
-    }
 }
