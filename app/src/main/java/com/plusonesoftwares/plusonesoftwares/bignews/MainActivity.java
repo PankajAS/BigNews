@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity  {
     private TabLayout tabLayout;
     ViewPager viewPager;
+    Utils utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         tabLayout = (TabLayout)findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
+        utils = new Utils();
         final String[] tabBarTitles = new String[]{
                 getString(R.string.Home),
                 getString(R.string.Menu),
@@ -26,17 +28,29 @@ public class MainActivity extends AppCompatActivity  {
         tabLayout.addTab(tabLayout.newTab().setText(tabBarTitles[2]));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                android.support.v4.app.Fragment fragment= ((PagerAdapter)viewPager.getAdapter()).getFragment(position);
 
+                if(position == 0 && fragment!=null){
+                    setTitle(utils.getUserPrefs(utils.CategroyTitle, getApplicationContext()));
+                }
+                else if(position == 1 && fragment!=null){
+                    setTitle("Followed Catogries");
+                }else if(position == 2 && fragment!=null){
+                    setTitle("All Catogries");
+                }
             }
             @Override
             public void onPageSelected(int position) {
-                if(position == 1){
-                    setTitle("Followed Catogries");
-                }else if(position == 2){
-                    setTitle("All Catogries");
+                android.support.v4.app.Fragment fragment= ((PagerAdapter)viewPager.getAdapter()).getFragment(position);
+                if(position == 0 && fragment!=null){
+                    fragment.onResume();
+                }
+                else if(position == 1 && fragment!=null){
+                    fragment.onResume();
                 }
             }
 
@@ -51,29 +65,29 @@ public class MainActivity extends AppCompatActivity  {
             tabLayout.setupWithViewPager(viewPager);
 
 
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                android.support.v4.app.Fragment fragment= ((PagerAdapter)viewPager.getAdapter()).getFragment(position);
-
-                if(position==1 && fragment!=null){
-                    fragment.onResume();
-                }
-                else if(position==0 && fragment!=null){
-                    fragment.onResume();
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
+//        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//
+//                android.support.v4.app.Fragment fragment= ((PagerAdapter)viewPager.getAdapter()).getFragment(position);
+//
+//                if(position == 0 && fragment!=null){
+//                    fragment.onResume();
+//                }
+//                else if(position == 1 && fragment!=null){
+//                    fragment.onResume();
+//                }
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
     }
 
     @Override
