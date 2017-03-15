@@ -3,7 +3,6 @@ package com.plusonesoftwares.plusonesoftwares.bignews;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,53 +11,48 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.plusonesoftwares.plusonesoftwares.bignews.data.Travels;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Plus 3 on 07-03-2017.
  */
 
-public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
+public class CustomViewAdapter extends ArrayAdapter {
 
     Context context;
-    private List<Travels.Data> travelData;
     JSONArray jsonArray;
-    CustomViewAdapter.ViewHolder holder= null;
+    CustomViewAdapter.ViewHolder holder = null;
     JSONObject jObject;
     Activity parentContext;
-
-    public CustomViewAdapter(Context context) {
-        super(context, R.layout.new_item);
-        this.context = context;
-        travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
-    }
+    JSONArray newsitems;
+    String title;
 
     public CustomViewAdapter(Context context, Activity parentContext, JSONArray jsonArray) {
         super(context, R.layout.new_item);
         this.context = context;
-        travelData = new ArrayList<Travels.Data>(Travels.IMG_DESCRIPTIONS);
         this.jsonArray = jsonArray;
         this.parentContext = parentContext;
+    }
+
+    public CustomViewAdapter(Context context, JSONArray jsonArray, String title) {
+        super(context, R.layout.new_item);
+        this.context = context;
+        this.jsonArray = jsonArray;
+        this.title = title;
     }
 
     @NonNull
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        if(convertView == null) {
+        if (convertView == null) {
             holder = new CustomViewAdapter.ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.new_item, null, true);
-            //final Travels.Data data = travelData.get(position % travelData.size());
-
             holder.title = (TextView) convertView.findViewById(R.id.title);
             holder.title_image = (ImageView) convertView.findViewById(R.id.titleimage);
 
@@ -69,8 +63,11 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
                     try {
                         jobject = jsonArray.getJSONObject(position);
                         Intent intent = new Intent(context, NewsDetails.class);
-                        intent.putExtra("Data",jobject.toString());
-                        intent.putExtra("NewsCategory",parentContext.getTitle());
+                        intent.putExtra("Data", jobject.toString());
+                        if (parentContext != null)
+                            intent.putExtra("NewsCategory", parentContext.getTitle());
+                        else
+                            intent.putExtra("NewsCategory", title);
                         context.startActivity(intent);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -79,7 +76,6 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
             });
 
             try {
-
                 jObject = jsonArray.getJSONObject(position);
                 holder.title.setText(jObject.getString("Title"));
                 Picasso.with(parentContext)
@@ -89,8 +85,6 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
-            holder = (CustomViewAdapter.ViewHolder) convertView.getTag();
         }
 
         return convertView;
@@ -98,10 +92,15 @@ public class CustomViewAdapter extends ArrayAdapter<Travels.Data> {
 
     @Override
     public int getCount() {
-        return jsonArray.length();
+        if (jsonArray != null) {
+            return jsonArray.length();
+        } else if (newsitems != null) {
+            return newsitems.length();
+        }
+        return 0;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         TextView title;
         ImageView title_image;
     }

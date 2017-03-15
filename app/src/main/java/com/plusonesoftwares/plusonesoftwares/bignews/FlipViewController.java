@@ -1,5 +1,6 @@
 package com.plusonesoftwares.plusonesoftwares.bignews;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -34,6 +35,7 @@ public class FlipViewController extends AdapterView<Adapter> {
     public static final int VERTICAL = 0;
     public static final int HORIZONTAL = 1;
     private GLSurfaceView surfaceView;
+    Activity activity;
 
 
     public static interface ViewFlipListener {
@@ -80,6 +82,7 @@ public class FlipViewController extends AdapterView<Adapter> {
     private final LinkedList<View> bufferedViews = new LinkedList<View>();
     private final LinkedList<View> releasedViews = new LinkedList<View>(); //XXX: use a SparseArray to keep the related view indices?
     private int bufferIndex = -1;
+
     private int adapterIndex = -1;
     private final int sideBufferSize = 1;
 
@@ -100,7 +103,6 @@ public class FlipViewController extends AdapterView<Adapter> {
 
     public FlipViewController(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
         int orientation = VERTICAL;
 
         TypedArray
@@ -254,7 +256,9 @@ public class FlipViewController extends AdapterView<Adapter> {
     private void updateVisibleView(int index) {
         for (int i = 0; i < bufferedViews.size(); i++) {
             bufferedViews.get(i).setVisibility(index == i ? VISIBLE : GONE);
+
         }
+
     }
 
     public void postHideFlipAnimation() {
@@ -410,6 +414,7 @@ public class FlipViewController extends AdapterView<Adapter> {
                     }
                     if (adapterIndex + sideBufferSize < adapterDataCount) {
                         bufferedViews.addLast(viewFromAdapter(adapterIndex + sideBufferSize, true));
+
                     }
                     bufferIndex = bufferedViews.indexOf(old) + 1;
                     requestLayout();
@@ -501,7 +506,7 @@ public class FlipViewController extends AdapterView<Adapter> {
                 bufferedViews.addFirst(viewFromAdapter(previous, false));
             }
             if (next < adapterDataCount) {
-                bufferedViews.addLast(viewFromAdapter(next, true));
+              bufferedViews.addLast(viewFromAdapter(next, true));
             }
         }
 

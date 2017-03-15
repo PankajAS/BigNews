@@ -48,7 +48,12 @@ public class ContentRepo {
                 values.put(NewsDataModel.KEY_Title, newsData.Title);
                 values.put(NewsDataModel.KEY_ImageUrl, newsData.ImageUrl);
                 values.put(NewsDataModel.KEY_Description, newsData.Description);
-                db.update(NewsDataModel.TABLE, values, NewsDataModel.KEY_Category + "=?  AND " + NewsDataModel.KEY_IsNext + "=?", new String[]{categoryName, newsData.IsNext});
+                //db.update(NewsDataModel.TABLE, values, NewsDataModel.KEY_Category + " = '"+newsData.Category.toString()+ "' AND " + NewsDataModel.KEY_IsNext + " = '"+newsData.IsNext+"'",null);
+                db.update(NewsDataModel.TABLE,
+                        values,
+                        NewsDataModel.KEY_Category + " = ? AND " + NewsDataModel.KEY_IsNext + " = ? ",
+                        new String[]{String.valueOf(newsData.Category), String.valueOf(newsData.IsNext)});
+
             }
             db.setTransactionSuccessful();
         } finally {
@@ -119,6 +124,8 @@ public class ContentRepo {
         db.close();
         return categoryList;
     }
+
+
 
     public ArrayList<HashMap<String, String>> getAllNewsDataByCategory(String categoryName) {
         //Open connection to read only

@@ -6,17 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 import com.plusonesoftwares.plusonesoftwares.bignews.unit.UI;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +34,8 @@ public class TravelAdapter extends BaseAdapter {
     List<String> newsCategory;
     ContentRepo newsRecordsClsObj;
     Utils utils;
+    List<String> selectedCategory;
+    String title;
 
     public TravelAdapter(Context context1, Activity parentcontext, List<String> newsCategory) {
         this.context = context1;
@@ -57,13 +55,20 @@ public class TravelAdapter extends BaseAdapter {
         this.jarray = jarray;
     }
 
+    public TravelAdapter(Context context, List<String> selectedCategory, String title) {
+        this.context = context;
+        inflater = LayoutInflater.from(context);
+        this.selectedCategory = selectedCategory;
+        this.title = title;
+    }
+
     @Override
     public int getCount() {
         if(newsCategory !=null){
         return newsCategory.size();
         }
-        else if(jarray !=null){
-            return jarray.length();
+        else if(selectedCategory !=null){
+            return selectedCategory.size();
         }
         return 0;
     }
@@ -101,49 +106,46 @@ public class TravelAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, final View convertView, ViewGroup viewGroup) {
         View layout = convertView;
-
+        newsRecordsClsObj = new ContentRepo(context);
         if(parentContext!=null) {
 
             if (convertView == null) {
                 layout = inflater.inflate(R.layout.activity_home_fragment, null);
-
             }
-            newsRecordsClsObj = new ContentRepo(context);
+
             utils = new Utils();
-            Boolean isNext = getIsNext(newsCategory,position);
-            ArrayList<HashMap<String, String>> newsList = newsRecordsClsObj.getNewsData(newsCategory.get(position), isNext? "true":"false");
-
-            JSONArray mJSONArray = new JSONArray(Arrays.asList(newsList));
-            JSONArray jsonArray1 = new JSONArray();
-            try {
-                jsonArray1 = mJSONArray.getJSONArray(0);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
+            JSONArray jsonArray1 = getNewsDataByCategory(position, newsCategory);
             UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, parentContext, jsonArray1));
             parentContext.setTitle(utils.getCatNameByCatId(newsCategory.get(position)));
-
             utils.setUserPrefs(utils.CategroyTitle,utils.getCatNameByCatId(newsCategory.get(position)),parentContext);
 
         }else{
 
             if(convertView == null){
-                layout = inflater.inflate(R.layout.activity_news_category_details,null);
+                layout = inflater.inflate(R.layout.activity_home_fragment,null);
             }
-            try {
-                JSONObject jobject = jarray.getJSONObject(position);
-                UI.<TextView>findViewById(layout, R.id.headline).setText(jobject.getString("Title"));
-                Picasso.with(parentContext)
-                        .load("http:" + jobject.getString("ImageUrl"))
-                        .into(UI.<ImageView>findViewById(layout, R.id.newsImage));
-                JSONObject descObject = new JSONObject(jobject.getString("Description"));
-                UI.<TextView>findViewById(layout, R.id.description).setText(descObject.getString("value"));
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            JSONArray jsonArray1 = getNewsDataByCategory(position, selectedCategory);
+            UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, jsonArray1,title));
+
         }
         return layout;
+    }
+
+    private JSONArray getNewsDataByCategory(int position, List<String> CategoryNameList) {
+
+        Boolean isNext = getIsNext(CategoryNameList,position);
+        ArrayList<HashMap<String, String>> newsList = newsRecordsClsObj.getNewsData(CategoryNameList.get(position), isNext? "true":"false");
+
+        JSONArray mJSONArray = new JSONArray(Arrays.asList(newsList));
+        JSONArray jsonArray1 = new JSONArray();
+        try {
+            jsonArray1 = mJSONArray.getJSONArray(0);
+
+           System.out.println(jsonArray1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonArray1;
     }
 }

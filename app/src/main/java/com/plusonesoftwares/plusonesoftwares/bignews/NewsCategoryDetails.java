@@ -1,15 +1,11 @@
 package com.plusonesoftwares.plusonesoftwares.bignews;
 
-import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import org.json.JSONArray;
-import org.json.JSONException;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class NewsCategoryDetails extends AppCompatActivity {
@@ -17,29 +13,28 @@ public class NewsCategoryDetails extends AppCompatActivity {
     String category;
     List<String> urls;
     Utils utils;
+    List<String> selectedCategory;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         flipView = new FlipViewController(getApplicationContext(), FlipViewController.VERTICAL);
-        setContentView(flipView);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        selectedCategory = new ArrayList<>();
         utils = new Utils();
         Intent intent = getIntent();
         urls = new ArrayList<>();
-        setTitle(intent.getStringExtra("categoryName"));
+        category = intent.getStringExtra("categoryName");
+        setTitle(category);
+        selectedCategory.add(utils.getCatIdByCatName(category));//first News item
+        selectedCategory.add(utils.getCatIdByCatName(category));//next News item
 
-        category = utils.getCatIdByCatName(intent.getStringExtra("categoryName"));
-        ContentRepo newsRecords = new ContentRepo(getApplicationContext());
-        ArrayList<HashMap<String, String>> newsList = newsRecords.getAllNewsDataByCategory(category);
 
-        JSONArray mJSONArray = new JSONArray(Arrays.asList(newsList));
-        try {
-            JSONArray jsonArray1 = mJSONArray.getJSONArray(0);
-            flipView.setAdapter(new TravelAdapter(NewsCategoryDetails.this, jsonArray1));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        flipView.setAdapter(new TravelAdapter(getApplicationContext(), selectedCategory, category));
+        setContentView(flipView);
     }
 
     @Override
