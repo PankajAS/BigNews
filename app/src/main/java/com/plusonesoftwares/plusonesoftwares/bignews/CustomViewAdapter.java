@@ -3,6 +3,7 @@ package com.plusonesoftwares.plusonesoftwares.bignews;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,9 +51,9 @@ public class CustomViewAdapter extends ArrayAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
-            holder = new CustomViewAdapter.ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.new_item, null, true);
+            holder = new CustomViewAdapter.ViewHolder();
             holder.title = (TextView) convertView.findViewById(R.id.title);
             holder.title_image = (ImageView) convertView.findViewById(R.id.titleimage);
 
@@ -74,17 +75,20 @@ public class CustomViewAdapter extends ArrayAdapter {
                     }
                 }
             });
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        try {
+            jObject = jsonArray.getJSONObject(position);
+            holder.title.setText(jObject.getString("Title"));
+            Picasso.with(parentContext)
+                    .load("http:" + jObject.getString("ImageUrl"))
+                    .into(holder.title_image);
+            holder.title.setTextColor(Color.BLACK);
 
-            try {
-                jObject = jsonArray.getJSONObject(position);
-                holder.title.setText(jObject.getString("Title"));
-                Picasso.with(parentContext)
-                        .load("http:" + jObject.getString("ImageUrl"))
-                        .into(holder.title_image);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         return convertView;
