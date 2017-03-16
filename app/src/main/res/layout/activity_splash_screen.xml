@@ -47,11 +47,11 @@
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/txtViewMessage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Initialization..."
+        android:text="@string/splashMessage1"
         android:typeface="serif"
         android:layout_below="@+id/progressBar"
         android:textColor="@android:color/white"

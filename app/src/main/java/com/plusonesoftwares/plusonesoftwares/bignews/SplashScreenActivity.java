@@ -3,6 +3,7 @@ package com.plusonesoftwares.plusonesoftwares.bignews;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 
@@ -17,7 +18,7 @@ import java.util.List;
 public class SplashScreenActivity extends AppCompatActivity {
     List<String> string;
     ArrayList<String> newsCategory = new ArrayList<>();
-
+    TextView txtViewMessage;
     Utils utils;
     ContentRepo contentOperation;
 
@@ -26,19 +27,24 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        txtViewMessage = (TextView) findViewById(R.id.txtViewMessage);
+
+        contentOperation = new ContentRepo(getApplicationContext());
         utils = new Utils();
 
         if (!utils.keyExist(getApplicationContext())) {
-            utils.defaultNewsCategories(getApplicationContext());
+            utils.defaultNewsCategories(getApplicationContext());//setting default news categories for first time when user install the app
         }
-
-        contentOperation = new ContentRepo(getApplicationContext());
 
         newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true, true);
 
         boolean isLastRequest = false;
         int parentIndex = 0;
-        Boolean isInsert = !contentOperation.dataAlreadyExist();
+        Boolean isInsert = true;
+        if(contentOperation.dataAlreadyExist()) {
+            isInsert = false;
+            txtViewMessage.setText(R.string.splashMessage2);
+        }
 
         for (String url : newsCategory) {
             isLastRequest = (parentIndex == 3);
