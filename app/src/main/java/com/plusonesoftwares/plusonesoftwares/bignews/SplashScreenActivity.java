@@ -69,7 +69,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
             startActivity(intent);
         }
-        jobSchedulerService();//intilization job Scheduler
+        jobSchedulerService();//initialization of job Scheduler
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
