@@ -60,7 +60,6 @@ public class DiscoverFragment extends Fragment {
     private void createButtonsDynamically(View menuView, final String[] numberOfItems, final String[] BgColor) throws JSONException {
         TableLayout mTlayout;
         TableRow tr = null;
-        final ContentRepo contentOperation = new ContentRepo(getContext());
         int i = 0;
 
         mTlayout = (TableLayout) menuView.findViewById(R.id.tableLayout);
@@ -106,8 +105,6 @@ public class DiscoverFragment extends Fragment {
                         JsonCategories = utils.getUpdatedCategories(getContext());
                         JsonCategories.remove(utils.catKeys[finalI]);
                         utils.setUserPrefs(utils.NewsCategories, JsonCategories.toString(),getContext());
-                        //Deleting data from sqlite database on un-select
-                        //contentOperation.delete_NewsData(utils.getCatIdByCatName(numberOfItems[finalI]));
                     }
                     else //selecting new category
                     {

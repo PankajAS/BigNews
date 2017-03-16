@@ -41,6 +41,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         boolean isLastRequest = false;
         int parentIndex = 0;
         Boolean isInsert = true;
+
         if(contentOperation.dataAlreadyExist()) {
             isInsert = false;
             txtViewMessage.setText(R.string.splashMessage2);
