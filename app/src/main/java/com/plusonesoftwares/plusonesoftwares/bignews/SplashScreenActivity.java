@@ -27,19 +27,21 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         utils = new Utils();
-        defaultNewsCategories();
+
+        if (!utils.keyExist(getApplicationContext())) {
+            utils.defaultNewsCategories(getApplicationContext());
+        }
 
         contentOperation = new ContentRepo(getApplicationContext());
 
         newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true, true);
 
-        // if(!contentOperation.dataAlreadyExist()) {
         boolean isLastRequest = false;
         int parentIndex = 0;
         Boolean isInsert = !contentOperation.dataAlreadyExist();
 
         for (String url : newsCategory) {
-            isLastRequest = (parentIndex == 2);
+            isLastRequest = (parentIndex == 3);
             try {
                 new GetNewsData(getApplicationContext(), getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest, SplashScreenActivity.this, isInsert).execute(new URL(url));//start async task to get all categories
             } catch (MalformedURLException e) {
@@ -47,12 +49,6 @@ public class SplashScreenActivity extends AppCompatActivity {
             }
             parentIndex++;
         }
-        // }
-       /* else
-        {
-            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-            startActivity(intent);
-        }*/
     }
 
     private String getIsNext(ArrayList<String> newsCategory, int parentIndex) {
@@ -63,20 +59,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         } else {
             return "false";
         }
-    }
-
-    private void defaultNewsCategories() {
-        JSONObject FollowedCategories = new JSONObject();
-        try {
-            FollowedCategories.put("indiaHeadLinesNews", "India Head Lines News");
-            FollowedCategories.put("indiaMovieNews", "India Movie News");
-            FollowedCategories.put("indiaBusinessNews", "India Business News");
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if (!utils.keyExist(getApplicationContext()))
-            utils.setUserPrefs(utils.NewsCategories, FollowedCategories.toString(), getApplicationContext());
     }
 }
 

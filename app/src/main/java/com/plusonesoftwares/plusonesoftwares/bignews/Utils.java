@@ -212,4 +212,18 @@ public class Utils {
         }
         return categoriesLink;
     }
+
+    public void defaultNewsCategories(Context context) {
+
+        JSONObject FollowedCategories = new JSONObject();
+        try {
+            FollowedCategories.put("indiaHeadLinesNews", "India Head Lines News");
+            FollowedCategories.put("indiaMovieNews", "India Movie News");
+            FollowedCategories.put("indiaBusinessNews", "India Business News");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        setUserPrefs(NewsCategories, FollowedCategories.toString(), context);
+    }
 }

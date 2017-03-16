@@ -11,7 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.StringTokenizer;
 
 public class ContentRepo {
 
@@ -38,6 +37,7 @@ public class ContentRepo {
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
+            db.close();
         }
     }
 
@@ -60,12 +60,14 @@ public class ContentRepo {
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
+            db.close();
         }
     }
 
     public void delete_NewsData(String categoryName) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(NewsDataModel.TABLE, NewsDataModel.KEY_Category + "=?", new String[]{categoryName});
+        db.close();
     }
 
     public boolean dataAlreadyExist() {
@@ -79,6 +81,7 @@ public class ContentRepo {
             return false;
         }
         cursor.close();
+        db.close();
         return true;
     }
 

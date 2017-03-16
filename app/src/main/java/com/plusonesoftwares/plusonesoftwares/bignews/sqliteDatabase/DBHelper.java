@@ -23,9 +23,6 @@ public class DBHelper  extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-
-
         //All necessary tables you like to create will create here
         String CREATE_TABLE_NEWS = "CREATE TABLE " + NewsDataModel.TABLE  + "("
                 + NewsDataModel.KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
