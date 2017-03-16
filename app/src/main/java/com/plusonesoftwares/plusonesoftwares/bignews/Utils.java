@@ -226,4 +226,13 @@ public class Utils {
         }
         setUserPrefs(NewsCategories, FollowedCategories.toString(), context);
     }
+
+    public String getIsNext(ArrayList<String> newsCategory, int parentIndex) {
+        int halfsize = newsCategory.size() / 2;
+        if (parentIndex > halfsize - 1) {
+            return "true";
+        } else {
+            return "false";
+        }
+    }
 }

@@ -39,7 +39,8 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
         boolean isInsert;
 
 
-        public GetNewsData(Context context, String isNext ,String Category, boolean isLastRequest, Activity parentContext, boolean isInsert){
+        public GetNewsData(Context context, String isNext , String Category, boolean isLastRequest, Activity
+                parentContext, boolean isInsert){
             this.context = context;
             this.isNext = isNext;
             this.Category = Category;
@@ -79,7 +80,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
             super.onPostExecute(jsonArray);
-            ContentRepo contentOperation = new ContentRepo(parentContext);
+            ContentRepo contentOperation = new ContentRepo(context);
 
             List<NewsDataModel> newsList = new ArrayList<>();
 
