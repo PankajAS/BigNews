@@ -508,6 +508,7 @@ public class FlipViewController extends AdapterView<Adapter> {
             if (next < adapterDataCount) {
               bufferedViews.addLast(viewFromAdapter(next, true));
             }
+            System.out.println(position);
         }
 
         bufferIndex = bufferedViews.indexOf(selectedView);

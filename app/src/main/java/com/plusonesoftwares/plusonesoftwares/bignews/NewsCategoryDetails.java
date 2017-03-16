@@ -21,7 +21,6 @@ public class NewsCategoryDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         flipView = new FlipViewController(getApplicationContext(), FlipViewController.VERTICAL);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         selectedCategory = new ArrayList<>();
         utils = new Utils();
@@ -33,7 +32,7 @@ public class NewsCategoryDetails extends AppCompatActivity {
         selectedCategory.add(utils.getCatIdByCatName(category));//next News item
 
 
-        flipView.setAdapter(new TravelAdapter(getApplicationContext(), selectedCategory, category));
+        flipView.setAdapter(new TravelAdapter(NewsCategoryDetails.this, selectedCategory, category));
         setContentView(flipView);
     }
 
