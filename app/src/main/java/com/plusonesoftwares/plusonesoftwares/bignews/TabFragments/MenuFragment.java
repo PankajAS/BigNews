@@ -29,7 +29,6 @@ public class MenuFragment extends Fragment {
     View menuView;
 
 
-
     String[] colorCodes = { "#cd6155", "#DAF7A6", "#FFC300", "#FF5733", "#C70039", "#ba4a00", "#5d6d7e", "#cd6155", "#DAF7A6", "#FFC300"};
 
     @Override
