@@ -1,5 +1,6 @@
 package com.plusonesoftwares.plusonesoftwares.bignews;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
@@ -36,25 +37,33 @@ public class SplashScreenActivity extends AppCompatActivity {
             utils.defaultNewsCategories(getApplicationContext());//setting default news categories for first time when user install the app
         }
 
-        newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true, true);
+        if(utils.haveNetworkConnection(getApplicationContext())) {
+            newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true, true);
 
-        boolean isLastRequest = false;
-        int parentIndex = 0;
-        Boolean isInsert = true;
+            boolean isLastRequest = false;
+            int parentIndex = 0;
+            Boolean isInsert = true;
 
-        if(contentOperation.dataAlreadyExist()) {
-            isInsert = false;
-            txtViewMessage.setText(R.string.splashMessage2);
-        }
-
-        for (String url : newsCategory) {
-            isLastRequest = (parentIndex == 3);
-            try {
-                new GetNewsData(getApplicationContext(), getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest, SplashScreenActivity.this, isInsert).execute(new URL(url));//start async task to get all categories
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+            if (contentOperation.dataAlreadyExist()) {
+                isInsert = false;
+                txtViewMessage.setText(R.string.splashMessage2);
             }
-            parentIndex++;
+
+            for (String url : newsCategory) {
+                isLastRequest = (parentIndex == 3);
+                try {
+                    new GetNewsData(getApplicationContext(), getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest, SplashScreenActivity.this, isInsert).execute(new URL(url));//start async task to get all categories
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                parentIndex++;
+            }
+        }
+        else
+        {
+            utils.showNetworkConnectionMsg(SplashScreenActivity.this);
+            Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
+            startActivity(intent);
         }
     }
 

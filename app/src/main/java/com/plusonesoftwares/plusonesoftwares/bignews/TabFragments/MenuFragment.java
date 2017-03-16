@@ -30,24 +30,19 @@ public class MenuFragment extends Fragment {
 
 
 
-    String[] colorCodes = { "#cd6155", "#DAF7A6", "#FFC300", "#FF5733", "#C70039", "#ba4a00", "#5d6d7e"};
+    String[] colorCodes = { "#cd6155", "#DAF7A6", "#FFC300", "#FF5733", "#C70039", "#ba4a00", "#5d6d7e", "#cd6155", "#DAF7A6", "#FFC300"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         menuView = inflater.inflate(R.layout.activity_menu_fragment, container, false);
-
-        //Toast.makeText(getContext(), " Called menu Tab", Toast.LENGTH_SHORT).show();
         utils = new Utils();
-        //defaultNewsCategories();
         defaultCat = utils.getUserPrefs(utils.NewsCategories,getContext());
         try {
             createButtonsDynamically(menuView, utils.mTextofButton, colorCodes);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-      // FragmentTransaction ft = getFragmentManager().beginTransaction();
-    //   ft.detach(this).attach(this).commit();
 
         return menuView;
     }
