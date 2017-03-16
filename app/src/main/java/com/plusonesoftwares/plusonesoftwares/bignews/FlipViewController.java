@@ -42,6 +42,7 @@ public class FlipViewController extends AdapterView<Adapter> {
 
         void onViewFlipped(View view, int position);
     }
+
     private static final int MAX_RELEASED_VIEW_SIZE = 1;
 
     public static final int MSG_SURFACE_CREATED = 1;
@@ -96,8 +97,7 @@ public class FlipViewController extends AdapterView<Adapter> {
     @ViewDebug.ExportedProperty
     private Bitmap.Config animationBitmapFormat = Bitmap.Config.ARGB_8888;
 
-    public FlipViewController(Context context) {
-
+    public FlipViewController(Activity context) {
         this(context, VERTICAL);
     }
 
@@ -130,10 +130,14 @@ public class FlipViewController extends AdapterView<Adapter> {
         init(context, orientation);
     }
 
-    public FlipViewController(Context context, int flipOrientation) {
+    Activity context;
+
+    public FlipViewController(Activity context, int flipOrientation) {
         super(context);
         init(context, flipOrientation);
+        this.context = context;
     }
+
     public FlipViewController(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -201,18 +205,23 @@ public class FlipViewController extends AdapterView<Adapter> {
     public GLSurfaceView getSurfaceView() {
         return surfaceView;
     }
+
     public float getTouchSlop() {
         return touchSlop;
     }
+
     public int getContentHeight() {
         return contentHeight;
     }
+
     FlipRenderer getRenderer() {
         return renderer;
     }
+
     public int getContentWidth() {
         return contentWidth;
     }
+
     public boolean isOverFlipEnabled() {
         return overFlipEnabled;
     }
@@ -261,12 +270,21 @@ public class FlipViewController extends AdapterView<Adapter> {
 
     }
 
+    Boolean isFirstTime = false;
     public void postHideFlipAnimation() {
         if (inFlipAnimation) {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
                     hideFlipAnimation();
+                    if (context.getClass().getSimpleName().equals("NewsCategoryDetails")){
+                        if (bufferedViews.size() == 2 && isFirstTime) {
+                            context.finish();
+
+                        } else if (bufferedViews.size() == 2) {
+                            isFirstTime = true;
+                        }
+                    }
                 }
             });
         }
@@ -292,7 +310,7 @@ public class FlipViewController extends AdapterView<Adapter> {
 
             handler.post(new Runnable() {
                 public void run() {
-                    if (!inFlipAnimation){
+                    if (!inFlipAnimation) {
                         cards.setVisible(false);
                         surfaceView.requestRender(); //ask OpenGL to clear its display
                     }
@@ -300,6 +318,7 @@ public class FlipViewController extends AdapterView<Adapter> {
             });
         }
     }
+
     public void showFlipAnimation() {
         if (!inFlipAnimation) {
             inFlipAnimation = true;
@@ -345,18 +364,18 @@ public class FlipViewController extends AdapterView<Adapter> {
             requestLayout();
         }
     }
+
     public void refreshAllPages() {
         cards.refreshAllPages();
         requestLayout();
     }
 
 
-
     public void postFlippedToView(final int indexInAdapter) {
         handler.post(new Runnable() {
             @Override
             public void run() {
-               flippedToView(indexInAdapter, true);
+                flippedToView(indexInAdapter, true);
             }
         });
     }
@@ -398,7 +417,7 @@ public class FlipViewController extends AdapterView<Adapter> {
     }
 
     public void flippedToView(final int indexInAdapter, boolean isPost) {
-          if (AphidLog.ENABLE_DEBUG) {
+        if (AphidLog.ENABLE_DEBUG) {
             AphidLog.d("flippedToView: %d, isPost %s", indexInAdapter, isPost);
         }
         debugBufferedViews();
@@ -506,9 +525,8 @@ public class FlipViewController extends AdapterView<Adapter> {
                 bufferedViews.addFirst(viewFromAdapter(previous, false));
             }
             if (next < adapterDataCount) {
-              bufferedViews.addLast(viewFromAdapter(next, true));
+                bufferedViews.addLast(viewFromAdapter(next, true));
             }
-            System.out.println(position);
         }
 
         bufferIndex = bufferedViews.indexOf(selectedView);
@@ -535,6 +553,7 @@ public class FlipViewController extends AdapterView<Adapter> {
         detachViewFromParent(view);
         addReleasedView(view);
     }
+
     private void addReleasedView(View view) {
         Assert.assertNotNull(view);
         if (releasedViews.size() < MAX_RELEASED_VIEW_SIZE) {

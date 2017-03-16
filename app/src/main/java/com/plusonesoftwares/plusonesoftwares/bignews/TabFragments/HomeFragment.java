@@ -22,7 +22,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        flipView = new FlipViewController(getContext(), FlipViewController.VERTICAL);
+        flipView = new FlipViewController(getActivity(), FlipViewController.VERTICAL);
         utils = new Utils();
         flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), utils.getFollowedCategoriesLink(getContext(), false, false)));
 
