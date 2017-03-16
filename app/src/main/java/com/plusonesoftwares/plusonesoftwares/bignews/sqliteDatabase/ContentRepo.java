@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class ContentRepo {
 
@@ -26,6 +27,7 @@ public class ContentRepo {
         try {
             ContentValues values = new ContentValues();
             for (NewsDataModel newsData : list) {
+                values.put(NewsDataModel.KEY_UniqueID, newsData.UniqueId);
                 values.put(NewsDataModel.KEY_Title, newsData.Title);
                 values.put(NewsDataModel.KEY_ImageUrl, newsData.ImageUrl);
                 values.put(NewsDataModel.KEY_Description, newsData.Description);
@@ -39,7 +41,7 @@ public class ContentRepo {
         }
     }
 
-    public void update_NewsData(List<NewsDataModel> list, String categoryName) {
+    public void update_NewsData(List<NewsDataModel> list) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.beginTransaction();
         try {
@@ -51,8 +53,8 @@ public class ContentRepo {
                 //db.update(NewsDataModel.TABLE, values, NewsDataModel.KEY_Category + " = '"+newsData.Category.toString()+ "' AND " + NewsDataModel.KEY_IsNext + " = '"+newsData.IsNext+"'",null);
                 db.update(NewsDataModel.TABLE,
                         values,
-                        NewsDataModel.KEY_Category + " = ? AND " + NewsDataModel.KEY_IsNext + " = ? ",
-                        new String[]{String.valueOf(newsData.Category), String.valueOf(newsData.IsNext)});
+                        NewsDataModel.KEY_Category + " = ? AND " + NewsDataModel.KEY_IsNext + " = ? AND " + NewsDataModel.KEY_UniqueID + " = ? ",
+                        new String[]{String.valueOf(newsData.Category), String.valueOf(newsData.IsNext), String.valueOf(newsData.UniqueId)});
 
             }
             db.setTransactionSuccessful();

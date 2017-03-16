@@ -88,6 +88,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     try {
                         singleCatObj = new NewsDataModel();
+                        singleCatObj.UniqueId = jsonArray.getJSONObject(i).getString("uniqueId");
                         singleCatObj.Title = jsonArray.getJSONObject(i).getString("title");
                         singleCatObj.ImageUrl = jsonArray.getJSONObject(i).getString("imgURL");
                         singleCatObj.Description = jsonArray.getJSONObject(i).getString("desc");
@@ -102,7 +103,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
                 if(isInsert)
                     contentOperation.insert_NewsData(newsList);
                 else
-                    contentOperation.update_NewsData(newsList, Category);
+                    contentOperation.update_NewsData(newsList);
 
                 if(isLastRequest)
                 {

@@ -29,6 +29,7 @@ public class DBHelper  extends SQLiteOpenHelper {
         //All necessary tables you like to create will create here
         String CREATE_TABLE_NEWS = "CREATE TABLE " + NewsDataModel.TABLE  + "("
                 + NewsDataModel.KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                + NewsDataModel.KEY_UniqueID + " TEXT ,"
                 + NewsDataModel.KEY_Title + " TEXT ,"
                 + NewsDataModel.KEY_ImageUrl + " TEXT ,"
                 + NewsDataModel.KEY_Description + " TEXT ,"

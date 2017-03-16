@@ -12,6 +12,7 @@ public class NewsDataModel {
     public static final String TABLE = "tblNewsData";
     // Labels Table Columns names
     public  static final String KEY_ID = "ID";
+    public  static final String KEY_UniqueID = "UniqueId";
     public  static final String KEY_Title = "Title";
     public  static final String KEY_ImageUrl = "ImageUrl";
     public  static final String KEY_Description = "Description";
@@ -20,38 +21,10 @@ public class NewsDataModel {
 
     //property help us to keep data
     public String ID;
+    public String UniqueId;
     public String Title;
     public String ImageUrl;
     public String Description;
     public static String Category;
     public static String IsNext;
-
-    public static List<Data> IMG_DESCRIPTIONS = new ArrayList<Data>();
-
-static {
-    //IMG_DESCRIPTIONS.add(new NewsDataModel.Data());
-}
-
-
-
-
-    public static final class Data {
-
-        public String ID;
-        public String Title;
-        public String ImageUrl;
-        public String Description;
-        public String Category;
-        public Boolean IsNext;
-
-        private Data(String ID, String Title, String ImageUrl, String Description,
-                     String Category, Boolean IsNext) {
-            this.ID = ID;
-            this.Title = Title;
-            this.ImageUrl = ImageUrl;
-            this.Description = Description;
-            this.Category = Category;
-            this.IsNext = IsNext;
-        }
-    }
 }
