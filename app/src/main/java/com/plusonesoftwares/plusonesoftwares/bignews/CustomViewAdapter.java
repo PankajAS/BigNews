@@ -3,7 +3,6 @@ package com.plusonesoftwares.plusonesoftwares.bignews;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,7 +84,6 @@ public class CustomViewAdapter extends ArrayAdapter {
             Picasso.with(parentContext)
                     .load("http:" + jObject.getString("ImageUrl"))
                     .into(holder.title_image);
-            holder.title.setTextColor(Color.BLACK);
 
         } catch (JSONException e) {
             e.printStackTrace();

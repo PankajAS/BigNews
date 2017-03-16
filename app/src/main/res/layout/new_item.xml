@@ -19,7 +19,8 @@
         android:textSize="18sp"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/titleimage"
-            android:layout_toEndOf="@+id/titleimage" />
+            android:layout_toEndOf="@+id/titleimage"
+            android:textColor="@android:color/black" />
 
         <ImageView
             android:layout_width="70dp"
