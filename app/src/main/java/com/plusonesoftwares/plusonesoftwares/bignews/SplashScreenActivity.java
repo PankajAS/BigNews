@@ -1,22 +1,21 @@
 package com.plusonesoftwares.plusonesoftwares.bignews;
 
-import android.app.job.JobInfo;
-import android.app.job.JobScheduler;
-import android.content.ComponentName;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -25,16 +24,13 @@ public class SplashScreenActivity extends AppCompatActivity {
     TextView txtViewMessage;
     Utils utils;
     ContentRepo contentOperation;
-    JobScheduler jobScheduler;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         txtViewMessage = (TextView) findViewById(R.id.txtViewMessage);
-        jobScheduler = (JobScheduler) getApplicationContext().getSystemService(Context.JOB_SCHEDULER_SERVICE);
 
         contentOperation = new ContentRepo(getApplicationContext());
         utils = new Utils();
@@ -69,19 +65,19 @@ public class SplashScreenActivity extends AppCompatActivity {
             Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
             startActivity(intent);
         }
-        jobSchedulerService();//initialization of job Scheduler
+        startAlert();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void jobSchedulerService() {
-        ComponentName mServiceComponent = new ComponentName(getApplicationContext(), NewsUpdateJobScheduler.class);
-        JobInfo.Builder builder = new JobInfo.Builder(0, mServiceComponent);
-        builder.setPeriodic(43200000);//total time of scheduler is 12 hours in milliseconds(1000*60*60*12)
-        builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED);
-        builder.setRequiresCharging(false);
-        builder.setRequiresDeviceIdle(true);
-        JobInfo jobInfo = builder.build();
-        jobScheduler.schedule(jobInfo);
+    public void startAlert() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(SplashScreenActivity.this, NewsBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(SplashScreenActivity.this, 0, intent, 0);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
+        Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
     }
 }
 
