@@ -103,23 +103,39 @@ public class TravelAdapter extends BaseAdapter {
             return  false;
         }
     }
+
     @Override
     public View getView(final int position, final View convertView, ViewGroup viewGroup) {
         View layout = convertView;
         newsRecordsClsObj = new ContentRepo(context);
+
+        int titlePosition = 0;
         if(parentContext!=null) {
 
-            if (convertView == null) {
-                layout = inflater.inflate(R.layout.activity_home_fragment, null);
-            }
-
             utils = new Utils();
-            JSONArray jsonArray1 = getNewsDataByCategory(position, newsCategory);
-            UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, parentContext, jsonArray1));
-            parentContext.setTitle(utils.getCatNameByCatId(newsCategory.get(position)));
-            utils.setUserPrefs(utils.CategroyTitle,utils.getCatNameByCatId(newsCategory.get(position)),parentContext);
+            titlePosition = (position > 0 ? position-1 : position);
+            if(newsCategory.get(position).equals("AdMob"))
+            {
+                //if (convertView == null) {
+                    layout = inflater.inflate(R.layout.activity_admob, null);
+                    //UI.<ListView>findViewById(layout, R.id.list)); will be used to set add data here
+                //}
+            }
+            else {
 
-        }else{
+               // if (convertView == null) {
+                    layout = inflater.inflate(R.layout.activity_home_fragment, null);
+               // }
+                JSONArray jsonArray1 = getNewsDataByCategory(position, newsCategory);
+
+                UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, parentContext, jsonArray1));
+
+            }
+            parentContext.setTitle(utils.getCatNameByCatId(newsCategory.get(titlePosition)));
+            utils.setUserPrefs(utils.CategroyTitle,utils.getCatNameByCatId(newsCategory.get(titlePosition)),parentContext);
+        }
+        else
+        {
 
             if(convertView == null){
                 layout = inflater.inflate(R.layout.activity_home_fragment,null);

@@ -25,10 +25,24 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".NewsCategoryDetails" />
         <activity android:name=".NewsDetails" />
-        <activity android:name=".AboutUs"></activity>
-        <service android:name=".NewsUpdateJobScheduler"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true"/>
+        <activity android:name=".AboutUs" />
+
+        <service
+            android:name=".NewsUpdateJobScheduler"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <!-- This meta-data tag is required to use Google Play Services. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".AdmobActivity"
+            android:label="@string/title_activity_admob"></activity> <!-- Include the AdActivity configChanges and theme. -->
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
     </application>
 
 </manifest>
