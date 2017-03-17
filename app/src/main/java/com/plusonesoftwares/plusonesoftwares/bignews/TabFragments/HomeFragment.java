@@ -18,7 +18,7 @@ import java.util.List;
 public class HomeFragment extends Fragment {
     private FlipViewController flipView;
     Utils utils;
-
+    List<String> newsCategory1;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +30,7 @@ public class HomeFragment extends Fragment {
         utils = new Utils();
 
         List<String> newsCategory = utils.getFollowedCategoriesLink(getContext(), false, false);
-        List<String> newsCategory1 = new ArrayList<>();
+        newsCategory1 = new ArrayList<>();
         int index = 0;
 
         for(String cat : newsCategory)
@@ -55,6 +55,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         getActivity().setTitle(utils.getUserPrefs(utils.CategroyTitle, getContext()));
+        flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));//to refresh the  main activity on pressed of home button
         super.onResume();
     }
 }
