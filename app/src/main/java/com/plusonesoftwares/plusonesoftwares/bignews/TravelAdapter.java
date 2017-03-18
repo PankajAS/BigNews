@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 import com.plusonesoftwares.plusonesoftwares.bignews.unit.UI;
 
@@ -119,6 +121,12 @@ public class TravelAdapter extends BaseAdapter {
                 //if (convertView == null) {
                     layout = inflater.inflate(R.layout.activity_admob, null);
                     //UI.<ListView>findViewById(layout, R.id.list)); will be used to set add data here
+                AdView adView = (AdView) layout.findViewById(R.id.adView);
+                AdRequest adRequest = new AdRequest.Builder()
+                        .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                        .addTestDevice("CC5F2C72DF2B356BBF0DA198")
+                        .build();
+                adView.loadAd(adRequest);
                 //}
             }
             else {
