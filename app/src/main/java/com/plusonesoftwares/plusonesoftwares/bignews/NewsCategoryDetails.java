@@ -20,7 +20,7 @@ public class NewsCategoryDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        flipView = new FlipViewController(NewsCategoryDetails.this, FlipViewController.VERTICAL);
+        flipView = new FlipViewController(NewsCategoryDetails.this,getApplicationContext(), FlipViewController.VERTICAL);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         selectedCategory = new ArrayList<>();
         utils = new CommonClass();

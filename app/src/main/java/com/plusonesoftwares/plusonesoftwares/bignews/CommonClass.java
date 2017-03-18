@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by ashoksharma on 02/03/17.
@@ -250,4 +251,25 @@ public class CommonClass {
         }
         newsCategory.clear();
     }
+
+
+    public List<String> getCatWithAdmob(List<String> newsCategory) {
+       List<String> newsCategory1 = new ArrayList<>();
+        int index = 0;
+
+        for(String cat : newsCategory)
+        {
+            if(index!=0 && index%3==0) {
+                newsCategory1.add(index, "AdMob");
+                index++;
+                newsCategory1.add(index, cat);
+            }
+            else {
+                newsCategory1.add(index, cat);
+            }
+            index++;
+        }
+        return newsCategory1;
+    }
+
 }

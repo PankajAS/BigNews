@@ -110,7 +110,6 @@ public class TravelAdapter extends BaseAdapter {
     public View getView(final int position, final View convertView, ViewGroup viewGroup) {
         View layout = convertView;
         newsRecordsClsObj = new ContentRepo(context);
-
         int titlePosition = 0;
         if(parentContext!=null) {
 
@@ -139,8 +138,9 @@ public class TravelAdapter extends BaseAdapter {
                 UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, parentContext, jsonArray1));
 
             }
-            parentContext.setTitle(utils.getCatNameByCatId(newsCategory.get(titlePosition)));
-            utils.setUserPrefs(utils.CategroyTitle,utils.getCatNameByCatId(newsCategory.get(titlePosition)),parentContext);
+            //parentContext.setTitle(utils.getCatNameByCatId(newsCategory.get(titlePosition)));
+
+           // utils.setUserPrefs(utils.CategroyTitle,utils.getCatNameByCatId(newsCategory.get(titlePosition)),parentContext);
         }
         else
         {

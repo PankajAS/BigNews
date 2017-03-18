@@ -1,13 +1,16 @@
 package com.plusonesoftwares.plusonesoftwares.bignews.flip;
 
+import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.view.View;
 
+import com.plusonesoftwares.plusonesoftwares.bignews.CommonClass;
 import com.plusonesoftwares.plusonesoftwares.bignews.FlipViewController;
 import com.plusonesoftwares.plusonesoftwares.bignews.unit.TextureUtils;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -38,11 +41,16 @@ public class FlipRenderer implements GLSurfaceView.Renderer {
 
     private boolean created = false;
     private final LinkedList<Texture> postDestroyTextures = new LinkedList<Texture>();
-
-    public FlipRenderer(FlipViewController flipViewController, FlipCards cards) {
+     Activity context;
+    CommonClass clsCommon = new CommonClass();
+    List<String> newsCategory;
+    public FlipRenderer(FlipViewController flipViewController, Activity context, FlipCards cards) {
         this.flipViewController = flipViewController;
         this.cards = cards;
+        this.context =context;
+        newsCategory = clsCommon.getCatWithAdmob(clsCommon.getFollowedCategoriesLink(context, false, false));
     }
+
     public static float[] light0Position = {0, 0, 100f, 0f};
 
     @Override
@@ -127,6 +135,14 @@ public class FlipRenderer implements GLSurfaceView.Renderer {
     }
     public void updateTexture(int frontIndex, View frontView, int backIndex, View backView) {
         if (created) {
+            //setting title for home navigationbar
+            if(!context.getClass().getSimpleName().equals("NewsCategoryDetails")) {
+                if (frontIndex != 0 && frontIndex % 3 == 0) {
+                    context.setTitle("");
+                } else {
+                    context.setTitle(clsCommon.getCatNameByCatId(newsCategory.get(frontIndex)));
+                }
+            }
             cards.reloadTexture(frontIndex, frontView, backIndex, backView);
             flipViewController.getSurfaceView().requestRender();
         }

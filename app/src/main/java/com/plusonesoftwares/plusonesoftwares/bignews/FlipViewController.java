@@ -97,9 +97,9 @@ public class FlipViewController extends AdapterView<Adapter> {
     @ViewDebug.ExportedProperty
     private Bitmap.Config animationBitmapFormat = Bitmap.Config.ARGB_8888;
 
-    public FlipViewController(Activity context) {
+    /*public FlipViewController(Activity context) {
         this(context, VERTICAL);
-    }
+    }*/
 
     public FlipViewController(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -127,26 +127,24 @@ public class FlipViewController extends AdapterView<Adapter> {
             a.recycle();
         }
 
-        init(context, orientation);
+        init(context, activity, orientation);
     }
 
-    Activity context;
-
-    public FlipViewController(Activity context, int flipOrientation) {
+    public FlipViewController(Activity activity,Context context, int flipOrientation) {
         super(context);
-        init(context, flipOrientation);
-        this.context = context;
+        init(context,activity, flipOrientation);
+        this.activity = activity;
     }
 
     public FlipViewController(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    private void init(Context context, int orientation) {
+    private void init(Context context, Activity activity, int orientation) {
         ViewConfiguration configuration = ViewConfiguration.get(getContext());
         touchSlop = configuration.getScaledTouchSlop();
         this.flipOrientation = orientation;
-        setupSurfaceView(context);
+        setupSurfaceView(context, activity);
     }
 
     public void setAnimationBitmapFormat(Bitmap.Config animationBitmapFormat) {
@@ -242,11 +240,11 @@ public class FlipViewController extends AdapterView<Adapter> {
         this.flipByTouchEnabled = flipByTouchEnabled;
     }
 
-    private void setupSurfaceView(Context context) {
+    private void setupSurfaceView(Context context, Activity activity) {
         surfaceView = new GLSurfaceView(getContext());
 
         cards = new FlipCards(this, flipOrientation == VERTICAL);
-        renderer = new FlipRenderer(this, cards);
+        renderer = new FlipRenderer(this, activity, cards);
 
         surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         surfaceView.setZOrderOnTop(true);
@@ -265,9 +263,7 @@ public class FlipViewController extends AdapterView<Adapter> {
     private void updateVisibleView(int index) {
         for (int i = 0; i < bufferedViews.size(); i++) {
             bufferedViews.get(i).setVisibility(index == i ? VISIBLE : GONE);
-
         }
-
     }
 
     Boolean isFirstTime = false;
@@ -277,9 +273,9 @@ public class FlipViewController extends AdapterView<Adapter> {
                 @Override
                 public void run() {
                     hideFlipAnimation();
-                    if (context.getClass().getSimpleName().equals("NewsCategoryDetails")){
+                    if (activity.getClass().getSimpleName().equals("NewsCategoryDetails")){
                         if (bufferedViews.size() == 2 && isFirstTime) {
-                            context.finish();
+                            activity.finish();
 
                         } else if (bufferedViews.size() == 2) {
                             isFirstTime = true;
@@ -376,6 +372,8 @@ public class FlipViewController extends AdapterView<Adapter> {
             @Override
             public void run() {
                 flippedToView(indexInAdapter, true);
+                //context.setTitle(String.valueOf(indexInAdapter));
+                //System.out.println("indexInAdapter "+indexInAdapter);
             }
         });
     }
@@ -516,7 +514,6 @@ public class FlipViewController extends AdapterView<Adapter> {
 
         View selectedView = viewFromAdapter(position, true);
         bufferedViews.add(selectedView);
-
         for (int i = 1; i <= sideBufferSize; i++) {
             int previous = position - i;
             int next = position + i;
@@ -534,7 +531,6 @@ public class FlipViewController extends AdapterView<Adapter> {
 
         requestLayout();
         updateVisibleView(inFlipAnimation ? -1 : bufferIndex);
-
         cards.resetSelection(position, adapterDataCount);
 
     }
