@@ -11,6 +11,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -30,7 +32,7 @@ import java.util.Iterator;
    10. MalayalamNationalNews
  */
 
-public class Utils {
+public class CommonClass {
     public static final String MyPREFERENCES = "MyPrefs";
     public static final String NewsCategories = "NewsCategories";
     public static final String CategroyTitle = "CategroyTitle";
@@ -234,5 +236,18 @@ public class Utils {
         } else {
             return "false";
         }
+    }
+
+    public void insertUpdateNews(ArrayList<String> newsCategory, Context context) {
+        int parentIndex = 0;
+        for (String url : newsCategory) {
+            try {
+                new GetNewsData(context, getIsNext(newsCategory, parentIndex), getCategoryName(url), false, null).execute(new URL(url));//start async task to get all categories
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            parentIndex++;
+        }
+        newsCategory.clear();
     }
 }

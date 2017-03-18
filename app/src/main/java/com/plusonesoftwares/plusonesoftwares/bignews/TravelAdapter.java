@@ -33,7 +33,7 @@ public class TravelAdapter extends BaseAdapter {
     JSONArray jarray;
     List<String> newsCategory;
     ContentRepo newsRecordsClsObj;
-    Utils utils;
+    CommonClass utils;
     List<String> selectedCategory;
     String title;
 
@@ -112,7 +112,7 @@ public class TravelAdapter extends BaseAdapter {
         int titlePosition = 0;
         if(parentContext!=null) {
 
-            utils = new Utils();
+            utils = new CommonClass();
             titlePosition = (position > 0 ? position-1 : position);
             if(newsCategory.get(position).equals("AdMob"))
             {

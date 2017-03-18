@@ -14,7 +14,7 @@ import android.widget.TableRow;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.NewsCategoryDetails;
 import com.plusonesoftwares.plusonesoftwares.bignews.R;
-import com.plusonesoftwares.plusonesoftwares.bignews.Utils;
+import com.plusonesoftwares.plusonesoftwares.bignews.CommonClass;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 public class MenuFragment extends Fragment {
 
-    Utils utils;
+    CommonClass utils;
     String defaultCat;
     View menuView;
 
@@ -35,7 +35,7 @@ public class MenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         menuView = inflater.inflate(R.layout.activity_menu_fragment, container, false);
-        utils = new Utils();
+        utils = new CommonClass();
         defaultCat = utils.getUserPrefs(utils.NewsCategories,getContext());
         try {
             createButtonsDynamically(menuView, utils.mTextofButton, colorCodes);

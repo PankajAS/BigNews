@@ -14,20 +14,11 @@ import java.util.ArrayList;
 
 public class NewsBroadcastReceiver extends BroadcastReceiver {
     ArrayList<String> newsCategory = new ArrayList<>();
-    Utils utils = new Utils();
+    CommonClass utils = new CommonClass();
 
     @Override
     public void onReceive(Context context, Intent intent) {
         newsCategory = utils.getFollowedCategoriesLink(context, true, true);
-        int parentIndex = 0;
-        for (String url : newsCategory) {
-            try {
-                new GetNewsData(context, utils.getIsNext(newsCategory, parentIndex),
-                        utils.getCategoryName(url), false, null).execute(new URL(url));//start async task to get all categories
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            parentIndex++;
-        }
+        utils.insertUpdateNews(newsCategory, context);
     }
 }

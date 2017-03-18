@@ -13,7 +13,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity  {
     private TabLayout tabLayout;
     ViewPager viewPager;
-    Utils utils;
+    CommonClass utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         tabLayout = (TabLayout)findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
-        utils = new Utils();
+        utils = new CommonClass();
         final String[] tabBarTitles = new String[]{
                 getString(R.string.Home),
                 getString(R.string.Menu),

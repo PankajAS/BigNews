@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 
@@ -22,7 +21,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     List<String> string;
     ArrayList<String> newsCategory = new ArrayList<>();
     TextView txtViewMessage;
-    Utils utils;
+    CommonClass utils;
     ContentRepo contentOperation;
 
     @Override
@@ -33,7 +32,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         txtViewMessage = (TextView) findViewById(R.id.txtViewMessage);
 
         contentOperation = new ContentRepo(getApplicationContext());
-        utils = new Utils();
+        utils = new CommonClass();
 
         if (!utils.keyExist(getApplicationContext())) {
             utils.defaultNewsCategories(getApplicationContext());//setting default news categories for first time when user install the app

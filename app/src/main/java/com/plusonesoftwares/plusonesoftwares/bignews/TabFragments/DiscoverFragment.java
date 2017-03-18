@@ -11,12 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.Toast;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.GetNewsData;
 import com.plusonesoftwares.plusonesoftwares.bignews.R;
-import com.plusonesoftwares.plusonesoftwares.bignews.Utils;
-import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
+import com.plusonesoftwares.plusonesoftwares.bignews.CommonClass;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,14 +39,14 @@ public class DiscoverFragment extends Fragment {
         return new DiscoverFragment(title);
     }
 
-    Utils utils;
+    CommonClass utils;
     JSONObject JsonCategories;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View discoverView = inflater.inflate(R.layout.activity_discover_fragment, container, false);
 
-        utils = new Utils();
+        utils = new CommonClass();
         JsonCategories = utils.getUpdatedCategories(getContext());
         //Toast.makeText(getContext(), " Called discover Tab", Toast.LENGTH_SHORT).show();
 
@@ -125,21 +123,9 @@ public class DiscoverFragment extends Fragment {
 
                         //******Request async data for new selected data for update or insert********
                         ArrayList<String> newsCategory = new ArrayList<>();
-
                         newsCategory.add(utils.Url + category);
                         newsCategory.add(utils.nextUrl + category);
-
-                        int parentIndex = 0;
-                        for (String url : newsCategory) {
-                            try {
-                                new GetNewsData(getContext(), utils.getIsNext(newsCategory, parentIndex),
-                                        utils.getCategoryName(url), false, null).execute(new URL(url));//start async task to get all categories
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
-                            }
-                            parentIndex++;
-                        }
-                        newsCategory.clear();
+                        utils.insertUpdateNews(newsCategory, getContext());
                         //******Request async data for new selected data for update or insert********
                     }
                 }

@@ -12,7 +12,7 @@ public class NewsCategoryDetails extends AppCompatActivity {
     private FlipViewController flipView;
     String category;
     List<String> urls;
-    Utils utils;
+    CommonClass utils;
     List<String> selectedCategory;
 
 
@@ -23,7 +23,7 @@ public class NewsCategoryDetails extends AppCompatActivity {
         flipView = new FlipViewController(NewsCategoryDetails.this, FlipViewController.VERTICAL);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         selectedCategory = new ArrayList<>();
-        utils = new Utils();
+        utils = new CommonClass();
         Intent intent = getIntent();
         urls = new ArrayList<>();
         category = intent.getStringExtra("categoryName");
