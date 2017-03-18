@@ -18,7 +18,10 @@ public class NewsBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        newsCategory = utils.getFollowedCategoriesLink(context, true, true);
-        utils.insertUpdateNews(newsCategory, context);
+        if(utils.haveNetworkConnection(context))
+        {
+            newsCategory = utils.getFollowedCategoriesLink(context, true, true);
+            utils.insertUpdateNews(newsCategory, context);
+        }
     }
 }
