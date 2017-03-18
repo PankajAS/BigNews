@@ -70,7 +70,7 @@ public class DiscoverFragment extends Fragment {
 
         TableRow.LayoutParams tableRowLayoutParams =
                 new TableRow.LayoutParams((utils.getScreenWidth())/2, (utils.getScreenWidth())/2);
-        tableRowLayoutParams.setMargins(0,0,10,10);
+        tableRowLayoutParams.setMargins(0,0,5,5);
 
         while (i < numberOfItems.length) {
             final Button button = new Button(menuView.getContext());
@@ -81,8 +81,8 @@ public class DiscoverFragment extends Fragment {
             }
             button.setText(numberOfItems[i]);
             button.setLayoutParams(tableRowLayoutParams);
-           // button.setPadding(0,0,5,5);
-            button.setTextSize(16);
+            button.setLines(1);
+            button.setTextSize(14);
             button.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
             button.setTextColor(Color.BLACK);
             button.setId(i);

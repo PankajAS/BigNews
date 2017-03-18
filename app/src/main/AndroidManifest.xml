@@ -22,10 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".NewsCategoryDetails" />
-        <activity android:name=".NewsDetails" />
-        <activity android:name=".AboutUs" />
+        <activity android:name=".MainActivity"
+         android:screenOrientation="portrait"/>
+        <activity android:name=".NewsCategoryDetails"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NewsDetails"
+            android:screenOrientation="portrait"/>/>
+        <activity android:name=".AboutUs"
+            android:screenOrientation="portrait"/>/>
 
         <!-- This meta-data tag is required to use Google Play Services. -->
         <meta-data
@@ -34,9 +38,11 @@
 
         <activity
             android:name=".AdmobActivity"
+
             android:label="@string/title_activity_admob"></activity> <!-- Include the AdActivity configChanges and theme. -->
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
+            android:screenOrientation="portrait"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
         <receiver android:name=".NewsBroadcastReceiver"/>

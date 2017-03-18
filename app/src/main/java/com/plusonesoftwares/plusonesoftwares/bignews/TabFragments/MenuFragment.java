@@ -50,15 +50,12 @@ public class MenuFragment extends Fragment {
 
         TableLayout mTlayout;
         TableRow tr = null;
-
-
-
         mTlayout = (TableLayout) menuView.findViewById(R.id.tableLayout);
 
         mTlayout.removeAllViews();
         TableRow.LayoutParams tableRowLayoutParams =
                 new TableRow.LayoutParams((utils.getScreenWidth()) / 2, (utils.getScreenWidth()) / 2);
-        tableRowLayoutParams.setMargins(0,0,10,10);
+        tableRowLayoutParams.setMargins(0,0,5,5);
 
         final JSONObject JsonCategories = new JSONObject(defaultCat);
 
@@ -83,8 +80,8 @@ public class MenuFragment extends Fragment {
 
             button.setText(categoryName.toString());
             button.setLayoutParams(tableRowLayoutParams);
-            //button.setPadding(7,10,7,10);
-            button.setTextSize(16);
+            button.setLines(1);
+            button.setTextSize(14);
             button.setTypeface(Typeface.create("sans-serif-condensed", Typeface.NORMAL));
             button.setBackgroundColor(Color.parseColor(BgColor[i])); //custom color
             button.setTextColor(Color.BLACK);
