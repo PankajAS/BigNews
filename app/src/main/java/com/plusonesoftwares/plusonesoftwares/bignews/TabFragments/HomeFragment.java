@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onResume() {
-      //  getActivity().setTitle(utils.getUserPrefs(utils.CategroyTitle, getContext()));
+       getActivity().setTitle(utils.getUserPrefs(utils.CategroyTitle, getContext()));
         flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));//to refresh the  main activity on pressed of home button
         super.onResume();
     }

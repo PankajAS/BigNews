@@ -140,7 +140,9 @@ public class FlipRenderer implements GLSurfaceView.Renderer {
                 if (frontIndex != 0 && frontIndex % 3 == 0) {
                     context.setTitle("");
                 } else {
-                    context.setTitle(clsCommon.getCatNameByCatId(newsCategory.get(frontIndex)));
+                    String title = clsCommon.getCatNameByCatId(newsCategory.get(frontIndex));
+                    context.setTitle(title);
+                    clsCommon.setUserPrefs(clsCommon.CategroyTitle,title,context);
                 }
             }
             cards.reloadTexture(frontIndex, frontView, backIndex, backView);
