@@ -3,12 +3,14 @@ package com.plusonesoftwares.plusonesoftwares.bignews;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -30,6 +32,8 @@ public class CustomViewAdapter extends ArrayAdapter {
     Activity parentContext;
     JSONArray newsitems;
     String title;
+    RelativeLayout layoutSingleRow;
+    int headerFooterMargin = 0;
 
     public CustomViewAdapter(Context context, Activity parentContext, JSONArray jsonArray) {
         super(context, R.layout.new_item);
@@ -55,6 +59,18 @@ public class CustomViewAdapter extends ArrayAdapter {
             holder = new CustomViewAdapter.ViewHolder();
             holder.title = (TextView) convertView.findViewById(R.id.title);
             holder.title_image = (ImageView) convertView.findViewById(R.id.titleimage);
+
+            //******* setting list row height to fit all 4 rows on screen**********
+            if (parentContext != null)
+                headerFooterMargin = 450;
+            else
+                headerFooterMargin = 300;
+
+            layoutSingleRow = (RelativeLayout)  convertView.findViewById(R.id.layoutSingleRow);
+            System.out.print("Row Height: " + (Resources.getSystem().getDisplayMetrics().heightPixels));
+            RelativeLayout.LayoutParams rel_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ((Resources.getSystem().getDisplayMetrics().heightPixels)-headerFooterMargin)/4);
+            layoutSingleRow.setLayoutParams(rel_params);
+            //******* setting list row height to fit 4 rows on screen**********
 
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override

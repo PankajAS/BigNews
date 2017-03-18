@@ -47,8 +47,8 @@ public class Utils {
 
     public static final String SelectedColor = "#04A94A";
     public static final String UnSelectedColor = "#aab7b8";
-    String Url = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=";
-    String nextUrl = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getNextNewsList?newsCategory=";
+    public static final String Url = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=";
+    public static final String nextUrl = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getNextNewsList?newsCategory=";
 
     SharedPreferences sharedpreferences;
     

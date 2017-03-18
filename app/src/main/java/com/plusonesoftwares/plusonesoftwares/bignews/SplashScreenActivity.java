@@ -44,17 +44,15 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             boolean isLastRequest = false;
             int parentIndex = 0;
-            Boolean isInsert = true;
 
             if (contentOperation.dataAlreadyExist()) {
-                isInsert = false;
                 txtViewMessage.setText(R.string.splashMessage2);
             }
 
             for (String url : newsCategory) {
                 isLastRequest = (parentIndex == 3);
                 try {
-                    new GetNewsData(getApplicationContext(), utils.getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest, SplashScreenActivity.this, isInsert).execute(new URL(url));//start async task to get all categories
+                    new GetNewsData(getApplicationContext(), utils.getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest, SplashScreenActivity.this).execute(new URL(url));//start async task to get all categories
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -77,7 +75,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         Intent intent = new Intent(SplashScreenActivity.this, NewsBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(SplashScreenActivity.this, 0, intent, 0);
         manager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_HALF_DAY, pendingIntent);
-        Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
     }
 }
 

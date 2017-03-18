@@ -19,13 +19,11 @@ public class NewsBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         newsCategory = utils.getFollowedCategoriesLink(context, true, true);
-        boolean isLastRequest = false;
         int parentIndex = 0;
-        Boolean isInsert = false;
         for (String url : newsCategory) {
             try {
                 new GetNewsData(context, utils.getIsNext(newsCategory, parentIndex),
-                        utils.getCategoryName(url), isLastRequest, null, isInsert).execute(new URL(url));//start async task to get all categories
+                        utils.getCategoryName(url), false, null).execute(new URL(url));//start async task to get all categories
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }

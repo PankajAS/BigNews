@@ -85,6 +85,23 @@ public class ContentRepo {
         return true;
     }
 
+    public boolean dataAlreadyExist(String Category, String isNext) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String sql = " SELECT ID FROM "+ NewsDataModel.TABLE + " WHERE " + NewsDataModel.KEY_Category + " = ? AND "+ NewsDataModel.KEY_IsNext + " = ?";
+        Cursor cursor;
+        String[] params = new String[]{Category, isNext};
+        cursor = db.rawQuery(sql, params);
+
+        if(cursor.getCount() <= 0){
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        db.close();
+        return true;
+    }
+
     public ArrayList<HashMap<String, String>> getNewsData(String categoryName, String isNext) {
         //Open connection to read only
         SQLiteDatabase db = dbHelper.getReadableDatabase();

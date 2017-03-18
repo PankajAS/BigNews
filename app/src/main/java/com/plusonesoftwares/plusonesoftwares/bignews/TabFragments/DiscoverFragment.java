@@ -13,6 +13,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
 
+import com.plusonesoftwares.plusonesoftwares.bignews.GetNewsData;
 import com.plusonesoftwares.plusonesoftwares.bignews.R;
 import com.plusonesoftwares.plusonesoftwares.bignews.Utils;
 import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
@@ -20,6 +21,9 @@ import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class DiscoverFragment extends Fragment {
@@ -110,13 +114,33 @@ public class DiscoverFragment extends Fragment {
                     {
                         v.setBackgroundColor(Color.parseColor(utils.SelectedColor)); // custom color
                         button.setTextColor(Color.WHITE);
+                        String category = utils.catKeys[finalI];
                         try {
                             JsonCategories = utils.getUpdatedCategories(getContext());
-                            JsonCategories.put(utils.catKeys[finalI], numberOfItems[finalI]);
+                            JsonCategories.put(category, numberOfItems[finalI]);
                             utils.setUserPrefs(utils.NewsCategories, JsonCategories.toString(),getContext());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        //******Request async data for new selected data for update or insert********
+                        ArrayList<String> newsCategory = new ArrayList<>();
+
+                        newsCategory.add(utils.Url + category);
+                        newsCategory.add(utils.nextUrl + category);
+
+                        int parentIndex = 0;
+                        for (String url : newsCategory) {
+                            try {
+                                new GetNewsData(getContext(), utils.getIsNext(newsCategory, parentIndex),
+                                        utils.getCategoryName(url), false, null).execute(new URL(url));//start async task to get all categories
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            }
+                            parentIndex++;
+                        }
+                        newsCategory.clear();
+                        //******Request async data for new selected data for update or insert********
                     }
                 }
             });
