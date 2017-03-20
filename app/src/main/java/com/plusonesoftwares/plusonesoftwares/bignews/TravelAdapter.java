@@ -109,54 +109,55 @@ public class TravelAdapter extends BaseAdapter {
     }
 
     private InterstitialAd interstitial;
+    NativeCustomTemplateAd nativeAd;
 
     @Override
     public View getView(final int position, final View convertView, ViewGroup viewGroup) {
         View layout = convertView;
         newsRecordsClsObj = new ContentRepo(context);
         int titlePosition = 0;
-        if (parentContext != null) {
 
+        if (parentContext != null) {
             utils = new CommonClass();
             titlePosition = (position > 0 ? position - 1 : position);
-            if (newsCategory.get(position).equals("AdMob")) {
-                //if (convertView == null) {
-                layout = inflater.inflate(R.layout.activity_admob, null);
-                //UI.<ListView>findViewById(layout, R.id.list)); will be used to set add data here
-                // AdView adView = (AdView) layout.findViewById(R.id.adView);
-                //}
-                final View finalLayout = layout;
+            if(position==1){
                 AdLoader adLoader = new AdLoader.Builder(context,
                         context.getString(R.string.native_ad_unit_id))
                         .forCustomTemplateAd(context.getString(R.string.native_template_id),
                                 new NativeCustomTemplateAd.OnCustomTemplateAdLoadedListener() {
                                     @Override
                                     public void onCustomTemplateAdLoaded(final NativeCustomTemplateAd ad) {
-                                        ViewGroup adView = (ViewGroup) finalLayout.findViewById(R.id.adView);
-                                       // displayAd(adView, ad);
-                                        TextView headline = (TextView) adView.findViewById(R.id.headline);
-                                        TextView caption = (TextView) adView.findViewById(R.id.caption);
-                                        ImageView mainImage = (ImageView) adView.findViewById(R.id.mainImage);
-                                        headline.setText(ad.getText("Headline"));
-                                        caption.setText(ad.getText("Caption"));
-                                        mainImage.setImageDrawable(ad.getImage("MainImage").getDrawable());
-
-                                        // Record an impression
-                                        ad.recordImpression();
-
-                                        // Handle clicks on image
-                                        mainImage.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                ad.performClick("MainImage");
-                                            }
-                                        });
+                                        nativeAd=ad;
                                     }
                                 },
                                 null)
                         .build();
-
                 adLoader.loadAd(new PublisherAdRequest.Builder().build());
+            }
+            if (newsCategory.get(position).equals("AdMob")) {
+                //if (convertView == null) {
+                layout = inflater.inflate(R.layout.activity_admob, null);
+                final ViewGroup adView = (ViewGroup) layout.findViewById(R.id.adView);
+                final TextView headline = (TextView) adView.findViewById(R.id.headline);
+                final TextView caption = (TextView) adView.findViewById(R.id.caption);
+                final ImageView mainImage = (ImageView) adView.findViewById(R.id.mainImage);
+                //UI.<ListView>findViewById(layout, R.id.list)); will be used to set add data here
+                // AdView adView = (AdView) layout.findViewById(R.id.adView);
+                //}
+                headline.setText(nativeAd.getText("Headline"));
+                caption.setText(nativeAd.getText("Caption"));
+                mainImage.setImageDrawable(nativeAd.getImage("MainImage").getDrawable());
+                // Record an impression
+                nativeAd.recordImpression();
+                // Handle clicks on image
+                mainImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        nativeAd.performClick("MainImage");
+                    }
+                });
+
+
             } else {
 
                 // if (convertView == null) {
