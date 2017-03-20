@@ -20,8 +20,6 @@ import com.plusonesoftwares.plusonesoftwares.bignews.unit.UI;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -72,10 +70,9 @@ public class TravelAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if(newsCategory !=null){
-        return newsCategory.size();
-        }
-        else if(selectedCategory !=null){
+        if (newsCategory != null) {
+            return newsCategory.size();
+        } else if (selectedCategory != null) {
             return selectedCategory.size();
         }
         return 0;
@@ -100,34 +97,33 @@ public class TravelAdapter extends BaseAdapter {
     }
 
 
-    private Boolean getIsNext(List<String> newsCategory, int parentIndex){
+    private Boolean getIsNext(List<String> newsCategory, int parentIndex) {
 
-        int halfsize =  newsCategory.size()/2;
+        int halfsize = newsCategory.size() / 2;
 
-        if(parentIndex>halfsize-1){
-            return  true;
-        }
-        else{
-            return  false;
+        if (parentIndex > halfsize - 1) {
+            return true;
+        } else {
+            return false;
         }
     }
 
     private InterstitialAd interstitial;
+
     @Override
     public View getView(final int position, final View convertView, ViewGroup viewGroup) {
         View layout = convertView;
         newsRecordsClsObj = new ContentRepo(context);
         int titlePosition = 0;
-        if(parentContext!=null) {
+        if (parentContext != null) {
 
             utils = new CommonClass();
-            titlePosition = (position > 0 ? position-1 : position);
-            if(newsCategory.get(position).equals("AdMob"))
-            {
+            titlePosition = (position > 0 ? position - 1 : position);
+            if (newsCategory.get(position).equals("AdMob")) {
                 //if (convertView == null) {
-                    layout = inflater.inflate(R.layout.activity_admob, null);
-                    //UI.<ListView>findViewById(layout, R.id.list)); will be used to set add data here
-               // AdView adView = (AdView) layout.findViewById(R.id.adView);
+                layout = inflater.inflate(R.layout.activity_admob, null);
+                //UI.<ListView>findViewById(layout, R.id.list)); will be used to set add data here
+                // AdView adView = (AdView) layout.findViewById(R.id.adView);
                 //}
                 final View finalLayout = layout;
                 AdLoader adLoader = new AdLoader.Builder(context,
@@ -137,6 +133,7 @@ public class TravelAdapter extends BaseAdapter {
                                     @Override
                                     public void onCustomTemplateAdLoaded(final NativeCustomTemplateAd ad) {
                                         ViewGroup adView = (ViewGroup) finalLayout.findViewById(R.id.adView);
+                                       // displayAd(adView, ad);
                                         TextView headline = (TextView) adView.findViewById(R.id.headline);
                                         TextView caption = (TextView) adView.findViewById(R.id.caption);
                                         ImageView mainImage = (ImageView) adView.findViewById(R.id.mainImage);
@@ -160,31 +157,26 @@ public class TravelAdapter extends BaseAdapter {
                         .build();
 
                 adLoader.loadAd(new PublisherAdRequest.Builder().build());
+            } else {
 
-            }
-            else {
-
-               // if (convertView == null) {
-                    layout = inflater.inflate(R.layout.activity_home_fragment, null);
-               // }
+                // if (convertView == null) {
+                layout = inflater.inflate(R.layout.activity_home_fragment, null);
+                // }
                 JSONArray jsonArray1 = getNewsDataByCategory(position, newsCategory);
 
                 UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, parentContext, jsonArray1));
 
             }
             //parentContext.setTitle(utils.getCatNameByCatId(newsCategory.get(titlePosition)));
+            // utils.setUserPrefs(utils.CategroyTitle,utils.getCatNameByCatId(newsCategory.get(titlePosition)),parentContext);
+        } else {
 
-           // utils.setUserPrefs(utils.CategroyTitle,utils.getCatNameByCatId(newsCategory.get(titlePosition)),parentContext);
-        }
-        else
-        {
-
-            if(convertView == null){
-                layout = inflater.inflate(R.layout.activity_home_fragment,null);
+            if (convertView == null) {
+                layout = inflater.inflate(R.layout.activity_home_fragment, null);
             }
 
             JSONArray jsonArray1 = getNewsDataByCategory(position, selectedCategory);
-            UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, jsonArray1,title));
+            UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, jsonArray1, title));
 
         }
         return layout;
@@ -192,42 +184,21 @@ public class TravelAdapter extends BaseAdapter {
 
     private JSONArray getNewsDataByCategory(int position, List<String> CategoryNameList) {
 
-        Boolean isNext = getIsNext(CategoryNameList,position);
-        ArrayList<HashMap<String, String>> newsList = newsRecordsClsObj.getNewsData(CategoryNameList.get(position), isNext? "true":"false");
+        Boolean isNext = getIsNext(CategoryNameList, position);
+        ArrayList<HashMap<String, String>> newsList = newsRecordsClsObj.getNewsData(CategoryNameList.get(position), isNext ? "true" : "false");
 
         JSONArray mJSONArray = new JSONArray(Arrays.asList(newsList));
         JSONArray jsonArray1 = new JSONArray();
         try {
             jsonArray1 = mJSONArray.getJSONArray(0);
 
-           //System.out.println(jsonArray1);
+            //System.out.println(jsonArray1);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonArray1;
     }
+    private void displayAd(ViewGroup view, NativeCustomTemplateAd ad){
 
-    public static final String md5(final String s) {
-        try {
-            // Create MD5 Hash
-            MessageDigest digest = java.security.MessageDigest
-                    .getInstance("MD5");
-            digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
-
-            // Create Hex String
-            StringBuffer hexString = new StringBuffer();
-            for (int i = 0; i < messageDigest.length; i++) {
-                String h = Integer.toHexString(0xFF & messageDigest[i]);
-                while (h.length() < 2)
-                    h = "0" + h;
-                hexString.append(h);
-            }
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            //Logger.logStackTrace(TAG,e);
-        }
-        return "";
     }
 }
