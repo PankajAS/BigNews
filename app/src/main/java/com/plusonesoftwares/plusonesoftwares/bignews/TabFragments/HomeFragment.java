@@ -18,9 +18,12 @@ public class HomeFragment extends Fragment {
     private FlipViewController flipView;
     CommonClass utils;
     List<String> newsCategory1;
+    boolean shouldExecuteOnResume;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        shouldExecuteOnResume = false;
     }
 
     @Override
@@ -54,8 +57,14 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onResume() {
-       getActivity().setTitle(utils.getUserPrefs(utils.CategroyTitle, getContext()));
-        flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));//to refresh the  main activity on pressed of home button
         super.onResume();
+        if(shouldExecuteOnResume){
+            System.out.println("onResume");
+            getActivity().setTitle(utils.getUserPrefs(utils.CategroyTitle, getContext()));
+            flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));//to refresh the  main activity on pressed of home button
+
+        } else{
+            shouldExecuteOnResume = true;
+        }
     }
 }

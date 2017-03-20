@@ -53,8 +53,10 @@ public class ContentRepo {
                 //db.update(NewsDataModel.TABLE, values, NewsDataModel.KEY_Category + " = '"+newsData.Category.toString()+ "' AND " + NewsDataModel.KEY_IsNext + " = '"+newsData.IsNext+"'",null);
                 db.update(NewsDataModel.TABLE,
                         values,
-                        NewsDataModel.KEY_Category + " = ? AND " + NewsDataModel.KEY_IsNext + " = ? AND " + NewsDataModel.KEY_UniqueID + " = ? ",
-                        new String[]{String.valueOf(newsData.Category), String.valueOf(newsData.IsNext), String.valueOf(newsData.UniqueId)});
+                       // NewsDataModel.KEY_Category + " = ? AND " + NewsDataModel.KEY_IsNext + " = ? AND " + NewsDataModel.KEY_UniqueID + " = ? ",
+                        NewsDataModel.KEY_UniqueID + " = ? ",
+                        //new String[]{String.valueOf(newsData.Category), String.valueOf(newsData.IsNext), String.valueOf(newsData.UniqueId)});
+                        new String[]{String.valueOf(newsData.UniqueId)});
 
             }
             db.setTransactionSuccessful();
@@ -115,7 +117,8 @@ public class ContentRepo {
                 NewsDataModel.KEY_ImageUrl + "," +
                 NewsDataModel.KEY_Description + "," +
                 NewsDataModel.KEY_Category + "," +
-                NewsDataModel.KEY_IsNext +
+                NewsDataModel.KEY_IsNext + "," +
+                NewsDataModel.KEY_UniqueID +
                 " FROM " + NewsDataModel.TABLE + categoryWhereClause ;
 
         Cursor cursor;
@@ -137,6 +140,7 @@ public class ContentRepo {
                 category.put("Description", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Description)));
                 category.put("Category", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Category)));
                 category.put("IsNext", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_IsNext)));
+                category.put("UniqueID", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_UniqueID)));
                 categoryList.add(category);
 
             } while (cursor.moveToNext());
@@ -146,8 +150,6 @@ public class ContentRepo {
         db.close();
         return categoryList;
     }
-
-
 
     public ArrayList<HashMap<String, String>> getAllNewsDataByCategory(String categoryName) {
         //Open connection to read only

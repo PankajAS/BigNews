@@ -97,6 +97,12 @@ public class CustomViewAdapter extends ArrayAdapter {
         try {
             jObject = jsonArray.getJSONObject(position);
             holder.title.setText(jObject.getString("Title"));
+
+            //System.out.println("Category: " + jObject.getString("Category"));
+
+            //System.out.println("UniqueID " + jObject.getString("UniqueID"));
+
+
             Picasso.with(parentContext)
                     .load("http:" + jObject.getString("ImageUrl"))
                     .into(holder.title_image);

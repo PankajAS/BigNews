@@ -107,6 +107,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
 
                 if(isLastRequest)
                 {
+                    //System.out.println("isLastRequest: " + isLastRequest);
                     Intent intent = new Intent(parentContext, MainActivity.class);
                     parentContext.startActivity(intent);
                 }
