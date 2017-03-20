@@ -2,15 +2,18 @@ package com.plusonesoftwares.plusonesoftwares.bignews;
 
 import android.app.Activity;
 import android.content.Context;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.formats.NativeCustomTemplateAd;
 import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 import com.plusonesoftwares.plusonesoftwares.bignews.unit.UI;
 
@@ -23,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Created by Plus 3 on 07-03-2017.
@@ -110,6 +112,7 @@ public class TravelAdapter extends BaseAdapter {
         }
     }
 
+    private InterstitialAd interstitial;
     @Override
     public View getView(final int position, final View convertView, ViewGroup viewGroup) {
         View layout = convertView;
@@ -124,20 +127,24 @@ public class TravelAdapter extends BaseAdapter {
                 //if (convertView == null) {
                     layout = inflater.inflate(R.layout.activity_admob, null);
                     //UI.<ListView>findViewById(layout, R.id.list)); will be used to set add data here
-                AdView adView = (AdView) layout.findViewById(R.id.adView);
-
-                String android_id = Settings.Secure.getString(parentContext.getContentResolver(), Settings.Secure.ANDROID_ID);
-                String deviceId = md5(android_id).toUpperCase();
-                //mAdRequest.addTestDevice(deviceId);
-
-                AdRequest adRequest = new AdRequest.Builder()
-                        //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                        .addTestDevice(deviceId)
+               // AdView adView = (AdView) layout.findViewById(R.id.adView);
+                //}
+                final View finalLayout = layout;
+                AdLoader adLoader = new AdLoader.Builder(context,
+                        context.getString(R.string.native_ad_unit_id))
+                        .forCustomTemplateAd(context.getString(R.string.native_template_id),
+                                new NativeCustomTemplateAd.OnCustomTemplateAdLoadedListener() {
+                                    @Override
+                                    public void onCustomTemplateAdLoaded(NativeCustomTemplateAd ad) {
+                                        ViewGroup adView = (ViewGroup) finalLayout.findViewById(R.id.adView);
+                                        displayCustomTemplateAd(adView, ad);
+                                    }
+                                },
+                                null)
                         .build();
 
+                adLoader.loadAd(new PublisherAdRequest.Builder().build());
 
-                adView.loadAd(adRequest);
-                //}
             }
             else {
 
@@ -206,5 +213,38 @@ public class TravelAdapter extends BaseAdapter {
             //Logger.logStackTrace(TAG,e);
         }
         return "";
+    }
+
+    public void displayInterstitial() {
+        // If Ads are loaded, show Interstitial else show nothing.
+        if (interstitial.isLoaded()) {
+            interstitial.show();
+        }
+    }
+
+    private void displayCustomTemplateAd (ViewGroup parent, final NativeCustomTemplateAd ad) {
+        // Inflate a layout and add it to the parent ViewGroup.
+        LayoutInflater inflater = (LayoutInflater) parent.getContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View adView = inflater.inflate(R.layout.custom_template_ad, parent);
+
+        // Show the custom template
+        TextView headline = (TextView) adView.findViewById(R.id.headline);
+        TextView caption = (TextView) adView.findViewById(R.id.caption);
+        ImageView mainImage = (ImageView) adView.findViewById(R.id.mainImage);
+        headline.setText(ad.getText("Headline"));
+        caption.setText(ad.getText("Caption"));
+        mainImage.setImageDrawable(ad.getImage("MainImage").getDrawable());
+
+        // Record an impression
+        ad.recordImpression();
+
+        // Handle clicks on image
+        mainImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ad.performClick("MainImage");
+            }
+        });
     }
 }
