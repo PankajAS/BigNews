@@ -53,10 +53,10 @@ public class ContentRepo {
                 //db.update(NewsDataModel.TABLE, values, NewsDataModel.KEY_Category + " = '"+newsData.Category.toString()+ "' AND " + NewsDataModel.KEY_IsNext + " = '"+newsData.IsNext+"'",null);
                 db.update(NewsDataModel.TABLE,
                         values,
-                       // NewsDataModel.KEY_Category + " = ? AND " + NewsDataModel.KEY_IsNext + " = ? AND " + NewsDataModel.KEY_UniqueID + " = ? ",
-                        NewsDataModel.KEY_UniqueID + " = ? ",
-                        //new String[]{String.valueOf(newsData.Category), String.valueOf(newsData.IsNext), String.valueOf(newsData.UniqueId)});
-                        new String[]{String.valueOf(newsData.UniqueId)});
+                        NewsDataModel.KEY_Category + " = ? AND " + NewsDataModel.KEY_IsNext + " = ? AND " + NewsDataModel.KEY_UniqueID + " = ? ",
+                        //NewsDataModel.KEY_UniqueID + " = ? ",
+                        new String[]{String.valueOf(newsData.Category), String.valueOf(newsData.IsNext), String.valueOf(newsData.UniqueId)});
+                        //new String[]{String.valueOf(newsData.UniqueId)});
 
             }
             db.setTransactionSuccessful();
