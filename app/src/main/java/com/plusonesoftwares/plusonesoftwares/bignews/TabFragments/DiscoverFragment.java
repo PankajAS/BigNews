@@ -12,15 +12,12 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 
-import com.plusonesoftwares.plusonesoftwares.bignews.GetNewsData;
-import com.plusonesoftwares.plusonesoftwares.bignews.R;
 import com.plusonesoftwares.plusonesoftwares.bignews.CommonClass;
+import com.plusonesoftwares.plusonesoftwares.bignews.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -45,7 +42,7 @@ public class DiscoverFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View discoverView = inflater.inflate(R.layout.activity_discover_fragment, container, false);
-
+        setHasOptionsMenu(true);
         utils = new CommonClass();
         JsonCategories = utils.getUpdatedCategories(getContext());
         //Toast.makeText(getContext(), " Called discover Tab", Toast.LENGTH_SHORT).show();
@@ -152,5 +149,7 @@ public class DiscoverFragment extends Fragment {
         }
         return false;
     }
+
+
 }
 

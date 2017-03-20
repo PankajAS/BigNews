@@ -135,9 +135,25 @@ public class TravelAdapter extends BaseAdapter {
                         .forCustomTemplateAd(context.getString(R.string.native_template_id),
                                 new NativeCustomTemplateAd.OnCustomTemplateAdLoadedListener() {
                                     @Override
-                                    public void onCustomTemplateAdLoaded(NativeCustomTemplateAd ad) {
+                                    public void onCustomTemplateAdLoaded(final NativeCustomTemplateAd ad) {
                                         ViewGroup adView = (ViewGroup) finalLayout.findViewById(R.id.adView);
-                                        displayCustomTemplateAd(adView, ad);
+                                        TextView headline = (TextView) adView.findViewById(R.id.headline);
+                                        TextView caption = (TextView) adView.findViewById(R.id.caption);
+                                        ImageView mainImage = (ImageView) adView.findViewById(R.id.mainImage);
+                                        headline.setText(ad.getText("Headline"));
+                                        caption.setText(ad.getText("Caption"));
+                                        mainImage.setImageDrawable(ad.getImage("MainImage").getDrawable());
+
+                                        // Record an impression
+                                        ad.recordImpression();
+
+                                        // Handle clicks on image
+                                        mainImage.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                ad.performClick("MainImage");
+                                            }
+                                        });
                                     }
                                 },
                                 null)
@@ -213,38 +229,5 @@ public class TravelAdapter extends BaseAdapter {
             //Logger.logStackTrace(TAG,e);
         }
         return "";
-    }
-
-    public void displayInterstitial() {
-        // If Ads are loaded, show Interstitial else show nothing.
-        if (interstitial.isLoaded()) {
-            interstitial.show();
-        }
-    }
-
-    private void displayCustomTemplateAd (ViewGroup parent, final NativeCustomTemplateAd ad) {
-        // Inflate a layout and add it to the parent ViewGroup.
-        LayoutInflater inflater = (LayoutInflater) parent.getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View adView = inflater.inflate(R.layout.custom_template_ad, parent);
-
-        // Show the custom template
-        TextView headline = (TextView) adView.findViewById(R.id.headline);
-        TextView caption = (TextView) adView.findViewById(R.id.caption);
-        ImageView mainImage = (ImageView) adView.findViewById(R.id.mainImage);
-        headline.setText(ad.getText("Headline"));
-        caption.setText(ad.getText("Caption"));
-        mainImage.setImageDrawable(ad.getImage("MainImage").getDrawable());
-
-        // Record an impression
-        ad.recordImpression();
-
-        // Handle clicks on image
-        mainImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ad.performClick("MainImage");
-            }
-        });
     }
 }
