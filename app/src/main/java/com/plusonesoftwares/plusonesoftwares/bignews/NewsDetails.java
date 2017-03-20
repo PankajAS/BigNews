@@ -20,6 +20,7 @@ public class NewsDetails extends AppCompatActivity {
     ImageView newsImage;
     String jsonarray;
     String newsTitle;
+    CommonClass clsCommon;
 
 
     @Override
@@ -34,6 +35,7 @@ public class NewsDetails extends AppCompatActivity {
         jsonarray = intent.getStringExtra("Data");
         newsTitle = intent.getStringExtra("NewsCategory");
         setTitle(newsTitle);
+        clsCommon = new CommonClass();
 
         try {
             jobject = new JSONObject(jsonarray);
@@ -52,8 +54,15 @@ public class NewsDetails extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
+            clsCommon.setUserPrefs(clsCommon.isBackKeyPressed, "true", getApplicationContext());
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        clsCommon.setUserPrefs(clsCommon.isBackKeyPressed, "true", getApplicationContext());
     }
 }

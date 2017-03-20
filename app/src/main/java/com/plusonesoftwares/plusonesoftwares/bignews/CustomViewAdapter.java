@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Rect;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -62,13 +64,16 @@ public class CustomViewAdapter extends ArrayAdapter {
 
             //******* setting list row height to fit all 4 rows on screen**********
             if (parentContext != null)
-                headerFooterMargin = 450;
+                headerFooterMargin = getNavBarHeight(parentContext, true);
             else
-                headerFooterMargin = 300;
+            {
+                headerFooterMargin = getNavBarHeight((Activity) context, false);
+            }
 
-            layoutSingleRow = (RelativeLayout)  convertView.findViewById(R.id.layoutSingleRow);
-            System.out.print("Row Height: " + (Resources.getSystem().getDisplayMetrics().heightPixels));
-            RelativeLayout.LayoutParams rel_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ((Resources.getSystem().getDisplayMetrics().heightPixels)-headerFooterMargin)/4);
+
+            layoutSingleRow = (RelativeLayout) convertView.findViewById(R.id.layoutSingleRow);
+            //System.out.print("Row Height: " + (Resources.getSystem().getDisplayMetrics().heightPixels));
+            RelativeLayout.LayoutParams rel_params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ((Resources.getSystem().getDisplayMetrics().heightPixels) - headerFooterMargin) / 4);
             layoutSingleRow.setLayoutParams(rel_params);
             //******* setting list row height to fit 4 rows on screen**********
 
@@ -128,4 +133,22 @@ public class CustomViewAdapter extends ArrayAdapter {
         TextView title;
         ImageView title_image;
     }
+
+    public  int getNavBarHeight(Activity parentContext, Boolean isFooter)
+    {
+        Rect rectangle = new Rect();
+        Window window = parentContext.getWindow();;
+        window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
+        int statusBarHeight = rectangle.top;;
+        //int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+        Resources resources = parentContext.getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+
+        if(resourceId > 0 )
+        {
+            return resources.getDimensionPixelSize(resourceId) * (isFooter ? 2 : 1) + statusBarHeight;
+        }
+        return 0;
+    }
 }
+

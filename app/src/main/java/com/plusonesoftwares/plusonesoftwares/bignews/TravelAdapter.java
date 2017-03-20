@@ -166,7 +166,7 @@ public class TravelAdapter extends BaseAdapter {
         try {
             jsonArray1 = mJSONArray.getJSONArray(0);
 
-           System.out.println(jsonArray1);
+           //System.out.println(jsonArray1);
         } catch (JSONException e) {
             e.printStackTrace();
         }

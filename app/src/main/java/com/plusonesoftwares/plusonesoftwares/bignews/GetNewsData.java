@@ -54,8 +54,8 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
             String line;
             String c;
 
-            System.out.println(url.toString().substring(url.toString().lastIndexOf("=") + 1));
-            System.out.println(url);
+           // System.out.println(url.toString().substring(url.toString().lastIndexOf("=") + 1));
+            //System.out.println(url);
             sb = new StringBuilder();
             try {
                 urlConnection = (HttpURLConnection)url.openConnection();
@@ -72,7 +72,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            System.out.println(jarray);
+            //System.out.println(jarray);
             return jarray;
         }
 

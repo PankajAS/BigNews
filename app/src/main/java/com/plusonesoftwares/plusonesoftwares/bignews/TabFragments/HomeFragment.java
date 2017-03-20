@@ -24,12 +24,12 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         shouldExecuteOnResume = false;
+        utils = new CommonClass();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         flipView = new FlipViewController(getActivity(),getContext(), FlipViewController.VERTICAL);
-        utils = new CommonClass();
 
         List<String> newsCategory = utils.getFollowedCategoriesLink(getContext(), false, false);
 
@@ -59,9 +59,15 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if(shouldExecuteOnResume){
-            System.out.println("onResume");
-            getActivity().setTitle(utils.getUserPrefs(utils.CategroyTitle, getContext()));
-            flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));//to refresh the  main activity on pressed of home button
+            if( utils.getUserPrefs(utils.isBackKeyPressed,getContext())!=null && utils.getUserPrefs(utils.isBackKeyPressed,getContext()).equals("true")) {
+                utils.setUserPrefs(utils.isBackKeyPressed, "false", getContext());
+            }
+            else
+            {
+                //System.out.println("onResume");
+                getActivity().setTitle(utils.getUserPrefs(utils.CategroyTitle, getContext()));
+                flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));//to refresh the  main activity on pressed of home button
+            }
 
         } else{
             shouldExecuteOnResume = true;
