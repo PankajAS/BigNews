@@ -2,6 +2,7 @@ package com.plusonesoftwares.plusonesoftwares.bignews;
 
 import android.app.Activity;
 import android.content.Context;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,13 @@ import com.plusonesoftwares.plusonesoftwares.bignews.unit.UI;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by Plus 3 on 07-03-2017.
@@ -121,10 +125,17 @@ public class TravelAdapter extends BaseAdapter {
                     layout = inflater.inflate(R.layout.activity_admob, null);
                     //UI.<ListView>findViewById(layout, R.id.list)); will be used to set add data here
                 AdView adView = (AdView) layout.findViewById(R.id.adView);
+
+                String android_id = Settings.Secure.getString(parentContext.getContentResolver(), Settings.Secure.ANDROID_ID);
+                String deviceId = md5(android_id).toUpperCase();
+                //mAdRequest.addTestDevice(deviceId);
+
                 AdRequest adRequest = new AdRequest.Builder()
-                        .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                        .addTestDevice("CC5F2C72DF2B356BBF0DA198")
+                        //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                        .addTestDevice(deviceId)
                         .build();
+
+
                 adView.loadAd(adRequest);
                 //}
             }
@@ -171,5 +182,29 @@ public class TravelAdapter extends BaseAdapter {
             e.printStackTrace();
         }
         return jsonArray1;
+    }
+
+    public static final String md5(final String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance("MD5");
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            for (int i = 0; i < messageDigest.length; i++) {
+                String h = Integer.toHexString(0xFF & messageDigest[i]);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            //Logger.logStackTrace(TAG,e);
+        }
+        return "";
     }
 }
