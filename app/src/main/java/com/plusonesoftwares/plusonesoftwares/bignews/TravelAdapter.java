@@ -6,14 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.google.android.gms.ads.AdLoader;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.formats.NativeCustomTemplateAd;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.plusonesoftwares.plusonesoftwares.bignews.sqliteDatabase.ContentRepo;
 import com.plusonesoftwares.plusonesoftwares.bignews.unit.UI;
 
@@ -108,8 +105,7 @@ public class TravelAdapter extends BaseAdapter {
         }
     }
 
-    private InterstitialAd interstitial;
-    //NativeCustomTemplateAd nativeAd;
+    View viewAd;
 
     @Override
     public View getView(final int position, final View convertView, ViewGroup viewGroup) {
@@ -118,39 +114,25 @@ public class TravelAdapter extends BaseAdapter {
 
         if (parentContext != null) {
             clsCommon = new CommonClass();
+            if(position==0) {
+                viewAd = inflater.inflate(R.layout.native_admob, null);
+                NativeExpressAdView adView = (NativeExpressAdView) viewAd.findViewById(R.id.adView);
+                AdRequest adRequest = new AdRequest.Builder().build();
+                adView.setAdListener(new AdListener() {
+                    @Override
+                    public void onAdOpened() {
+                        //Toast.makeText(context,"Test",Toast.LENGTH_LONG).show();
+                        clsCommon.setUserPrefs(clsCommon.isBackKeyPressed, "true", context);
+                        super.onAdOpened();
+                    }
+                });
+                adView.loadAd(adRequest);
+            }
 
             if (newsCategory.get(position).equals("AdMob")) {
-                layout = inflater.inflate(R.layout.activity_admob, null);
-                final ViewGroup adView = (ViewGroup) layout.findViewById(R.id.adView);
-                final TextView headline = (TextView) adView.findViewById(R.id.headline);
-                final TextView caption = (TextView) adView.findViewById(R.id.caption);
-                final ImageView mainImage = (ImageView) adView.findViewById(R.id.mainImage);
+                //if (convertView == null) {
+                layout =viewAd;
 
-                AdLoader adLoader = new AdLoader.Builder(context,
-                        context.getString(R.string.native_ad_unit_id))
-                        .forCustomTemplateAd(context.getString(R.string.native_template_id),
-                                new NativeCustomTemplateAd.OnCustomTemplateAdLoadedListener() {
-                                    @Override
-                                    public void onCustomTemplateAdLoaded(final NativeCustomTemplateAd nativeAd) {
-                                        headline.setText(nativeAd.getText("Headline"));
-                                        caption.setText(nativeAd.getText("Caption"));
-                                        mainImage.setImageDrawable(nativeAd.getImage("MainImage").getDrawable());
-                                        // Record an impression
-                                        nativeAd.recordImpression();
-                                        // Handle clicks on image
-                                        mainImage.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                nativeAd.performClick("MainImage");
-                                                //setting it as true to stop call of onresume of home  tab
-                                                clsCommon.setUserPrefs(clsCommon.isBackKeyPressed, "true", parentContext.getApplicationContext());
-                                            }
-                                        });
-                                    }
-                                },
-                                null)
-                        .build();
-                adLoader.loadAd(new PublisherAdRequest.Builder().build());
             } else {
 
                 layout = inflater.inflate(R.layout.activity_home_fragment, null);

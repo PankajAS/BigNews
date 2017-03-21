@@ -6,7 +6,7 @@
     xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:alpha="1"
     android:background="@android:color/white"
-    android:id="@+id/adView">
+    android:id="@+id/adView1">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/native_ad"
@@ -14,12 +14,11 @@
         android:layout_height="match_parent"
         android:padding="10dp"
         android:background="#dfdfdf"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true">
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:clickable="true"
             android:minWidth="200dp"
             android:minHeight="200dp"
