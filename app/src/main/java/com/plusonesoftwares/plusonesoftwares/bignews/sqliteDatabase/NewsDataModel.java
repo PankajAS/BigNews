@@ -16,6 +16,7 @@ public class NewsDataModel {
     public  static final String KEY_Title = "Title";
     public  static final String KEY_ImageUrl = "ImageUrl";
     public  static final String KEY_Description = "Description";
+    public  static final String KEY_SourceLink = "SourceLink";
     public  static final String KEY_Category = "Category";
     public  static final String KEY_IsNext = "IsNext";
 
@@ -25,6 +26,7 @@ public class NewsDataModel {
     public String Title;
     public String ImageUrl;
     public String Description;
+    public String SourceLink;
     public static String Category;
     public static String IsNext;
 }

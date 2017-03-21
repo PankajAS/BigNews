@@ -92,6 +92,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
                         singleCatObj.Title = jsonArray.getJSONObject(i).getString("title");
                         singleCatObj.ImageUrl = jsonArray.getJSONObject(i).getString("imgURL");
                         singleCatObj.Description = jsonArray.getJSONObject(i).getString("desc");
+                        singleCatObj.SourceLink = jsonArray.getJSONObject(i).getString("link");
                         singleCatObj.Category = Category;
                         singleCatObj.IsNext = isNext;
                         newsList.add(singleCatObj);

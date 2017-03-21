@@ -52,6 +52,14 @@
                 android:layout_below="@+id/newsImage"
                 android:layout_alignLeft="@+id/headline"
                 android:layout_alignStart="@+id/headline" />
+
+            <Button
+                android:text="News Source"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnSourceLink"
+                android:onClick="openNewsSource"
+                />
         </LinearLayout>
     </ScrollView>
 

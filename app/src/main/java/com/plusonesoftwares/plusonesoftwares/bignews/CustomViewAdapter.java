@@ -85,6 +85,7 @@ public class CustomViewAdapter extends ArrayAdapter {
                         jobject = jsonArray.getJSONObject(position);
                         Intent intent = new Intent(context, NewsDetails.class);
                         intent.putExtra("Data", jobject.toString());
+                        intent.putExtra("SourceLink", jobject.getString("SourceLink"));
                         if (parentContext != null)
                             intent.putExtra("NewsCategory", parentContext.getTitle());
                         else

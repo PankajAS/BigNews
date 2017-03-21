@@ -30,6 +30,7 @@ public class ContentRepo {
                 values.put(NewsDataModel.KEY_Title, newsData.Title);
                 values.put(NewsDataModel.KEY_ImageUrl, newsData.ImageUrl);
                 values.put(NewsDataModel.KEY_Description, newsData.Description);
+                values.put(NewsDataModel.KEY_SourceLink, newsData.SourceLink);
                 values.put(NewsDataModel.KEY_Category, newsData.Category);
                 values.put(NewsDataModel.KEY_IsNext, newsData.IsNext);
                 db.insert(NewsDataModel.TABLE, null, values);
@@ -50,6 +51,7 @@ public class ContentRepo {
                 values.put(NewsDataModel.KEY_Title, newsData.Title);
                 values.put(NewsDataModel.KEY_ImageUrl, newsData.ImageUrl);
                 values.put(NewsDataModel.KEY_Description, newsData.Description);
+                values.put(NewsDataModel.KEY_SourceLink, newsData.SourceLink);
                 //db.update(NewsDataModel.TABLE, values, NewsDataModel.KEY_Category + " = '"+newsData.Category.toString()+ "' AND " + NewsDataModel.KEY_IsNext + " = '"+newsData.IsNext+"'",null);
                 db.update(NewsDataModel.TABLE,
                         values,
@@ -116,6 +118,7 @@ public class ContentRepo {
                 NewsDataModel.KEY_Title + "," +
                 NewsDataModel.KEY_ImageUrl + "," +
                 NewsDataModel.KEY_Description + "," +
+                NewsDataModel.KEY_SourceLink + "," +
                 NewsDataModel.KEY_Category + "," +
                 NewsDataModel.KEY_IsNext + "," +
                 NewsDataModel.KEY_UniqueID +
@@ -138,6 +141,7 @@ public class ContentRepo {
                 category.put("Title", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Title)));
                 category.put("ImageUrl", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_ImageUrl)));
                 category.put("Description", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Description)));
+                category.put("SourceLink", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_SourceLink)));
                 category.put("Category", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Category)));
                 category.put("IsNext", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_IsNext)));
                 category.put("UniqueID", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_UniqueID)));
@@ -161,6 +165,7 @@ public class ContentRepo {
                 NewsDataModel.KEY_Title + "," +
                 NewsDataModel.KEY_ImageUrl + "," +
                 NewsDataModel.KEY_Description + "," +
+                NewsDataModel.KEY_SourceLink + "," +
                 NewsDataModel.KEY_Category + "," +
                 NewsDataModel.KEY_IsNext +
                 " FROM " + NewsDataModel.TABLE + categoryWhereClause ;
@@ -179,6 +184,7 @@ public class ContentRepo {
                 category.put("Title", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Title)));
                 category.put("ImageUrl", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_ImageUrl)));
                 category.put("Description", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Description)));
+                category.put("SourceLink", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_SourceLink)));
                 category.put("Category", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Category)));
                 category.put("IsNext", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_IsNext)));
                 categoryList.add(category);
