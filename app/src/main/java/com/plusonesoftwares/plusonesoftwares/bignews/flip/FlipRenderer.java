@@ -11,6 +11,7 @@ import com.plusonesoftwares.plusonesoftwares.bignews.unit.TextureUtils;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -127,12 +128,12 @@ public class FlipRenderer implements GLSurfaceView.Renderer {
         cards.draw(this, gl);
     }
 
-
     public void postDestroyTexture(Texture texture) {
         synchronized (postDestroyTextures) {
             postDestroyTextures.add(texture);
         }
     }
+
     public void updateTexture(int frontIndex, View frontView, int backIndex, View backView) {
         if (created) {
             //setting title for home navigationbar
@@ -145,6 +146,9 @@ public class FlipRenderer implements GLSurfaceView.Renderer {
                     clsCommon.setUserPrefs(clsCommon.CategroyTitle,title,context);
                 }
             }
+            //Storing current index of flipper
+            clsCommon.setUserPrefs(clsCommon.flipCurrentIndex, String.valueOf(frontIndex) ,context);
+            
             cards.reloadTexture(frontIndex, frontView, backIndex, backView);
             flipViewController.getSurfaceView().requestRender();
         }
@@ -157,10 +161,4 @@ public class FlipRenderer implements GLSurfaceView.Renderer {
         //    throw new RuntimeException(GLU.gluErrorString(error));
         //}
     }
-
-
-
-
-
-
 }

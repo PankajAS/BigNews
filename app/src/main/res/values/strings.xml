@@ -9,6 +9,8 @@
     <string name="connectionError">Check your internet connection for latest news!</string>
     <string name="splashMessage1">Initialization..</string>
     <string name="splashMessage2">Updating latest news..</string>
+    <string name="flipBackMsg">Please flip back to see previous news items</string>
+
     <string name="title_activity_admob">AdmobActivity</string>
 
     <string name="action_settings">Settings</string>

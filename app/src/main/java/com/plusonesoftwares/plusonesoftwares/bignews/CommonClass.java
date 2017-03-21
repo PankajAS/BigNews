@@ -38,6 +38,7 @@ public class CommonClass {
     public static final String NewsCategories = "NewsCategories";
     public static final String CategroyTitle = "CategroyTitle";
     public static final String isBackKeyPressed = "isBackKeyPressed";
+    public static final String flipCurrentIndex = "flipCurrentIndex";
 
 
     public static final  String[] mTextofButton = { "India Head Lines News", "India Movie News", "India Business News", "Malayalam Head Lines News", "Malayalam Business News", "Telugu Business News",

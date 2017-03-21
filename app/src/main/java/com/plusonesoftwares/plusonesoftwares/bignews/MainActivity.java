@@ -9,11 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity  {
     private TabLayout tabLayout;
     ViewPager viewPager;
-    CommonClass utils;
+    CommonClass clsCommon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         tabLayout = (TabLayout)findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
-        utils = new CommonClass();
+        clsCommon = new CommonClass();
         final String[] tabBarTitles = new String[]{
                 getString(R.string.Home),
                 getString(R.string.Menu),
@@ -39,13 +40,15 @@ public class MainActivity extends AppCompatActivity  {
                 android.support.v4.app.Fragment fragment= ((PagerAdapter)viewPager.getAdapter()).getFragment(position);
 
                 if(position == 0 && fragment!=null){
-                    setTitle(utils.getUserPrefs(utils.CategroyTitle, getApplicationContext()));
+                    setTitle(clsCommon.getUserPrefs(clsCommon.CategroyTitle, getApplicationContext()));
                 }
                 else if(position == 1 && fragment!=null){
                     setTitle("Followed Catogries");
                 }else if(position == 2 && fragment!=null){
                     setTitle("All Catogries");
                 }
+                //Storing current index of flipper
+                clsCommon.setUserPrefs(clsCommon.flipCurrentIndex, "0" ,getApplicationContext());
             }
             @Override
             public void onPageSelected(int position) {
@@ -53,7 +56,7 @@ public class MainActivity extends AppCompatActivity  {
 
                 if (position == 0 && fragment != null) {
                     fragment.onResume();
-                    setTitle(utils.getUserPrefs(utils.CategroyTitle, getApplicationContext()));
+                    setTitle(clsCommon.getUserPrefs(clsCommon.CategroyTitle, getApplicationContext()));
                 } else if (position == 1 && fragment != null) {
                     fragment.onResume();
                     setTitle("Followed Catogries");
@@ -67,7 +70,6 @@ public class MainActivity extends AppCompatActivity  {
 
             }
         });
-
             final PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(),tabBarTitles);
             viewPager.setAdapter(pagerAdapter);
             tabLayout.setupWithViewPager(viewPager);
@@ -75,10 +77,18 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        String flipIndex = clsCommon.getUserPrefs(clsCommon.flipCurrentIndex, getApplicationContext());
+
+        if (flipIndex.equals("0")) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+        else
+        {
+            Toast.makeText(this, R.string.flipBackMsg, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
