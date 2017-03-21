@@ -39,7 +39,7 @@ public class TravelAdapter extends BaseAdapter {
     JSONArray jarray;
     List<String> newsCategory;
     ContentRepo newsRecordsClsObj;
-    CommonClass utils;
+    CommonClass clsCommon;
     List<String> selectedCategory;
     String title;
 
@@ -109,67 +109,55 @@ public class TravelAdapter extends BaseAdapter {
     }
 
     private InterstitialAd interstitial;
-    NativeCustomTemplateAd nativeAd;
+    //NativeCustomTemplateAd nativeAd;
 
     @Override
     public View getView(final int position, final View convertView, ViewGroup viewGroup) {
         View layout = convertView;
         newsRecordsClsObj = new ContentRepo(context);
-        int titlePosition = 0;
 
         if (parentContext != null) {
-            utils = new CommonClass();
-            titlePosition = (position > 0 ? position - 1 : position);
-            if(position==1){
-                AdLoader adLoader = new AdLoader.Builder(context,
-                        context.getString(R.string.native_ad_unit_id))
-                        .forCustomTemplateAd(context.getString(R.string.native_template_id),
-                                new NativeCustomTemplateAd.OnCustomTemplateAdLoadedListener() {
-                                    @Override
-                                    public void onCustomTemplateAdLoaded(final NativeCustomTemplateAd ad) {
-                                        nativeAd=ad;
-                                    }
-                                },
-                                null)
-                        .build();
-                adLoader.loadAd(new PublisherAdRequest.Builder().build());
-            }
+            clsCommon = new CommonClass();
+
             if (newsCategory.get(position).equals("AdMob")) {
-                //if (convertView == null) {
                 layout = inflater.inflate(R.layout.activity_admob, null);
                 final ViewGroup adView = (ViewGroup) layout.findViewById(R.id.adView);
                 final TextView headline = (TextView) adView.findViewById(R.id.headline);
                 final TextView caption = (TextView) adView.findViewById(R.id.caption);
                 final ImageView mainImage = (ImageView) adView.findViewById(R.id.mainImage);
-                //UI.<ListView>findViewById(layout, R.id.list)); will be used to set add data here
-                // AdView adView = (AdView) layout.findViewById(R.id.adView);
-                //}
-                headline.setText(nativeAd.getText("Headline"));
-                caption.setText(nativeAd.getText("Caption"));
-                mainImage.setImageDrawable(nativeAd.getImage("MainImage").getDrawable());
-                // Record an impression
-                nativeAd.recordImpression();
-                // Handle clicks on image
-                mainImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        nativeAd.performClick("MainImage");
-                    }
-                });
 
-
+                AdLoader adLoader = new AdLoader.Builder(context,
+                        context.getString(R.string.native_ad_unit_id))
+                        .forCustomTemplateAd(context.getString(R.string.native_template_id),
+                                new NativeCustomTemplateAd.OnCustomTemplateAdLoadedListener() {
+                                    @Override
+                                    public void onCustomTemplateAdLoaded(final NativeCustomTemplateAd nativeAd) {
+                                        headline.setText(nativeAd.getText("Headline"));
+                                        caption.setText(nativeAd.getText("Caption"));
+                                        mainImage.setImageDrawable(nativeAd.getImage("MainImage").getDrawable());
+                                        // Record an impression
+                                        nativeAd.recordImpression();
+                                        // Handle clicks on image
+                                        mainImage.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                nativeAd.performClick("MainImage");
+                                                //setting it as true to stop call of onresume of home  tab
+                                                clsCommon.setUserPrefs(clsCommon.isBackKeyPressed, "true", parentContext.getApplicationContext());
+                                            }
+                                        });
+                                    }
+                                },
+                                null)
+                        .build();
+                adLoader.loadAd(new PublisherAdRequest.Builder().build());
             } else {
 
-                // if (convertView == null) {
                 layout = inflater.inflate(R.layout.activity_home_fragment, null);
-                // }
                 JSONArray jsonArray1 = getNewsDataByCategory(position, newsCategory);
-
                 UI.<ListView>findViewById(layout, R.id.list).setAdapter(new CustomViewAdapter(context, parentContext, jsonArray1));
 
             }
-            //parentContext.setTitle(utils.getCatNameByCatId(newsCategory.get(titlePosition)));
-            // utils.setUserPrefs(utils.CategroyTitle,utils.getCatNameByCatId(newsCategory.get(titlePosition)),parentContext);
         } else {
 
             if (convertView == null) {
@@ -192,14 +180,10 @@ public class TravelAdapter extends BaseAdapter {
         JSONArray jsonArray1 = new JSONArray();
         try {
             jsonArray1 = mJSONArray.getJSONArray(0);
-
             //System.out.println(jsonArray1);
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonArray1;
-    }
-    private void displayAd(ViewGroup view, NativeCustomTemplateAd ad){
-
     }
 }

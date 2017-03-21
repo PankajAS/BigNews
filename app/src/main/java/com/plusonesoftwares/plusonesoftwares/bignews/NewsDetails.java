@@ -104,5 +104,4 @@ public class NewsDetails extends AppCompatActivity {
         super.onBackPressed();
         clsCommon.setUserPrefs(clsCommon.isBackKeyPressed, "true", getApplicationContext());
     }
-
 }
