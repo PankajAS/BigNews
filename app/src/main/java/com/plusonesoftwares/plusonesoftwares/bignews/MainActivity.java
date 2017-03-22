@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -76,21 +77,41 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     @Override
-    public void onBackPressed() {
-        String flipIndex = clsCommon.getUserPrefs(clsCommon.flipCurrentIndex, getApplicationContext());
-
-        if (flipIndex.equals("0")) {
-            super.onBackPressed();
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_HOME);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
-        else
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        switch(keyCode)
         {
-            Toast.makeText(this, R.string.flipBackMsg, Toast.LENGTH_LONG).show();
+            case KeyEvent.KEYCODE_BACK:
+                String flipIndex = clsCommon.getUserPrefs(clsCommon.flipCurrentIndex, getApplicationContext());
+
+                if (flipIndex.equals("0")) {
+                    moveTaskToBack(true);
+                    return true;
+                }
+                else
+                {
+                    Toast.makeText(this, R.string.flipBackMsg, Toast.LENGTH_LONG).show();
+                }
         }
+        return false;
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        String flipIndex = clsCommon.getUserPrefs(clsCommon.flipCurrentIndex, getApplicationContext());
+//
+//        if (flipIndex.equals("0")) {
+//            super.onBackPressed();
+//            Intent intent = new Intent(Intent.ACTION_MAIN);
+//            intent.addCategory(Intent.CATEGORY_HOME);
+//            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//        }
+//        else
+//        {
+//            Toast.makeText(this, R.string.flipBackMsg, Toast.LENGTH_LONG).show();
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
