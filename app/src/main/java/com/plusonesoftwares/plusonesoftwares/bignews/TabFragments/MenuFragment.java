@@ -1,25 +1,27 @@
 package com.plusonesoftwares.plusonesoftwares.bignews.TabFragments;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
+import android.content.res.Resources;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 
-import com.plusonesoftwares.plusonesoftwares.bignews.NewsCategoryDetails;
-import com.plusonesoftwares.plusonesoftwares.bignews.R;
 import com.plusonesoftwares.plusonesoftwares.bignews.CommonClass;
+import com.plusonesoftwares.plusonesoftwares.bignews.R;
+import com.plusonesoftwares.plusonesoftwares.bignews.unit.NewsCategoryAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 
 public class MenuFragment extends Fragment {
@@ -27,26 +29,68 @@ public class MenuFragment extends Fragment {
     CommonClass utils;
     String defaultCat;
     View menuView;
-
+    private RecyclerView recyclerView;
+    private NewsCategoryAdapter adapter;
+    List<String> getFollowedCat;
 
     String[] colorCodes = { "#cd6155", "#DAF7A6", "#FFC300", "#FF5733", "#C70039", "#ba4a00", "#5d6d7e", "#cd6155", "#DAF7A6", "#FFC300"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        menuView = inflater.inflate(R.layout.activity_menu_fragment, container, false);
+        menuView = inflater.inflate(R.layout.activity_discover_view, container, false);
         utils = new CommonClass();
         defaultCat = utils.getUserPrefs(utils.NewsCategories,getContext());
+        recyclerView = (RecyclerView) menuView.findViewById(R.id.recycler_view);
+        getFollowedCat = getFollowedCat(defaultCat);
+        adapter = new NewsCategoryAdapter(getContext(), MenuFragment.this, recyclerView, getFollowedCat);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(2), true));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+
+       /* defaultCat = utils.getUserPrefs(utils.NewsCategories,getContext());
         try {
             createButtonsDynamically(menuView, utils.mTextofButton, colorCodes);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         return menuView;
     }
 
-    public void createButtonsDynamically(View menuView, String[] numberOfItems, final String[] BgColor) throws JSONException {
+    private List<String> getFollowedCat(String value) {
+        JSONObject JsonCategories = null;
+        try {
+            JsonCategories = new JSONObject(value);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Iterator<String> iter = JsonCategories.keys();
+
+        int i = 0;
+        List<String> categoryName = new ArrayList<>();
+        while (iter.hasNext()) {
+
+            String key = iter.next();
+            try {
+                categoryName.add(String.valueOf(JsonCategories.get(key)));
+            } catch (JSONException e) {
+                // Something went wrong!
+            }
+        }
+            return categoryName;
+
+    }
+
+    private int dpToPx(int dp) {
+        Resources r = getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+
+    /*public void createButtonsDynamically(View menuView, String[] numberOfItems, final String[] BgColor) throws JSONException {
 
         TableLayout mTlayout;
         TableRow tr = null;
@@ -91,6 +135,8 @@ public class MenuFragment extends Fragment {
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), NewsCategoryDetails.class);
                     intent.putExtra("categoryName",((Button) v).getText());
+                    //Storing current index of flipper
+                    utils.setUserPrefs(utils.flipCurrentIndex, "" ,getContext());
                     startActivity(intent);
                 }
             });
@@ -98,18 +144,42 @@ public class MenuFragment extends Fragment {
             tr.addView(button);
             i++;
        }
-    }
+    }*/
 
-    @Override
-    public void onResume() {
-        //defaultNewsCategories();
-        defaultCat = utils.getUserPrefs(utils.NewsCategories,getContext());
-        try {
-            createButtonsDynamically(menuView, utils.mTextofButton, colorCodes);
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+
+        private int spanCount;
+        private int spacing;
+        private boolean includeEdge;
+
+        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+            this.spanCount = spanCount;
+            this.spacing = spacing;
+            this.includeEdge = includeEdge;
         }
-        super.onResume();
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int position = parent.getChildAdapterPosition(view); // item position
+            int column = position % spanCount; // item column
+
+            if (includeEdge) {
+                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+
+                if (position < spanCount) { // top edge
+                    outRect.top = spacing;
+                }
+                outRect.bottom = spacing; // item bottom
+            } else {
+                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
+                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (position >= spanCount) {
+                    outRect.top = spacing; // item top
+                }
+            }
+        }
     }
 }
 

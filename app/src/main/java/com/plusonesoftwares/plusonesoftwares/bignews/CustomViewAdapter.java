@@ -36,12 +36,14 @@ public class CustomViewAdapter extends ArrayAdapter {
     String title;
     RelativeLayout layoutSingleRow;
     int headerFooterMargin = 0;
+    CommonClass clsComman;
 
     public CustomViewAdapter(Context context, Activity parentContext, JSONArray jsonArray) {
         super(context, R.layout.new_item);
         this.context = context;
         this.jsonArray = jsonArray;
         this.parentContext = parentContext;
+        clsComman=new CommonClass();
     }
 
     public CustomViewAdapter(Context context, JSONArray jsonArray, String title) {
@@ -49,6 +51,7 @@ public class CustomViewAdapter extends ArrayAdapter {
         this.context = context;
         this.jsonArray = jsonArray;
         this.title = title;
+        clsComman=new CommonClass();
     }
 
     @NonNull
@@ -86,10 +89,13 @@ public class CustomViewAdapter extends ArrayAdapter {
                         Intent intent = new Intent(context, NewsDetails.class);
                         intent.putExtra("Data", jobject.toString());
                         intent.putExtra("SourceLink", jobject.getString("SourceLink"));
+                        //Storing current index of flipper
+                        clsComman.setUserPrefs(clsComman.flipCurrentIndex, "" ,context);
                         if (parentContext != null)
                             intent.putExtra("NewsCategory", parentContext.getTitle());
                         else
                             intent.putExtra("NewsCategory", title);
+
                         context.startActivity(intent);
                     } catch (JSONException e) {
                         e.printStackTrace();

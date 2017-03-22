@@ -26,4 +26,8 @@
     <!- -->
     <string name="interstitial_ad_unit_id">ca-app-pub-1814894186196899/1273890561</string>
 
+    <!--Menu items strings-->
+    <string name="action_follow">Follow</string>
+    <string name="action_unfollow">UnFollow</string>
+
 </resources>
