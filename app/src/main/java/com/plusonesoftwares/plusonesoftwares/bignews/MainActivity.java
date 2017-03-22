@@ -85,8 +85,14 @@ public class MainActivity extends AppCompatActivity  {
                 String flipIndex = clsCommon.getUserPrefs(clsCommon.flipCurrentIndex, getApplicationContext());
 
                 if (flipIndex.equals("0")) {
-                    moveTaskToBack(true);
-                    return true;
+                    if(viewPager.getCurrentItem()==0) {
+                        moveTaskToBack(true);
+                        return true;
+                    }
+                    else
+                    {
+                        viewPager.setCurrentItem(0, true);
+                    }
                 }
                 else
                 {

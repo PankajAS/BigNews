@@ -101,7 +101,7 @@ public class CommonClass {
     public void showNetworkConnectionMsg(final Activity activity) {
         activity.runOnUiThread(new Runnable() {
             public void run() {
-                Toast.makeText(activity, R.string.connectionError, Toast.LENGTH_LONG).show();
+               // Toast.makeText(activity, R.string.connectionError, Toast.LENGTH_LONG).show();
             }
         });
     }
