@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity  {
                     fragment.onResume();
                     setTitle("Followed Catogries");
                 } else if (position == 2 && fragment != null) {
+                    fragment.onResume();
                     setTitle("All Catogries");
                 }
             }

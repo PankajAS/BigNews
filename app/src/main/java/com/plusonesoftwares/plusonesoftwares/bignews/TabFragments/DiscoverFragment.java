@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class DiscoverFragment extends Fragment {
@@ -39,9 +40,12 @@ public class DiscoverFragment extends Fragment {
 
     CommonClass utils;
     JSONObject JsonCategories;
+    JSONObject AllJsonCategories;
     private RecyclerView recyclerView;
     private NewsCategoryAdapter adapter;
     List<String> catList;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,15 +65,22 @@ public class DiscoverFragment extends Fragment {
         utils = new CommonClass();
         recyclerView = (RecyclerView) discoverView.findViewById(R.id.recycler_view);
         catList = new ArrayList<>(Arrays.asList(utils.mTextofButton));
-
-        adapter = new NewsCategoryAdapter(getContext(), DiscoverFragment.this,recyclerView, catList);
+        adapter = new NewsCategoryAdapter(getContext(), DiscoverFragment.this,recyclerView, geUnFollowedcategroy());
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(2), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+        //geUnFollowedcategroy();
 
         return discoverView;
+    }
+
+    @Override
+    public void onResume() {
+        recyclerView.setAdapter(new NewsCategoryAdapter(getContext(), DiscoverFragment.this, recyclerView, geUnFollowedcategroy()));
+        recyclerView.invalidate();
+        super.onResume();
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
@@ -106,6 +117,34 @@ public class DiscoverFragment extends Fragment {
             }
         }
     }
+
+    public List<String> geUnFollowedcategroy(){
+        List<String> unfollowedcatList = new ArrayList<>();
+        JsonCategories = utils.getUpdatedCategories(getContext());
+        Boolean isFollowed = false;
+        String key;
+        for(String catAll: utils.catKeys){
+            Iterator<String> iter = JsonCategories.keys();
+            while (iter.hasNext()) {
+                key = iter.next();
+                if(key.equals(catAll)){
+                    isFollowed = true;
+                    break;
+                }
+                else{
+                    isFollowed = false;
+                }
+            }
+            if(isFollowed==false){
+                unfollowedcatList.add(utils.getCatNameByCatId(catAll));
+            }
+        }
+
+
+    return unfollowedcatList;
+    }
+
+
     /**
      * Converting dp to pixel
      */
@@ -207,7 +246,6 @@ public class DiscoverFragment extends Fragment {
         }
         return false;
     }*/
-
 
 }
 

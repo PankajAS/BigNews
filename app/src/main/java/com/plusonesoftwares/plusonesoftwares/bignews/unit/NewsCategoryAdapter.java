@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.plusonesoftwares.plusonesoftwares.bignews.CommonClass;
 import com.plusonesoftwares.plusonesoftwares.bignews.NewsCategoryDetails;
 import com.plusonesoftwares.plusonesoftwares.bignews.R;
+import com.plusonesoftwares.plusonesoftwares.bignews.TabFragments.DiscoverFragment;
 import com.plusonesoftwares.plusonesoftwares.bignews.TabFragments.MenuFragment;
 
 import org.json.JSONException;
@@ -36,6 +37,8 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
     Fragment fragment;
     CommonClass utils;
     RecyclerView recyclerView;
+    JSONObject JsonCategoriesfollowed;
+    JSONObject JsonCategoriesUnfollowed;
 
     public NewsCategoryAdapter(Context context, Fragment fragment, RecyclerView recyclerView, List<String> mTextofButton) {
         this.context = context;
@@ -43,6 +46,8 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
         this.fragment = fragment;
         utils = new CommonClass();
         this.recyclerView = recyclerView;
+        JsonCategoriesfollowed = new JSONObject();
+        JsonCategoriesUnfollowed = new JSONObject();
     }
 
     public NewsCategoryAdapter() {
@@ -85,23 +90,43 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
         holder.title.setText(mTextofButton.get(position));
         Glide.with(context).load(R.drawable.cover).into(holder.thumbnail);
 
-        if(fragment instanceof MenuFragment) {
+        if(fragment instanceof DiscoverFragment){
+            holder.overflow.setVisibility(View.GONE);
+        }
             holder.thumbnail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if(fragment instanceof MenuFragment) {
+                        Intent intent = new Intent(context, NewsCategoryDetails.class);
+                        intent.putExtra("categoryName", mTextofButton.get(position));
+                        //Storing current index of flipper
+                        //   utils.setUserPrefs(utils.flipCurrentIndex, "" ,context);
+                        context.startActivity(intent);
+                    }
+                    else{
+                        String category = mTextofButton.get(position);
+                        JsonCategoriesfollowed = utils.getUpdatedCategories(context);
+                        try {
+                            JsonCategoriesfollowed.put(utils.getCatIdByCatName(category),category);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        //JsonCategoriesfollowed.remove(utils.getCatIdByCatName(mTextofButton.get(position)));
+                        mTextofButton.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, mTextofButton.size());
+                        utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
+                        //recyclerView.removeViewAt(position);
+                        notifyDataSetChanged();
 
-                    Intent intent = new Intent(context, NewsCategoryDetails.class);
-                    intent.putExtra("categoryName", mTextofButton.get(position));
-                    //Storing current index of flipper
-                    //   utils.setUserPrefs(utils.flipCurrentIndex, "" ,context);
-                    context.startActivity(intent);
-
+                    }
                 }
             });
-        }
+
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,9 +143,6 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
         if(fragment instanceof MenuFragment) {
             inflater.inflate(R.menu.menu_options1, popup.getMenu());
         }
-        else{
-            inflater.inflate(R.menu.menu_option2, popup.getMenu());
-        }
         popup.setOnMenuItemClickListener(new MyMenuItemClickListener(position));
         popup.show();
     }
@@ -130,11 +152,10 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
      */
     class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
         int position;
-        JSONObject JsonCategories;
 
         public MyMenuItemClickListener(int position) {
             this.position = position;
-            JsonCategories = new JSONObject();
+            JsonCategoriesfollowed = new JSONObject();
         }
 
         @Override
@@ -144,27 +165,29 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
                 case R.id.follow:
                     String category = utils.catKeys[position];
                     try {
-                       JsonCategories = utils.getUpdatedCategories(context);
-                        JsonCategories.put(category, mTextofButton.get(position));
-                        utils.setUserPrefs(utils.NewsCategories, JsonCategories.toString(),context);
+                        JsonCategoriesfollowed = utils.getUpdatedCategories(context);
+                        JsonCategoriesfollowed.put(category, mTextofButton.get(position));
+                        utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
+                        notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                         Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
                     return true;
                 case R.id.unfollow:
-                    JsonCategories = utils.getUpdatedCategories(context);
-                    JsonCategories.remove(utils.getCatIdByCatName(mTextofButton.get(position)));
+                    JsonCategoriesfollowed = utils.getUpdatedCategories(context);
+                    JsonCategoriesfollowed.remove(utils.getCatIdByCatName(mTextofButton.get(position)));
                     mTextofButton.remove(position);
-                    recyclerView.removeViewAt(position);
-                    new NewsCategoryAdapter().notifyItemRemoved(position);
-                    new NewsCategoryAdapter().notifyItemRangeChanged(position, mTextofButton.size());
-                    utils.setUserPrefs(utils.NewsCategories, JsonCategories.toString(),context);
+                    notifyItemRemoved(position);
+                   notifyItemRangeChanged(position, getItemCount());
+                    utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
+                   // recyclerView.removeViewAt(position);
                 default:
             }
             return false;
         }
     }
+
 
     @Override
     public int getItemCount() {

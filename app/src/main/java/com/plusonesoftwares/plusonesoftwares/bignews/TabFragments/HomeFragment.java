@@ -31,9 +31,17 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         flipView = new FlipViewController(getActivity(),getContext(), FlipViewController.VERTICAL);
 
+        getUpdatedData();
+
+        flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));
+
+        return flipView;
+    }
+
+    private void getUpdatedData() {
         List<String> newsCategory = utils.getFollowedCategoriesLink(getContext(), false, false);
 
-       // utils.getCatWithAdmob(utils.getFollowedCategoriesLink(getContext(), false, false));
+        // utils.getCatWithAdmob(utils.getFollowedCategoriesLink(getContext(), false, false));
         newsCategory1 = new ArrayList<>();
         int index = 0;
 
@@ -49,10 +57,6 @@ public class HomeFragment extends Fragment {
             }
             index++;
         }
-
-        flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));
-
-        return flipView;
     }
 
     @Override
@@ -66,6 +70,7 @@ public class HomeFragment extends Fragment {
             {
                 //System.out.println("onResume");
                 getActivity().setTitle(utils.getUserPrefs(utils.CategroyTitle, getContext()));
+                getUpdatedData();
                 flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));//to refresh the  main activity on pressed of home button
             }
 
