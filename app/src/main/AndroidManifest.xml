@@ -51,7 +51,7 @@
 
         <receiver android:name=".NewsBroadcastReceiver" />
 
-        <activity android:name=".unit.WebView"></activity>
+        <activity android:name=".WebViewActivity"></activity>
     </application>
 
 </manifest>

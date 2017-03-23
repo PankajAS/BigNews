@@ -82,6 +82,7 @@ public class NewsDetails extends AppCompatActivity {
 
                         Intent intent = new Intent(NewsDetails.this,WebViewActivity.class);
                         intent.putExtra("url",String.valueOf(Uri.parse(SourceUrl)));
+                        intent.putExtra("newsTitle",newsTitle);
                         startActivity(intent);
                     }
                 });

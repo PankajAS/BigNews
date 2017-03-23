@@ -28,9 +28,10 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        startAlert();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         txtViewMessage = (TextView) findViewById(R.id.txtViewMessage);
-        startAlert();
+
         contentOperation = new ContentRepo(getApplicationContext());
         utils = new CommonClass();
 
@@ -46,33 +47,21 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             if (contentOperation.dataAlreadyExist()) {
                 txtViewMessage.setText(R.string.splashMessage2);
-                // If data exist in application app will not wait for updation , it will happen in background
-                Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
-                startActivity(intent);
-                updatingNewsItems(parentIndex, true);
-            }
-            else {
-                updatingNewsItems(parentIndex, false);
             }
 
+            for (String url : newsCategory) {
+                isLastRequest = (parentIndex == 2);
+                try {
+                    new GetNewsData(getApplicationContext(), utils.getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest, SplashScreenActivity.this).execute(new URL(url));//start async task to get all categories
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                parentIndex++;
+            }
         } else {
-            //utils.showNetworkConnectionMsg(SplashScreenActivity.this);
+            utils.showNetworkConnectionMsg(SplashScreenActivity.this);
             Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
             startActivity(intent);
-        }
-
-    }
-
-    private void updatingNewsItems(int parentIndex, Boolean DataExist) {
-        boolean isLastRequest;
-        for (String url : newsCategory) {
-            isLastRequest = (DataExist? false : (parentIndex == 1));
-            try {
-                new GetNewsData(getApplicationContext(), utils.getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest, SplashScreenActivity.this).execute(new URL(url));//start async task to get all categories
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            parentIndex++;
         }
     }
 
