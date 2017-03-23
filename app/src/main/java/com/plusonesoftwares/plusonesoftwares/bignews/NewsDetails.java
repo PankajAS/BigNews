@@ -1,6 +1,5 @@
 package com.plusonesoftwares.plusonesoftwares.bignews;
 
-import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,6 +7,7 @@ import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
 import android.support.customtabs.CustomTabsSession;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,25 +42,6 @@ public class NewsDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mCustomTabsServiceConnection = new CustomTabsServiceConnection() {
-            @Override
-            public void onCustomTabsServiceConnected(ComponentName componentName, CustomTabsClient customTabsClient) {
-                mCustomTabsClient= customTabsClient;
-                mCustomTabsClient.warmup(0L);
-                mCustomTabsSession = mCustomTabsClient.newSession(null);
-            }
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                mCustomTabsClient= null;
-            }
-        };
-
-        CustomTabsClient.bindCustomTabsService(this, CUSTOM_TAB_PACKAGE_NAME, mCustomTabsServiceConnection);
-        mCustomTabsIntent = new CustomTabsIntent.Builder(mCustomTabsSession)
-                .setShowTitle(true)
-                .build();
-
         headline = (TextView)findViewById(R.id.headline);
         description = (TextView)findViewById(R.id.description);
         newsImage = (ImageView)findViewById(R.id.newsImage);
@@ -85,7 +66,12 @@ public class NewsDetails extends AppCompatActivity {
     }
 
     public void openNewsSource(View view) {
-        mCustomTabsIntent.launchUrl(this, Uri.parse(SourceUrl));
+       // mCustomTabsIntent.launchUrl(this, Uri.parse(SourceUrl));
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        builder.setSecondaryToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(this, Uri.parse(SourceUrl));
     }
 
 
