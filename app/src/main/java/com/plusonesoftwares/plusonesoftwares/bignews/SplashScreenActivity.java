@@ -30,7 +30,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         txtViewMessage = (TextView) findViewById(R.id.txtViewMessage);
-
+        startAlert();
         contentOperation = new ContentRepo(getApplicationContext());
         utils = new CommonClass();
 
@@ -60,7 +60,7 @@ public class SplashScreenActivity extends AppCompatActivity {
             Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
             startActivity(intent);
         }
-        startAlert();
+
     }
 
     private void updatingNewsItems(int parentIndex, Boolean DataExist) {
