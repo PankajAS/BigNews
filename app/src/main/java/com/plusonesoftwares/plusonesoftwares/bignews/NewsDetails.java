@@ -1,5 +1,6 @@
 package com.plusonesoftwares.plusonesoftwares.bignews;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,9 +12,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.plusonesoftwares.plusonesoftwares.bignews.chromeCustomTab.CustomTabActivityHelper;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -71,8 +74,17 @@ public class NewsDetails extends AppCompatActivity {
         builder.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
         builder.setSecondaryToolbarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.launchUrl(this, Uri.parse(SourceUrl));
+       // customTabsIntent.launchUrl(this, Uri.parse(SourceUrl));
+        CustomTabActivityHelper.openCustomTab(this, customTabsIntent, Uri.parse(SourceUrl),
+                new CustomTabActivityHelper.CustomTabFallback() {
+                    @Override
+                    public void openUri(Activity activity, Uri uri) {
+                        WebView myWebView = (WebView) findViewById(R.id.webview);
+                        myWebView.loadUrl(String.valueOf(Uri.parse(SourceUrl)));
+                    }
+                });
     }
+
 
 
     @Override
