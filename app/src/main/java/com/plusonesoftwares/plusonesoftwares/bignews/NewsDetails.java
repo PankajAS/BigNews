@@ -79,13 +79,13 @@ public class NewsDetails extends AppCompatActivity {
                 new CustomTabActivityHelper.CustomTabFallback() {
                     @Override
                     public void openUri(Activity activity, Uri uri) {
-                        WebView myWebView = (WebView) findViewById(R.id.webview);
-                        myWebView.loadUrl(String.valueOf(Uri.parse(SourceUrl)));
+
+                        Intent intent = new Intent(NewsDetails.this,WebViewActivity.class);
+                        intent.putExtra("url",String.valueOf(Uri.parse(SourceUrl)));
+                        startActivity(intent);
                     }
                 });
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
