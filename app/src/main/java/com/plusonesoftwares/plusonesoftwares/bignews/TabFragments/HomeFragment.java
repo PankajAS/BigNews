@@ -17,6 +17,10 @@ import com.plusonesoftwares.plusonesoftwares.bignews.TravelAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static java.lang.Thread.sleep;
 
 public class HomeFragment extends Fragment {
     private FlipViewController flipView;
@@ -102,6 +106,21 @@ public class HomeFragment extends Fragment {
                         ArrayList<String> newsCategory = new ArrayList<>();
                         newsCategory = utils.getFollowedCategoriesLink(getContext(), true, false);//updating only followed categories.
                         utils.insertUpdateNews(newsCategory, getContext(), true, true);
+
+                        //Refreh data after 3.5 seconds
+                         getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                try {
+                                    sleep(3500);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                finally {
+                                    getUpdatedData();
+                                    flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));//to refresh the  main activity on pressed of home button
+                                }
+                            }
+                        });
                     }
                 }
                 return true;
