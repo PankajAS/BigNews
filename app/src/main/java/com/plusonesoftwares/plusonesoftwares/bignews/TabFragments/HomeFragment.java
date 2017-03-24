@@ -118,6 +118,7 @@ public class HomeFragment extends Fragment {
                                 finally {
                                     getUpdatedData();
                                     flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));//to refresh the  main activity on pressed of home button
+
                                 }
                             }
                         });

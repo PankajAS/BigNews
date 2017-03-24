@@ -43,7 +43,6 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
     RecyclerView recyclerView;
     JSONObject JsonCategoriesfollowed;
     JSONObject JsonCategoriesUnfollowed;
-    List<String> list;
 
     public NewsCategoryAdapter(Context context, Fragment fragment, RecyclerView recyclerView, List<String> mTextofButton) {
         this.context = context;
@@ -53,7 +52,6 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
         this.recyclerView = recyclerView;
         JsonCategoriesfollowed = new JSONObject();
         JsonCategoriesUnfollowed = new JSONObject();
-        list = new ArrayList<>();
     }
 
     public NewsCategoryAdapter() {
@@ -117,22 +115,23 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
                 if (holder.chkSelection.isChecked()) {
                     //Toast.makeText(context,holder.chkSelection.getTag().toString(),Toast.LENGTH_SHORT).show();
                     holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.GREEN));
-                    list.add(holder.chkSelection.getTag().toString());
+                    JsonCategoriesfollowed = utils.getUpdatedCategories(context);
+                    try {
+
+                        JsonCategoriesfollowed.put(utils.getCatIdByCatName(holder.chkSelection.getTag().toString()), holder.chkSelection.getTag().toString());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    // mTextofButton.remove(position);
+                    utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
                 }
                 else if(!holder.chkSelection.isChecked()){
-                    list.remove(holder.chkSelection.getTag().toString());
+                    JsonCategoriesfollowed = utils.getUpdatedCategories(context);
                     holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
+                    JsonCategoriesfollowed.remove(utils.getCatIdByCatName(holder.chkSelection.getTag().toString()));
+                    utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
                 }
-                JsonCategoriesfollowed = utils.getUpdatedCategories(context);
-                try {
-                    for(String category:list) {
-                        JsonCategoriesfollowed.put(utils.getCatIdByCatName(category), category);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                // mTextofButton.remove(position);
-                utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
             }
         });
 
@@ -156,25 +155,23 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
                         if (holder.chkSelection.isChecked()) {
                             //Toast.makeText(context,holder.chkSelection.getTag().toString(),Toast.LENGTH_SHORT).show();
                             holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.GREEN));
-                            list.add(holder.chkSelection.getTag().toString());
+                            JsonCategoriesfollowed = utils.getUpdatedCategories(context);
+                            try {
+
+                                JsonCategoriesfollowed.put(utils.getCatIdByCatName(holder.chkSelection.getTag().toString()), holder.chkSelection.getTag().toString());
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            // mTextofButton.remove(position);
+                            utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
                         }
                         else if(!holder.chkSelection.isChecked()){
-                            list.remove(holder.chkSelection.getTag().toString());
+                            JsonCategoriesfollowed = utils.getUpdatedCategories(context);
                             holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
+                            JsonCategoriesfollowed.remove(utils.getCatIdByCatName(holder.chkSelection.getTag().toString()));
+                            utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
                         }
-
-
-                      //  String category = mTextofButton.get(position);
-                        JsonCategoriesfollowed = utils.getUpdatedCategories(context);
-                        try {
-                            for(String category:list) {
-                                JsonCategoriesfollowed.put(utils.getCatIdByCatName(category), category);
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                       // mTextofButton.remove(position);
-                        utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
 
                      /* String category = mTextofButton.get(position);
                         JsonCategoriesfollowed = utils.getUpdatedCategories(context);
@@ -183,7 +180,7 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        //JsonCategoriesfollowed.remove(utils.getCatIdByCatName(mTextofButton.get(position)));
+                        JsonCategoriesfollowed.remove(utils.getCatIdByCatName(mTextofButton.get(position)));
                         mTextofButton.remove(position);
                         notifyItemRemoved(position);
                         notifyItemRangeChanged(position, mTextofButton.size());
