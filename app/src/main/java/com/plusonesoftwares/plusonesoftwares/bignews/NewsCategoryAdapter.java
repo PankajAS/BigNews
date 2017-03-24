@@ -115,7 +115,7 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
             @Override
             public void onClick(View view) {
                 if (holder.chkSelection.isChecked()) {
-                    Toast.makeText(context,holder.chkSelection.getTag().toString(),Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context,holder.chkSelection.getTag().toString(),Toast.LENGTH_SHORT).show();
                     holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.GREEN));
                     list.add(holder.chkSelection.getTag().toString());
                 }
@@ -154,7 +154,7 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
                         holder.chkSelection.setChecked(check);
 
                         if (holder.chkSelection.isChecked()) {
-                            Toast.makeText(context,holder.chkSelection.getTag().toString(),Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context,holder.chkSelection.getTag().toString(),Toast.LENGTH_SHORT).show();
                             holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.GREEN));
                             list.add(holder.chkSelection.getTag().toString());
                         }
@@ -241,7 +241,7 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                        Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
                     return true;
                 case R.id.unfollow:
                     JsonCategoriesfollowed = utils.getUpdatedCategories(context);
