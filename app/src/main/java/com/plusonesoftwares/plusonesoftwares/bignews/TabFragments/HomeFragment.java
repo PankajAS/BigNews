@@ -4,12 +4,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.plusonesoftwares.plusonesoftwares.bignews.FlipViewController;
-import com.plusonesoftwares.plusonesoftwares.bignews.TravelAdapter;
 import com.plusonesoftwares.plusonesoftwares.bignews.CommonClass;
+import com.plusonesoftwares.plusonesoftwares.bignews.FlipViewController;
+import com.plusonesoftwares.plusonesoftwares.bignews.R;
+import com.plusonesoftwares.plusonesoftwares.bignews.TravelAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         shouldExecuteOnResume = false;
         utils = new CommonClass();
     }
@@ -76,6 +81,32 @@ public class HomeFragment extends Fragment {
 
         } else{
             shouldExecuteOnResume = true;
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.refresh_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.action_refresh:
+                if(utils.haveNetworkConnection(getContext()))
+                {
+                    if(utils.getUserPrefs(utils.isPendingRequest, getContext()) == null || utils.getUserPrefs(utils.isPendingRequest, getContext()).equals("false")) {
+                        utils.setUserPrefs(utils.isPendingRequest, "true", getContext());
+                        ArrayList<String> newsCategory = new ArrayList<>();
+                        newsCategory = utils.getFollowedCategoriesLink(getContext(), true, false);//updating only followed categories.
+                        utils.insertUpdateNews(newsCategory, getContext(), true, true);
+                    }
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

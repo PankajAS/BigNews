@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
@@ -134,6 +135,46 @@ public class CommonClass {
         }
         return JsonCategories;
     }
+
+//get image from cat id
+
+    /*public int getImagebyId(String CategoryId){
+        int CatImg = 0;
+        switch (CategoryId) {
+            case "indiaHeadLinesNews":
+                CatImg =  R.drawable.indiaheadlinesnews;
+                break;
+            case "indiaMovieNews":
+                CatImg = R.drawable.indiamovienews;
+                break;
+            case "indiaBusinessNews":
+                CatImg = R.drawable.indiabusinessnews;
+                break;
+            case "MalayalamHeadLinesNews":
+                CatImg = R.drawable.malayalamheadlinesnews;
+                break;
+            case "MalayalamBusinessNews":
+                CatImg = R.drawable.malayalambusinessnews;
+                break;
+            case "teluguBusinessNews":
+                CatImg = R.drawable.telugubusinessnews;
+                break;
+            case "MalayalamMovieNews":
+                CatImg = R.drawable.malayalammovienews;
+                break;
+            case "MalayalamSportsNews":
+                CatImg = R.drawable.malayalamsportsnews;
+                break;
+            case "MalayalamWorldNews":
+                CatImg = R.drawable.malayalamworldnews;
+                break;
+            case "MalayalamNationalNews":
+                CatImg = R.drawable.malayalamnationalnews;
+                break;
+        }
+        return CatImg;
+
+    }*/
 
     public String getCategoryName(String url){
         return url.substring(url.lastIndexOf("=") + 1);
