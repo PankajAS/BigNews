@@ -87,7 +87,7 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
                 Intent intent = new Intent(context, NewsCategoryDetails.class);
                 TextView txt = (TextView)itemView.findViewById(R.id.title);
                 intent.putExtra("categoryName", txt.getText().toString());
-                Toast.makeText(context,txt.getText().toString(),Toast.LENGTH_LONG).show();
+               // Toast.makeText(context,txt.getText().toString(),Toast.LENGTH_LONG).show();
                 //Storing current index of flipper
              //   utils.setUserPrefs(utils.flipCurrentIndex, "" ,context);
                 context.startActivity(intent);
