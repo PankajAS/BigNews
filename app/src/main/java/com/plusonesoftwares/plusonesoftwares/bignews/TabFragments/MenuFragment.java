@@ -11,11 +11,10 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.CommonClass;
 import com.plusonesoftwares.plusonesoftwares.bignews.R;
-import com.plusonesoftwares.plusonesoftwares.bignews.unit.NewsCategoryAdapter;
+import com.plusonesoftwares.plusonesoftwares.bignews.NewsCategoryAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;

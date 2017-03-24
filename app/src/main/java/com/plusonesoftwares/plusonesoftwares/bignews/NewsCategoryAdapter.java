@@ -1,7 +1,11 @@
-package com.plusonesoftwares.plusonesoftwares.bignews.unit;
+package com.plusonesoftwares.plusonesoftwares.bignews;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -10,20 +14,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.plusonesoftwares.plusonesoftwares.bignews.CommonClass;
-import com.plusonesoftwares.plusonesoftwares.bignews.NewsCategoryDetails;
-import com.plusonesoftwares.plusonesoftwares.bignews.R;
 import com.plusonesoftwares.plusonesoftwares.bignews.TabFragments.DiscoverFragment;
 import com.plusonesoftwares.plusonesoftwares.bignews.TabFragments.MenuFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +43,7 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
     RecyclerView recyclerView;
     JSONObject JsonCategoriesfollowed;
     JSONObject JsonCategoriesUnfollowed;
+    List<String> list;
 
     public NewsCategoryAdapter(Context context, Fragment fragment, RecyclerView recyclerView, List<String> mTextofButton) {
         this.context = context;
@@ -48,6 +53,7 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
         this.recyclerView = recyclerView;
         JsonCategoriesfollowed = new JSONObject();
         JsonCategoriesUnfollowed = new JSONObject();
+        list = new ArrayList<>();
     }
 
     public NewsCategoryAdapter() {
@@ -57,6 +63,7 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, count;
         public ImageView thumbnail, overflow;
+        public CheckBox chkSelection;
 
         public MyViewHolder(View view) {
             super(view);
@@ -64,6 +71,7 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
             //count = (TextView) view.findViewById(R.id.count);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             overflow = (ImageView) view.findViewById(R.id.overflow);
+            chkSelection = (CheckBox) view.findViewById(R.id.selection);
         }
     }
 
@@ -88,16 +96,50 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
         return new MyViewHolder(itemView);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         holder.title.setText(mTextofButton.get(position));
         Glide.with(context).load(R.drawable.cover).into(holder.thumbnail);
+        holder.chkSelection.setVisibility(View.GONE);
 
-        if(fragment instanceof DiscoverFragment){
+        if(fragment instanceof DiscoverFragment) {
             holder.overflow.setVisibility(View.GONE);
+            holder.chkSelection.setVisibility(View.VISIBLE);
+            holder.chkSelection.setTag(mTextofButton.get(position));
+
         }
-            holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+
+        holder.chkSelection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (holder.chkSelection.isChecked()) {
+                    Toast.makeText(context,holder.chkSelection.getTag().toString(),Toast.LENGTH_SHORT).show();
+                    holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.GREEN));
+                    list.add(holder.chkSelection.getTag().toString());
+                }
+                else if(!holder.chkSelection.isChecked()){
+                    list.remove(holder.chkSelection.getTag().toString());
+                    holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
+                }
+                JsonCategoriesfollowed = utils.getUpdatedCategories(context);
+                try {
+                    for(String category:list) {
+                        JsonCategoriesfollowed.put(utils.getCatIdByCatName(category), category);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                // mTextofButton.remove(position);
+                utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
+            }
+        });
+
+
+
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            Boolean check = false;
                 @Override
                 public void onClick(View view) {
                     if(fragment instanceof MenuFragment) {
@@ -108,7 +150,33 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
                         context.startActivity(intent);
                     }
                     else{
-                        String category = mTextofButton.get(position);
+                        check = !check;
+                        holder.chkSelection.setChecked(check);
+
+                        if (holder.chkSelection.isChecked()) {
+                            Toast.makeText(context,holder.chkSelection.getTag().toString(),Toast.LENGTH_SHORT).show();
+                            holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.GREEN));
+                            list.add(holder.chkSelection.getTag().toString());
+                        }
+                        else if(!holder.chkSelection.isChecked()){
+                            list.remove(holder.chkSelection.getTag().toString());
+                            holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
+                        }
+
+
+                      //  String category = mTextofButton.get(position);
+                        JsonCategoriesfollowed = utils.getUpdatedCategories(context);
+                        try {
+                            for(String category:list) {
+                                JsonCategoriesfollowed.put(utils.getCatIdByCatName(category), category);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                       // mTextofButton.remove(position);
+                        utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
+
+                     /* String category = mTextofButton.get(position);
                         JsonCategoriesfollowed = utils.getUpdatedCategories(context);
                         try {
                             JsonCategoriesfollowed.put(utils.getCatIdByCatName(category),category);
@@ -121,11 +189,12 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
                         notifyItemRangeChanged(position, mTextofButton.size());
                         utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
                         //recyclerView.removeViewAt(position);
-                        notifyDataSetChanged();
-
+                        notifyDataSetChanged();*/
                     }
                 }
             });
+
+
 
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {

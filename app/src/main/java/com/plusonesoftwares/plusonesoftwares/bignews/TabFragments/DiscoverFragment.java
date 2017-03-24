@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.CommonClass;
 import com.plusonesoftwares.plusonesoftwares.bignews.R;
-import com.plusonesoftwares.plusonesoftwares.bignews.unit.NewsCategoryAdapter;
+import com.plusonesoftwares.plusonesoftwares.bignews.NewsCategoryAdapter;
 
 import org.json.JSONObject;
 

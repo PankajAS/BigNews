@@ -41,13 +41,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/thumbnail"
-                android:paddingLeft="@dimen/album_title_padding"
-                android:paddingRight="@dimen/album_title_padding"
-                android:paddingTop="@dimen/album_title_padding"
                 android:textColor="@color/colorWhite"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="normal|bold"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:paddingTop="10dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="10dp" />
+
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/selection"
+                android:layout_alignTop="@id/thumbnail"
+                android:layout_alignRight="@+id/thumbnail"
+                card_view:buttonTint="@android:color/white" />
 
 
 
