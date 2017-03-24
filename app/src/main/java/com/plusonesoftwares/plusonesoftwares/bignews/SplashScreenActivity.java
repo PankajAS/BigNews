@@ -40,19 +40,23 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
 
         if (utils.haveNetworkConnection(getApplicationContext())) {
-            newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true, true);
 
             boolean isLastRequest = false;
             int parentIndex = 0;
 
             if (contentOperation.dataAlreadyExist()) {
                 txtViewMessage.setText(R.string.splashMessage2);
+                newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true, false);
+            }
+            else
+            {
+                newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true, true);
             }
 
             for (String url : newsCategory) {
                 isLastRequest = (parentIndex == 2);
                 try {
-                    new GetNewsData(getApplicationContext(), utils.getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest, SplashScreenActivity.this).execute(new URL(url));//start async task to get all categories
+                    new GetNewsData(getApplicationContext(), utils.getIsNext(newsCategory, parentIndex), utils.getCategoryName(url), isLastRequest,false, SplashScreenActivity.this).execute(new URL(url));//start async task to get all categories
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }

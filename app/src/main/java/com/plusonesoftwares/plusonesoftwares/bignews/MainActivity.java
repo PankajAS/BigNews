@@ -12,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity  {
     private TabLayout tabLayout;
     ViewPager viewPager;
@@ -133,6 +135,17 @@ public class MainActivity extends AppCompatActivity  {
         // Handle item selection
         final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
         switch (item.getItemId()) {
+            case R.id.action_refresh:
+                if(clsCommon.haveNetworkConnection(getApplicationContext()))
+                {
+                    if(clsCommon.getUserPrefs(clsCommon.isPendingRequest, getApplicationContext()) == null || clsCommon.getUserPrefs(clsCommon.isPendingRequest, getApplicationContext()).equals("false")) {
+                        clsCommon.setUserPrefs(clsCommon.isPendingRequest, "true", getApplicationContext());
+                        ArrayList<String> newsCategory = new ArrayList<>();
+                        newsCategory = clsCommon.getFollowedCategoriesLink(getApplicationContext(), true, false);//updating only followed categories.
+                        clsCommon.insertUpdateNews(newsCategory, getApplicationContext(), true, true);
+                    }
+                }
+                return true;
             case R.id.menu_Share:
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);

@@ -39,6 +39,7 @@ public class CommonClass {
     public static final String CategroyTitle = "CategroyTitle";
     public static final String isBackKeyPressed = "isBackKeyPressed";
     public static final String flipCurrentIndex = "flipCurrentIndex";
+    public static final String isPendingRequest = "isPendingRequest";
 
 
     public static final  String[] mTextofButton = { "India Head Lines News", "India Movie News", "India Business News", "Malayalam Head Lines News", "Malayalam Business News", "Telugu Business News",
@@ -241,11 +242,14 @@ public class CommonClass {
         }
     }
 
-    public void insertUpdateNews(ArrayList<String> newsCategory, Context context) {
+    public void insertUpdateNews(ArrayList<String> newsCategory, Context context, boolean lastRequest, boolean isRefresh) {
+        boolean isLastRequest = false;
+
         int parentIndex = 0;
         for (String url : newsCategory) {
+            isLastRequest = lastRequest ? (parentIndex == newsCategory.size()-1): false;
             try {
-                new GetNewsData(context, getIsNext(newsCategory, parentIndex), getCategoryName(url), false, null).execute(new URL(url));//start async task to get all categories
+                new GetNewsData(context, getIsNext(newsCategory, parentIndex), getCategoryName(url), isLastRequest, isRefresh, null).execute(new URL(url));//start async task to get all categories
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }

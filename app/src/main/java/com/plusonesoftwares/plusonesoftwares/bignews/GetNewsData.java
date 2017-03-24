@@ -36,16 +36,19 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
         String isNext;
         String Category;
         boolean isLastRequest;
+        boolean isRefresh;
         boolean isInsert;
+        CommonClass clsCommon;
 
-
-        public GetNewsData(Context context, String isNext , String Category, boolean isLastRequest, Activity parentContext){
+        public GetNewsData(Context context, String isNext , String Category, boolean isLastRequest, boolean isRefresh, Activity parentContext){
             this.context = context;
             this.isNext = isNext;
             this.Category = Category;
             this.isLastRequest = isLastRequest;
+            this.isRefresh = isRefresh;
             this.isInsert = isInsert;
             this.parentContext = parentContext;
+            clsCommon = new CommonClass();
         }
 
         @Override
@@ -106,11 +109,15 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
                 else
                     contentOperation.insert_NewsData(newsList);
 
-                if(isLastRequest)
+                if(isLastRequest && !isRefresh)
                 {
                     //System.out.println("isLastRequest: " + isLastRequest);
                     Intent intent = new Intent(parentContext, MainActivity.class);
                     parentContext.startActivity(intent);
+                }
+
+                if(isLastRequest && isRefresh) {
+                    clsCommon.setUserPrefs(clsCommon.isPendingRequest, "false", context);
                 }
             }
         }
