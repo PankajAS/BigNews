@@ -114,7 +114,7 @@ public class TravelAdapter extends BaseAdapter {
 
         if (parentContext != null) {
             clsCommon = new CommonClass();
-            if(position==0) {
+            if(position%2==0) {
                 viewAd = inflater.inflate(R.layout.native_admob, null);
                 NativeExpressAdView adView = (NativeExpressAdView) viewAd.findViewById(R.id.adView);
                 AdRequest adRequest = new AdRequest.Builder().build();
@@ -131,7 +131,7 @@ public class TravelAdapter extends BaseAdapter {
 
             if (newsCategory.get(position).equals("AdMob")) {
                 //if (convertView == null) {
-                layout =viewAd;
+                layout = viewAd;
 
             } else {
 
