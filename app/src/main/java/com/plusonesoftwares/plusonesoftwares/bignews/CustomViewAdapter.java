@@ -116,7 +116,7 @@ public class CustomViewAdapter extends ArrayAdapter {
 
             //System.out.println("UniqueID " + jObject.getString("UniqueID"));
 
-            if (clsComman.isNetworkAvailable(context)) {
+            if (clsComman.haveNetworkConnection(context)) {
                 Picasso.with(parentContext)
                         .load("http:" + jObject.getString("ImageUrl"))
                         .into(holder.title_image);
