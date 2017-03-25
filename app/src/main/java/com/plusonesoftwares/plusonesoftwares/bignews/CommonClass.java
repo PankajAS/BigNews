@@ -54,8 +54,10 @@ public class CommonClass {
 
     public static final String SelectedColor = "#04A94A";
     public static final String UnSelectedColor = "#aab7b8";
-    public static final String Url = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=";
-    public static final String nextUrl = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getNextNewsList?newsCategory=";
+    public  String Url = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getFirstNewsList?newsCategory=";
+    public  String nextUrl = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getNextNewsList?newsCategory=";
+    public static final String offlineUrl = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getOfflineFirstNewsList?newsCategory=";
+    public static final String offlineNextUrl = "https://flip-dev-app.appspot.com/_ah/api/flipnewsendpoint/v1/getOfflineNextNewsList?newsCategory=";
 
     SharedPreferences sharedpreferences;
     
@@ -106,6 +108,13 @@ public class CommonClass {
                // Toast.makeText(activity, R.string.connectionError, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     public boolean haveNetworkConnection(Context context) {
@@ -228,14 +237,19 @@ public class CommonClass {
         return category;
     }
 
-    public ArrayList<String> getFollowedCategoriesLink(Context context, boolean isUrl, boolean isAll) {
+    public ArrayList<String> getFollowedCategoriesLink(Context context, boolean isUrl, boolean isAll, Boolean isFromScheduler) {
         JSONObject JsonCategories = getUpdatedCategories(context);
 
         ArrayList<String> categoriesLink = new ArrayList<>();
         Iterator<String> iter = JsonCategories.keys();
         String key;
 
-        if(!isAll) {
+        if(isFromScheduler){
+            Url = offlineUrl;
+            nextUrl = offlineNextUrl;
+        }
+
+       if (!isAll) {
             //Adding url for first news items
             while (iter.hasNext()) {
                 key = iter.next();
@@ -247,16 +261,15 @@ public class CommonClass {
                 key = iter1.next();
                 categoriesLink.add(isUrl ? (nextUrl + key) : key);
             }
-        }
-        else
-        {
-            for (String catName: catKeys) {
+        } else {
+            for (String catName : catKeys) {
                 categoriesLink.add(isUrl ? (Url + catName) : catName);
             }
-            for (String catName: catKeys) {
+            for (String catName : catKeys) {
                 categoriesLink.add(isUrl ? (nextUrl + catName) : catName);
             }
         }
+
         return categoriesLink;
     }
 

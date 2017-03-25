@@ -3,6 +3,7 @@ package com.plusonesoftwares.plusonesoftwares.bignews;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,7 +21,7 @@ public class NewsBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if(utils.haveNetworkConnection(context))
         {
-            newsCategory = utils.getFollowedCategoriesLink(context, true, true);
+            newsCategory = utils.getFollowedCategoriesLink(context, true, true, true);
             utils.insertUpdateNews(newsCategory, context, false, false);
         }
     }

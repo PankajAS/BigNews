@@ -48,7 +48,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void getUpdatedData() {
-        List<String> newsCategory = utils.getFollowedCategoriesLink(getContext(), false, false);
+        List<String> newsCategory = utils.getFollowedCategoriesLink(getContext(), false, false, false);
 
         // utils.getCatWithAdmob(utils.getFollowedCategoriesLink(getContext(), false, false));
         newsCategory1 = new ArrayList<>();
@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment {
                     if(utils.getUserPrefs(utils.isPendingRequest, getContext()) == null || utils.getUserPrefs(utils.isPendingRequest, getContext()).equals("false")) {
                         utils.setUserPrefs(utils.isPendingRequest, "true", getContext());
                         ArrayList<String> newsCategory = new ArrayList<>();
-                        newsCategory = utils.getFollowedCategoriesLink(getContext(), true, false);//updating only followed categories.
+                        newsCategory = utils.getFollowedCategoriesLink(getContext(), true, false, false);//updating only followed categories.
                         utils.insertUpdateNews(newsCategory, getContext(), true, true);
 
                         //Refreh data after 3.5 seconds

@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +46,7 @@ public class CustomViewAdapter extends ArrayAdapter {
         this.context = context;
         this.jsonArray = jsonArray;
         this.parentContext = parentContext;
-        clsComman=new CommonClass();
+        clsComman = new CommonClass();
     }
 
     public CustomViewAdapter(Context context, JSONArray jsonArray, String title) {
@@ -51,7 +54,7 @@ public class CustomViewAdapter extends ArrayAdapter {
         this.context = context;
         this.jsonArray = jsonArray;
         this.title = title;
-        clsComman=new CommonClass();
+        clsComman = new CommonClass();
     }
 
     @NonNull
@@ -68,8 +71,7 @@ public class CustomViewAdapter extends ArrayAdapter {
             //******* setting list row height to fit all 4 rows on screen**********
             if (parentContext != null)
                 headerFooterMargin = getNavBarHeight(parentContext, true);
-            else
-            {
+            else {
                 headerFooterMargin = getNavBarHeight((Activity) context, false);
             }
 
@@ -90,7 +92,7 @@ public class CustomViewAdapter extends ArrayAdapter {
                         intent.putExtra("Data", jobject.toString());
                         intent.putExtra("SourceLink", jobject.getString("SourceLink"));
                         //Storing current index of flipper
-                        clsComman.setUserPrefs(clsComman.flipCurrentIndex, "" ,context);
+                        clsComman.setUserPrefs(clsComman.flipCurrentIndex, "", context);
                         if (parentContext != null)
                             intent.putExtra("NewsCategory", parentContext.getTitle());
                         else
@@ -114,10 +116,19 @@ public class CustomViewAdapter extends ArrayAdapter {
 
             //System.out.println("UniqueID " + jObject.getString("UniqueID"));
 
+            if (clsComman.isNetworkAvailable(context)) {
+                Picasso.with(parentContext)
+                        .load("http:" + jObject.getString("ImageUrl"))
+                        .into(holder.title_image);
+            } else {
 
-            Picasso.with(parentContext)
-                    .load("http:" + jObject.getString("ImageUrl"))
-                    .into(holder.title_image);
+                String base64Image = (String) jObject.getString("ImageByteArray");
+                if (base64Image != null && !base64Image.isEmpty()) {
+                    byte[] imageAsBytes = Base64.decode(base64Image.getBytes(), Base64.DEFAULT);
+                    Bitmap image = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+                    holder.title_image.setImageBitmap(image);
+                }
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -141,18 +152,18 @@ public class CustomViewAdapter extends ArrayAdapter {
         ImageView title_image;
     }
 
-    public  int getNavBarHeight(Activity parentContext, Boolean isFooter)
-    {
+    public int getNavBarHeight(Activity parentContext, Boolean isFooter) {
         Rect rectangle = new Rect();
-        Window window = parentContext.getWindow();;
+        Window window = parentContext.getWindow();
+        ;
         window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
-        int statusBarHeight = rectangle.top;;
+        int statusBarHeight = rectangle.top;
+        ;
         //int contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
         Resources resources = parentContext.getResources();
         int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
 
-        if(resourceId > 0 )
-        {
+        if (resourceId > 0) {
             return resources.getDimensionPixelSize(resourceId) * (isFooter ? 2 : 1) + statusBarHeight;
         }
         return 0;

@@ -46,11 +46,11 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             if (contentOperation.dataAlreadyExist()) {
                 txtViewMessage.setText(R.string.splashMessage2);
-                newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true, false);
+                newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true, false,false);
             }
             else
             {
-                newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true, true);
+                newsCategory = utils.getFollowedCategoriesLink(getApplicationContext(), true, true, false);
             }
 
             for (String url : newsCategory) {

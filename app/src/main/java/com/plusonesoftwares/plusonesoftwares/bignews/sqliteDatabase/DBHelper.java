@@ -29,6 +29,7 @@ public class DBHelper  extends SQLiteOpenHelper {
                 + NewsDataModel.KEY_UniqueID + " TEXT ,"
                 + NewsDataModel.KEY_Title + " TEXT ,"
                 + NewsDataModel.KEY_ImageUrl + " TEXT ,"
+                + NewsDataModel.KEY_ImageByteArray + " TEXT ,"
                 + NewsDataModel.KEY_Description + " TEXT ,"
                 + NewsDataModel.KEY_SourceLink + " TEXT ,"
                 + NewsDataModel.KEY_Category + " INTEGER ,"

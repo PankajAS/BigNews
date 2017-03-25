@@ -29,6 +29,7 @@ public class ContentRepo {
                 values.put(NewsDataModel.KEY_UniqueID, newsData.UniqueId);
                 values.put(NewsDataModel.KEY_Title, newsData.Title);
                 values.put(NewsDataModel.KEY_ImageUrl, newsData.ImageUrl);
+                values.put(NewsDataModel.KEY_ImageByteArray, newsData.ImageByteArray);
                 values.put(NewsDataModel.KEY_Description, newsData.Description);
                 values.put(NewsDataModel.KEY_SourceLink, newsData.SourceLink);
                 values.put(NewsDataModel.KEY_Category, newsData.Category);
@@ -50,6 +51,7 @@ public class ContentRepo {
             for (NewsDataModel newsData : list) {
                 values.put(NewsDataModel.KEY_Title, newsData.Title);
                 values.put(NewsDataModel.KEY_ImageUrl, newsData.ImageUrl);
+                values.put(NewsDataModel.KEY_ImageByteArray, newsData.ImageByteArray);
                 values.put(NewsDataModel.KEY_Description, newsData.Description);
                 values.put(NewsDataModel.KEY_SourceLink, newsData.SourceLink);
                 //db.update(NewsDataModel.TABLE, values, NewsDataModel.KEY_Category + " = '"+newsData.Category.toString()+ "' AND " + NewsDataModel.KEY_IsNext + " = '"+newsData.IsNext+"'",null);
@@ -117,6 +119,7 @@ public class ContentRepo {
                 NewsDataModel.KEY_ID + "," +
                 NewsDataModel.KEY_Title + "," +
                 NewsDataModel.KEY_ImageUrl + "," +
+                NewsDataModel.KEY_ImageByteArray + "," +
                 NewsDataModel.KEY_Description + "," +
                 NewsDataModel.KEY_SourceLink + "," +
                 NewsDataModel.KEY_Category + "," +
@@ -140,6 +143,7 @@ public class ContentRepo {
                 category.put("id", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_ID)));
                 category.put("Title", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Title)));
                 category.put("ImageUrl", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_ImageUrl)));
+                category.put("ImageByteArray", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_ImageByteArray)));
                 category.put("Description", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Description)));
                 category.put("SourceLink", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_SourceLink)));
                 category.put("Category", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Category)));
@@ -164,6 +168,7 @@ public class ContentRepo {
                 NewsDataModel.KEY_ID + "," +
                 NewsDataModel.KEY_Title + "," +
                 NewsDataModel.KEY_ImageUrl + "," +
+                NewsDataModel.KEY_ImageByteArray + "," +
                 NewsDataModel.KEY_Description + "," +
                 NewsDataModel.KEY_SourceLink + "," +
                 NewsDataModel.KEY_Category + "," +
@@ -183,6 +188,7 @@ public class ContentRepo {
                 category.put("id", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_ID)));
                 category.put("Title", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Title)));
                 category.put("ImageUrl", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_ImageUrl)));
+                category.put("ImageByteArray", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_ImageByteArray)));
                 category.put("Description", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Description)));
                 category.put("SourceLink", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_SourceLink)));
                 category.put("Category", cursor.getString(cursor.getColumnIndex(NewsDataModel.KEY_Category)));

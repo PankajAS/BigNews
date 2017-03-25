@@ -49,7 +49,7 @@ public class FlipRenderer implements GLSurfaceView.Renderer {
         this.flipViewController = flipViewController;
         this.cards = cards;
         this.context =context;
-        newsCategory = clsCommon.getCatWithAdmob(clsCommon.getFollowedCategoriesLink(context, false, false));
+        newsCategory = clsCommon.getCatWithAdmob(clsCommon.getFollowedCategoriesLink(context, false, false, false));
     }
 
     public static float[] light0Position = {0, 0, 100f, 0f};
