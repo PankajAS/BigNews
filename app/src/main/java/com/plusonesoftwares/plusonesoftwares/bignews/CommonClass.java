@@ -1,6 +1,7 @@
 package com.plusonesoftwares.plusonesoftwares.bignews;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -135,8 +136,6 @@ public class CommonClass {
         return JsonCategories;
     }
 
-//get image from cat id
-
     /*public int getImagebyId(String CategoryId){
         int CatImg = 0;
         switch (CategoryId) {
@@ -156,19 +155,19 @@ public class CommonClass {
                 CatImg = R.drawable.malayalambusinessnews;
                 break;
             case "teluguBusinessNews":
-                CatImg = R.drawable.telugubusinessnews;
+                CatImg = R.drawable;
                 break;
             case "MalayalamMovieNews":
-                CatImg = R.drawable.malayalammovienews;
+                CatImg = R.drawable.MalayalamMovieNews;
                 break;
             case "MalayalamSportsNews":
-                CatImg = R.drawable.malayalamsportsnews;
+                CatImg = R.drawable.MalayalamSportsNews;
                 break;
             case "MalayalamWorldNews":
-                CatImg = R.drawable.malayalamworldnews;
+                CatImg = R.drawable.MalayalamWorldNews;
                 break;
             case "MalayalamNationalNews":
-                CatImg = R.drawable.malayalamnationalnews;
+                CatImg = R.drawable.MalayalamNationalNews;
                 break;
         }
         return CatImg;
@@ -286,14 +285,13 @@ public class CommonClass {
         }
     }
 
-    public void insertUpdateNews(ArrayList<String> newsCategory, Context context, boolean lastRequest, boolean isRefresh) {
+    public void insertUpdateNews(ArrayList<String> newsCategory, Context context, boolean lastRequest, boolean isRefresh, ProgressDialog progressDialog) {
         boolean isLastRequest = false;
-
         int parentIndex = 0;
         for (String url : newsCategory) {
             isLastRequest = lastRequest ? (parentIndex == newsCategory.size()-1): false;
             try {
-                new GetNewsData(context, getIsNext(newsCategory, parentIndex), getCategoryName(url), isLastRequest, isRefresh, null).execute(new URL(url));//start async task to get all categories
+                new GetNewsData(context, getIsNext(newsCategory, parentIndex), getCategoryName(url), isLastRequest, isRefresh, null,progressDialog).execute(new URL(url));//start async task to get all categories
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }

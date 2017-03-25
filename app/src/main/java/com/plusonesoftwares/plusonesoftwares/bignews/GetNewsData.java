@@ -1,6 +1,7 @@
 package com.plusonesoftwares.plusonesoftwares.bignews;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -39,6 +40,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
         boolean isRefresh;
         boolean isInsert;
         CommonClass clsCommon;
+    ProgressDialog progressDialog;
 
         public GetNewsData(Context context, String isNext , String Category, boolean isLastRequest, boolean isRefresh, Activity parentContext){
             this.context = context;
@@ -51,6 +53,18 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
             clsCommon = new CommonClass();
         }
 
+       public GetNewsData(Context context, String isNext , String Category, boolean isLastRequest, boolean isRefresh, Activity parentContext, ProgressDialog progressDialog){
+        this.context = context;
+        this.isNext = isNext;
+        this.Category = Category;
+        this.isLastRequest = isLastRequest;
+        this.isRefresh = isRefresh;
+        this.isInsert = isInsert;
+        this.parentContext = parentContext;
+        clsCommon = new CommonClass();
+        this.progressDialog = progressDialog;
+       }
+    
         @Override
         protected JSONArray doInBackground(URL... urls) {
             URL url = urls[0];
@@ -120,6 +134,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
                 }
 
                 if(isLastRequest && isRefresh) {
+                    progressDialog.dismiss();
                     clsCommon.setUserPrefs(clsCommon.isPendingRequest, "false", context);
                 }
             }

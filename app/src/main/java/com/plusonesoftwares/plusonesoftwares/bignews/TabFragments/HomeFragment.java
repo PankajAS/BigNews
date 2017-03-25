@@ -1,5 +1,6 @@
 package com.plusonesoftwares.plusonesoftwares.bignews.TabFragments;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,8 +18,6 @@ import com.plusonesoftwares.plusonesoftwares.bignews.TravelAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static java.lang.Thread.sleep;
 
@@ -27,6 +26,7 @@ public class HomeFragment extends Fragment {
     CommonClass utils;
     List<String> newsCategory1;
     boolean shouldExecuteOnResume;
+    ProgressDialog progressDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,6 +34,7 @@ public class HomeFragment extends Fragment {
         setHasOptionsMenu(true);
         shouldExecuteOnResume = false;
         utils = new CommonClass();
+        progressDialog = new ProgressDialog(getContext());
     }
 
     @Override
@@ -104,9 +105,10 @@ public class HomeFragment extends Fragment {
                     if(utils.getUserPrefs(utils.isPendingRequest, getContext()) == null || utils.getUserPrefs(utils.isPendingRequest, getContext()).equals("false")) {
                         utils.setUserPrefs(utils.isPendingRequest, "true", getContext());
                         ArrayList<String> newsCategory = new ArrayList<>();
-                        newsCategory = utils.getFollowedCategoriesLink(getContext(), true, false, false);//updating only followed categories.
-                        utils.insertUpdateNews(newsCategory, getContext(), true, true);
-
+                        newsCategory = utils.getFollowedCategoriesLink(getContext(), true, false, false);
+                        progressDialog.setMessage(getString(R.string.splashMessage2));
+                        progressDialog.show();//updating only followed categories.
+                        utils.insertUpdateNews(newsCategory, getContext(), true, true, progressDialog);
                         //Refreh data after 3.5 seconds
                          getActivity().runOnUiThread(new Runnable() {
                             public void run() {

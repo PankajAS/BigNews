@@ -83,11 +83,11 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
             public void onClick(View view) {
 
                 Intent intent = new Intent(context, NewsCategoryDetails.class);
-                TextView txt = (TextView)itemView.findViewById(R.id.title);
+                TextView txt = (TextView) itemView.findViewById(R.id.title);
                 intent.putExtra("categoryName", txt.getText().toString());
-               // Toast.makeText(context,txt.getText().toString(),Toast.LENGTH_LONG).show();
+                // Toast.makeText(context,txt.getText().toString(),Toast.LENGTH_LONG).show();
                 //Storing current index of flipper
-             //   utils.setUserPrefs(utils.flipCurrentIndex, "" ,context);
+                //   utils.setUserPrefs(utils.flipCurrentIndex, "" ,context);
                 context.startActivity(intent);
             }
         });
@@ -102,7 +102,7 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
         Glide.with(context).load(R.drawable.cover).into(holder.thumbnail);
         holder.chkSelection.setVisibility(View.GONE);
 
-        if(fragment instanceof DiscoverFragment) {
+        if (fragment instanceof DiscoverFragment) {
             holder.overflow.setVisibility(View.GONE);
             holder.chkSelection.setVisibility(View.VISIBLE);
             holder.chkSelection.setTag(mTextofButton.get(position));
@@ -124,54 +124,51 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
                         e.printStackTrace();
                     }
                     // mTextofButton.remove(position);
-                    utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
-                }
-                else if(!holder.chkSelection.isChecked()){
+                    utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(), context);
+                } else if (!holder.chkSelection.isChecked()) {
                     JsonCategoriesfollowed = utils.getUpdatedCategories(context);
                     holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
                     JsonCategoriesfollowed.remove(utils.getCatIdByCatName(holder.chkSelection.getTag().toString()));
-                    utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
+                    utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(), context);
                 }
             }
         });
 
 
-
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             Boolean check = false;
-                @Override
-                public void onClick(View view) {
-                    if(fragment instanceof MenuFragment) {
-                        Intent intent = new Intent(context, NewsCategoryDetails.class);
-                        intent.putExtra("categoryName", mTextofButton.get(position));
-                        //Storing current index of flipper
-                        //   utils.setUserPrefs(utils.flipCurrentIndex, "" ,context);
-                        context.startActivity(intent);
+
+            @Override
+            public void onClick(View view) {
+                if (fragment instanceof MenuFragment) {
+                    Intent intent = new Intent(context, NewsCategoryDetails.class);
+                    intent.putExtra("categoryName", mTextofButton.get(position));
+                    //Storing current index of flipper
+                    //utils.setUserPrefs(utils.flipCurrentIndex, "" ,context);
+                    context.startActivity(intent);
+                } else {
+                    check = !check;
+                    holder.chkSelection.setChecked(check);
+
+                    if (holder.chkSelection.isChecked()) {
+                        //Toast.makeText(context,holder.chkSelection.getTag().toString(),Toast.LENGTH_SHORT).show();
+                        holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.GREEN));
+                        JsonCategoriesfollowed = utils.getUpdatedCategories(context);
+                        try {
+
+                            JsonCategoriesfollowed.put(utils.getCatIdByCatName(holder.chkSelection.getTag().toString()), holder.chkSelection.getTag().toString());
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        // mTextofButton.remove(position);
+                        utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(), context);
+                    } else if (!holder.chkSelection.isChecked()) {
+                        JsonCategoriesfollowed = utils.getUpdatedCategories(context);
+                        holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
+                        JsonCategoriesfollowed.remove(utils.getCatIdByCatName(holder.chkSelection.getTag().toString()));
+                        utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(), context);
                     }
-                    else{
-                        check = !check;
-                        holder.chkSelection.setChecked(check);
-
-                        if (holder.chkSelection.isChecked()) {
-                            //Toast.makeText(context,holder.chkSelection.getTag().toString(),Toast.LENGTH_SHORT).show();
-                            holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.GREEN));
-                            JsonCategoriesfollowed = utils.getUpdatedCategories(context);
-                            try {
-
-                                JsonCategoriesfollowed.put(utils.getCatIdByCatName(holder.chkSelection.getTag().toString()), holder.chkSelection.getTag().toString());
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            // mTextofButton.remove(position);
-                            utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
-                        }
-                        else if(!holder.chkSelection.isChecked()){
-                            JsonCategoriesfollowed = utils.getUpdatedCategories(context);
-                            holder.chkSelection.setButtonTintList(ColorStateList.valueOf(Color.WHITE));
-                            JsonCategoriesfollowed.remove(utils.getCatIdByCatName(holder.chkSelection.getTag().toString()));
-                            utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
-                        }
 
                      /* String category = mTextofButton.get(position);
                         JsonCategoriesfollowed = utils.getUpdatedCategories(context);
@@ -187,11 +184,9 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
                         utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
                         //recyclerView.removeViewAt(position);
                         notifyDataSetChanged();*/
-                    }
                 }
-            });
-
-
+            }
+        });
 
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
@@ -206,7 +201,7 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
         // inflate menu
         PopupMenu popup = new PopupMenu(context, view);
         MenuInflater inflater = popup.getMenuInflater();
-        if(fragment instanceof MenuFragment) {
+        if (fragment instanceof MenuFragment) {
             inflater.inflate(R.menu.menu_options1, popup.getMenu());
         }
         popup.setOnMenuItemClickListener(new MyMenuItemClickListener(position));
@@ -233,21 +228,21 @@ public class NewsCategoryAdapter extends RecyclerView.Adapter<NewsCategoryAdapte
                     try {
                         JsonCategoriesfollowed = utils.getUpdatedCategories(context);
                         JsonCategoriesfollowed.put(category, mTextofButton.get(position));
-                        utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
+                        utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(), context);
                         notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                        //Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
                     return true;
                 case R.id.unfollow:
                     JsonCategoriesfollowed = utils.getUpdatedCategories(context);
                     JsonCategoriesfollowed.remove(utils.getCatIdByCatName(mTextofButton.get(position)));
                     mTextofButton.remove(position);
                     notifyItemRemoved(position);
-                   notifyItemRangeChanged(position, getItemCount());
-                    utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(),context);
-                   // recyclerView.removeViewAt(position);
+                    notifyItemRangeChanged(position, getItemCount());
+                    utils.setUserPrefs(utils.NewsCategories, JsonCategoriesfollowed.toString(), context);
+                    // recyclerView.removeViewAt(position);
                 default:
             }
             return false;
