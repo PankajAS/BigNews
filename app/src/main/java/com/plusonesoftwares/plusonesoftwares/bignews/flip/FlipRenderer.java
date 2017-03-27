@@ -145,10 +145,10 @@ public class FlipRenderer implements GLSurfaceView.Renderer {
                     context.setTitle(title);
                     clsCommon.setUserPrefs(clsCommon.CategroyTitle,title,context);
                 }
+                //Storing current index of flipper
+                clsCommon.setUserPrefs(clsCommon.flipCurrentIndex, String.valueOf(frontIndex) ,context);
             }
-            //Storing current index of flipper
-            clsCommon.setUserPrefs(clsCommon.flipCurrentIndex, String.valueOf(frontIndex) ,context);
-            
+
             cards.reloadTexture(frontIndex, frontView, backIndex, backView);
             flipViewController.getSurfaceView().requestRender();
         }
