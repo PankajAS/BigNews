@@ -51,7 +51,10 @@ public class ContentRepo {
             for (NewsDataModel newsData : list) {
                 values.put(NewsDataModel.KEY_Title, newsData.Title);
                 values.put(NewsDataModel.KEY_ImageUrl, newsData.ImageUrl);
-                values.put(NewsDataModel.KEY_ImageByteArray, newsData.ImageByteArray);
+
+                if(newsData.ImageByteArray!=null && !newsData.ImageByteArray.isEmpty())
+                    values.put(NewsDataModel.KEY_ImageByteArray, newsData.ImageByteArray);
+
                 values.put(NewsDataModel.KEY_Description, newsData.Description);
                 values.put(NewsDataModel.KEY_SourceLink, newsData.SourceLink);
                 //db.update(NewsDataModel.TABLE, values, NewsDataModel.KEY_Category + " = '"+newsData.Category.toString()+ "' AND " + NewsDataModel.KEY_IsNext + " = '"+newsData.IsNext+"'",null);
