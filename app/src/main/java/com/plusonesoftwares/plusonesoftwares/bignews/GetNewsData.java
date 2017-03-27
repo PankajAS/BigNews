@@ -42,6 +42,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
         CommonClass clsCommon;
         ProgressDialog progressDialog;
         FlipViewController flipView;
+        boolean isCloseDialog;
 
         public GetNewsData(Context context, String isNext , String Category, boolean isLastRequest, boolean isRefresh, Activity parentContext){
             this.context = context;
@@ -54,7 +55,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
             clsCommon = new CommonClass();
         }
 
-       public GetNewsData(Context context, String isNext , String Category, boolean isLastRequest, boolean isRefresh, Activity parentContext, ProgressDialog progressDialog, FlipViewController flipView){
+       public GetNewsData(Context context, String isNext , String Category, boolean isLastRequest, boolean isRefresh, Activity parentContext, ProgressDialog progressDialog, FlipViewController flipView, boolean isCloseDialog){
             this.context = context;
             this.isNext = isNext;
             this.Category = Category;
@@ -65,6 +66,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
             clsCommon = new CommonClass();
             this.progressDialog = progressDialog;
             this.flipView = flipView;
+            this.isCloseDialog = isCloseDialog;
        }
     
         @Override
@@ -136,8 +138,11 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
                 }
 
                 if(isLastRequest && isRefresh) {
-                    progressDialog.dismiss();
                     clsCommon.setUserPrefs(clsCommon.isPendingRequest, "false", context);
+                }
+
+                if(isCloseDialog) { // closing dialog after updation of first category
+                    progressDialog.dismiss();
                     flipView.setAdapter(new TravelAdapter(context, parentContext, clsCommon.getUpdatedData(context)));//to refresh the  main activity on pressed of home button
                 }
             }

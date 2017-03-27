@@ -285,13 +285,16 @@ public class CommonClass {
         }
     }
 
-    public void insertUpdateNews(ArrayList<String> newsCategory, Context context, boolean lastRequest, boolean isRefresh, ProgressDialog progressDialog, Activity Activity, FlipViewController flipView) {
+    public void insertUpdateNews(ArrayList<String> newsCategory, Context context, boolean lastRequest, boolean isRefresh, ProgressDialog progressDialog, Activity Activity, FlipViewController flipView, boolean isCloseDialog) {
         boolean isLastRequest = false;
+        boolean closeDialog = false;
         int parentIndex = 0;
         for (String url : newsCategory) {
             isLastRequest = lastRequest ? (parentIndex == newsCategory.size()-1): false;
+            closeDialog = isCloseDialog ? (parentIndex == 2): false;
+
             try {
-                new GetNewsData(context, getIsNext(newsCategory, parentIndex), getCategoryName(url), isLastRequest, isRefresh, Activity, progressDialog, flipView).execute(new URL(url));//start async task to get all categories
+                new GetNewsData(context, getIsNext(newsCategory, parentIndex), getCategoryName(url), isLastRequest, isRefresh, Activity, progressDialog, flipView, closeDialog).execute(new URL(url));//start async task to get all categories
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }

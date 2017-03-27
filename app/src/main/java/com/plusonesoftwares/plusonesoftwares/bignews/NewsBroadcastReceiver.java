@@ -22,7 +22,7 @@ public class NewsBroadcastReceiver extends BroadcastReceiver {
         if(utils.haveNetworkConnection(context))
         {
             newsCategory = utils.getFollowedCategoriesLink(context, true, true, true);
-            utils.insertUpdateNews(newsCategory, context, false, false, null, null, null);
+            utils.insertUpdateNews(newsCategory, context, false, false, null, null, null, false);
         }
     }
 }

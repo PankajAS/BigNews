@@ -91,7 +91,7 @@ public class HomeFragment extends Fragment {
                         progressDialog.setMessage(getString(R.string.splashMessage2));
                         progressDialog.show();//updating only followed categories.
 
-                        utils.insertUpdateNews(newsCategory, getContext(), true, true, progressDialog, getActivity(), flipView);
+                        utils.insertUpdateNews(newsCategory, getContext(), true, true, progressDialog, getActivity(), flipView, true);
                     }
                 }
                 return true;
