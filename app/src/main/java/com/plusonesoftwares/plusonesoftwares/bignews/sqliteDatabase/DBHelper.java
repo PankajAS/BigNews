@@ -12,7 +12,7 @@ public class DBHelper  extends SQLiteOpenHelper {
     //version number to upgrade database version
     //each time if you Add, Edit table, you need to change the
     //version number.
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 1;
 
     // Database Name
     private static final String DATABASE_NAME = "crud.db";
@@ -24,24 +24,35 @@ public class DBHelper  extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //All necessary tables you like to create will create here
-        String CREATE_TABLE_NEWS = "CREATE TABLE " + NewsDataModel.TABLE  + "("
-                + NewsDataModel.KEY_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
-                + NewsDataModel.KEY_UniqueID + " TEXT ,"
-                + NewsDataModel.KEY_Title + " TEXT ,"
-                + NewsDataModel.KEY_ImageUrl + " TEXT ,"
-                + NewsDataModel.KEY_ImageByteArray + " TEXT ,"
-                + NewsDataModel.KEY_Description + " TEXT ,"
-                + NewsDataModel.KEY_SourceLink + " TEXT ,"
-                + NewsDataModel.KEY_Category + " INTEGER ,"
-                + NewsDataModel.KEY_IsNext + " TEXT ) ";
-        db.execSQL(CREATE_TABLE_NEWS);
+
+            String CREATE_TABLE_NEWS = "CREATE TABLE " + NewsDataModel.TABLE + "("
+                    + NewsDataModel.KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"
+                    + NewsDataModel.KEY_UniqueID + " TEXT ,"
+                    + NewsDataModel.KEY_Title + " TEXT ,"
+                    + NewsDataModel.KEY_ImageUrl + " TEXT ,"
+                    + NewsDataModel.KEY_ImageByteArray + " TEXT ,"
+                    + NewsDataModel.KEY_Description + " TEXT ,"
+                    + NewsDataModel.KEY_SourceLink + " TEXT ,"
+                    + NewsDataModel.KEY_Category + " INTEGER ,"
+                    + NewsDataModel.KEY_IsNext + " TEXT ) ";
+            db.execSQL(CREATE_TABLE_NEWS);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed, all data will be gone!!!
-        db.execSQL("DROP TABLE IF EXISTS " + NewsDataModel.TABLE);
-        // Create tables again
-        onCreate(db);
+      // db.execSQL("DROP TABLE IF EXISTS " + NewsDataModel.TABLE);
+
+        //refer this line https://thebhwgroup.com/blog/how-android-sqlite-onupgrade
+     //   if (oldVersion<2) {
+     //       db.execSQL("ALTER TABLE "+NewsDataModel.TABLE+" ADD COLUMN Test INTEGER DEFAULT 0");
+     //   }
+
+     // Create tables again
+     //onCreate(db);
+
     }
+
+
 }
