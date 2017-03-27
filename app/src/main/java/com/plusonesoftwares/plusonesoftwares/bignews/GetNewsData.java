@@ -40,7 +40,8 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
         boolean isRefresh;
         boolean isInsert;
         CommonClass clsCommon;
-    ProgressDialog progressDialog;
+        ProgressDialog progressDialog;
+        FlipViewController flipView;
 
         public GetNewsData(Context context, String isNext , String Category, boolean isLastRequest, boolean isRefresh, Activity parentContext){
             this.context = context;
@@ -53,16 +54,17 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
             clsCommon = new CommonClass();
         }
 
-       public GetNewsData(Context context, String isNext , String Category, boolean isLastRequest, boolean isRefresh, Activity parentContext, ProgressDialog progressDialog){
-        this.context = context;
-        this.isNext = isNext;
-        this.Category = Category;
-        this.isLastRequest = isLastRequest;
-        this.isRefresh = isRefresh;
-        this.isInsert = isInsert;
-        this.parentContext = parentContext;
-        clsCommon = new CommonClass();
-        this.progressDialog = progressDialog;
+       public GetNewsData(Context context, String isNext , String Category, boolean isLastRequest, boolean isRefresh, Activity parentContext, ProgressDialog progressDialog, FlipViewController flipView){
+            this.context = context;
+            this.isNext = isNext;
+            this.Category = Category;
+            this.isLastRequest = isLastRequest;
+            this.isRefresh = isRefresh;
+            this.isInsert = isInsert;
+            this.parentContext = parentContext;
+            clsCommon = new CommonClass();
+            this.progressDialog = progressDialog;
+            this.flipView = flipView;
        }
     
         @Override
@@ -136,6 +138,7 @@ public class GetNewsData extends AsyncTask<URL,Context,JSONArray> {
                 if(isLastRequest && isRefresh) {
                     progressDialog.dismiss();
                     clsCommon.setUserPrefs(clsCommon.isPendingRequest, "false", context);
+                    flipView.setAdapter(new TravelAdapter(context, parentContext, clsCommon.getUpdatedData(context)));//to refresh the  main activity on pressed of home button
                 }
             }
         }

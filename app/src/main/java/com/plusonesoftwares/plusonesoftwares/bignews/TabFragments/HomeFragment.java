@@ -13,9 +13,12 @@ import android.view.ViewGroup;
 
 import com.plusonesoftwares.plusonesoftwares.bignews.CommonClass;
 import com.plusonesoftwares.plusonesoftwares.bignews.FlipViewController;
+import com.plusonesoftwares.plusonesoftwares.bignews.GetNewsData;
 import com.plusonesoftwares.plusonesoftwares.bignews.R;
 import com.plusonesoftwares.plusonesoftwares.bignews.TravelAdapter;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,32 +44,11 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         flipView = new FlipViewController(getActivity(),getContext(), FlipViewController.VERTICAL);
 
-        getUpdatedData();
+        newsCategory1 = utils.getUpdatedData(getContext());
 
         flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));
 
         return flipView;
-    }
-
-    private void getUpdatedData() {
-        List<String> newsCategory = utils.getFollowedCategoriesLink(getContext(), false, false, false);
-
-        // utils.getCatWithAdmob(utils.getFollowedCategoriesLink(getContext(), false, false));
-        newsCategory1 = new ArrayList<>();
-        int index = 0;
-
-        for(String cat : newsCategory)
-        {
-            if(index!=0 && index%3==0) {
-                newsCategory1.add(index, "AdMob");
-                index++;
-                newsCategory1.add(index, cat);
-            }
-            else {
-                newsCategory1.add(index, cat);
-            }
-            index++;
-        }
     }
 
     @Override
@@ -80,7 +62,7 @@ public class HomeFragment extends Fragment {
             {
                 //System.out.println("onResume");
                 getActivity().setTitle(utils.getUserPrefs(utils.CategroyTitle, getContext()));
-                getUpdatedData();
+                utils.getUpdatedData(getContext());
                 flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));//to refresh the  main activity on pressed of home button
             }
 
@@ -108,22 +90,8 @@ public class HomeFragment extends Fragment {
                         newsCategory = utils.getFollowedCategoriesLink(getContext(), true, false, false);
                         progressDialog.setMessage(getString(R.string.splashMessage2));
                         progressDialog.show();//updating only followed categories.
-                        utils.insertUpdateNews(newsCategory, getContext(), true, true, progressDialog);
-                        //Refreh data after 3.5 seconds
-                         getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                try {
-                                    sleep(3500);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                finally {
-                                    getUpdatedData();
-                                    flipView.setAdapter(new TravelAdapter(getContext(), getActivity(), newsCategory1));//to refresh the  main activity on pressed of home button
 
-                                }
-                            }
-                        });
+                        utils.insertUpdateNews(newsCategory, getContext(), true, true, progressDialog, getActivity(), flipView);
                     }
                 }
                 return true;

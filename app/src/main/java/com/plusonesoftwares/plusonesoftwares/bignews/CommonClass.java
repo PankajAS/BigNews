@@ -285,13 +285,13 @@ public class CommonClass {
         }
     }
 
-    public void insertUpdateNews(ArrayList<String> newsCategory, Context context, boolean lastRequest, boolean isRefresh, ProgressDialog progressDialog) {
+    public void insertUpdateNews(ArrayList<String> newsCategory, Context context, boolean lastRequest, boolean isRefresh, ProgressDialog progressDialog, Activity Activity, FlipViewController flipView) {
         boolean isLastRequest = false;
         int parentIndex = 0;
         for (String url : newsCategory) {
             isLastRequest = lastRequest ? (parentIndex == newsCategory.size()-1): false;
             try {
-                new GetNewsData(context, getIsNext(newsCategory, parentIndex), getCategoryName(url), isLastRequest, isRefresh, null,progressDialog).execute(new URL(url));//start async task to get all categories
+                new GetNewsData(context, getIsNext(newsCategory, parentIndex), getCategoryName(url), isLastRequest, isRefresh, Activity, progressDialog, flipView).execute(new URL(url));//start async task to get all categories
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -301,8 +301,29 @@ public class CommonClass {
     }
 
 
-    public List<String> getCatWithAdmob(List<String> newsCategory) {
-       List<String> newsCategory1 = new ArrayList<>();
+//    public List<String> getCatWithAdmob(List<String> newsCategory) {
+//       List<String> newsCategory1 = new ArrayList<>();
+//        int index = 0;
+//
+//        for(String cat : newsCategory)
+//        {
+//            if(index!=0 && index%3==0) {
+//                newsCategory1.add(index, "AdMob");
+//                index++;
+//                newsCategory1.add(index, cat);
+//            }
+//            else {
+//                newsCategory1.add(index, cat);
+//            }
+//            index++;
+//        }
+//        return newsCategory1;
+//    }
+
+    public List<String> getUpdatedData(Context context) {
+        List<String> newsCategory = getFollowedCategoriesLink(context, false, false, false);
+
+        List<String>  newsCategory1 = new ArrayList<>();
         int index = 0;
 
         for(String cat : newsCategory)
@@ -320,3 +341,4 @@ public class CommonClass {
         return newsCategory1;
     }
  }
+
