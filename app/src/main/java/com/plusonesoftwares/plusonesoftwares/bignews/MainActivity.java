@@ -1,5 +1,8 @@
 package com.plusonesoftwares.plusonesoftwares.bignews;
 
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,18 +15,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     ViewPager viewPager;
     CommonClass clsCommon;
+    private boolean isMinimized = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         clsCommon = new CommonClass();
         final String[] tabBarTitles = new String[]{
@@ -40,19 +44,19 @@ public class MainActivity extends AppCompatActivity  {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                android.support.v4.app.Fragment fragment= ((PagerAdapter)viewPager.getAdapter()).getFragment(position);
+                android.support.v4.app.Fragment fragment = ((PagerAdapter) viewPager.getAdapter()).getFragment(position);
 
-                if(position == 0 && fragment!=null){
+                if (position == 0 && fragment != null) {
                     setTitle(clsCommon.getUserPrefs(clsCommon.CategroyTitle, getApplicationContext()));
-                }
-                else if(position == 1 && fragment!=null){
+                } else if (position == 1 && fragment != null) {
                     setTitle("Followed Catogries");
-                }else if(position == 2 && fragment!=null){
+                } else if (position == 2 && fragment != null) {
                     setTitle("All Catogries");
                 }
                 //Storing current index of flipper
-                clsCommon.setUserPrefs(clsCommon.flipCurrentIndex, "0" ,getApplicationContext());
+                clsCommon.setUserPrefs(clsCommon.flipCurrentIndex, "0", getApplicationContext());
             }
+
             @Override
             public void onPageSelected(int position) {
                 android.support.v4.app.Fragment fragment = ((PagerAdapter) viewPager.getAdapter()).getFragment(position);
@@ -74,31 +78,54 @@ public class MainActivity extends AppCompatActivity  {
 
             }
         });
-            final PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(),tabBarTitles);
-            viewPager.setAdapter(pagerAdapter);
-            tabLayout.setupWithViewPager(viewPager);
+        final PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager(), tabBarTitles);
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    public boolean isApplicationSentToBackground(final Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+        if (!tasks.isEmpty()) {
+            ComponentName topActivity = tasks.get(0).topActivity;
+            if (!topActivity.getPackageName().equals(context.getPackageName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        switch(keyCode)
-        {
+    protected void onPause() {
+        if (isApplicationSentToBackground(this)) {
+            isMinimized = true;
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onResume() {
+        if (isMinimized) {
+            startActivity(new Intent(this, SplashScreenActivity.class));
+            isMinimized = false;
+        }
+        super.onResume();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 String flipIndex = clsCommon.getUserPrefs(clsCommon.flipCurrentIndex, getApplicationContext());
 
                 if (flipIndex.equals("0")) {
-                    if(viewPager.getCurrentItem()==0) {
+                    if (viewPager.getCurrentItem() == 0) {
                         moveTaskToBack(true);
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         viewPager.setCurrentItem(0, true);
                     }
-                }
-                else
-                {
+                } else {
                     Toast.makeText(this, R.string.flipBackMsg, Toast.LENGTH_LONG).show();
                 }
         }
